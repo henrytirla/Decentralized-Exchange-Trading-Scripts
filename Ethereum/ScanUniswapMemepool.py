@@ -16,7 +16,7 @@ class style():  # Class of different text colours - default is white
     RESET = '\033[0m'
 
 # Connect to the Ethereum blockchain using the Infura node
-web3 = Web3(Web3.HTTPProvider(""))
+web3 = Web3(Web3.HTTPProvider("Input your node URL"))
 
 # Define the Uniswap Router and Factory addresses
 router_address = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
