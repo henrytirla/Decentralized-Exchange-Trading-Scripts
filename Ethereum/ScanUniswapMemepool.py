@@ -63,10 +63,10 @@ while x == True:
                     decoded = pcsContract.decode_function_input(data)
                     print("DECODED",decoded)
 
-                    #to = trans['to']
+                    to = trans['to']
                     print( "TO....", to)
                     from_wallet = trans['from']
-                    print(from_wallet)
+                    print("FROM......", from_wallet)
 
 
                     txHash = web3.toHex(trans['hash'])
