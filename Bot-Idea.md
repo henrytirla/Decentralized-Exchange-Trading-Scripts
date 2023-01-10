@@ -20,3 +20,4 @@ Trade automation bot | This bot could automate a trader's entire workflow, inclu
 Trade copying bot | This bot could copy the trades of successful traders and execute them on a DEX.
 Trade aggregation bot | This bot could aggregate orders from multiple traders and execute them as a single order on a DEX, potentially improving execution prices.
 Trade execution optimization bot | This bot could optimize trade execution by using techniques such as optimal execution algorithms and transaction cost analysis.
+MEV bots | A MEV (Minimal Execution Value) bot is a type of bot that seeks to capture small profits from the price difference between orders on a decentralized exchange (DEX). It does this by analyzing the order book of a DEX and identifying opportunities to fill orders at a price that is slightly better than the current best price.
