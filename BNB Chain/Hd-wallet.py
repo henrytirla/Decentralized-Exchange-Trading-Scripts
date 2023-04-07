@@ -6,7 +6,7 @@ from web3 import Web3
 import secrets
 from eth_account import Account
 """
-Please note the public key might differ when importing into different wallet services 
+Please note the public key might differ when importing the mnemonic phrase into different wallet services 
 like TrustWallet or SafePal because these services might use different derivation paths.
 
 Popular derivation paths include:
