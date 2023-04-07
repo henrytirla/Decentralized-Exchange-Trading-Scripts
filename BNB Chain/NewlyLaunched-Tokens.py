@@ -1,0 +1,1 @@
+"Monitor newly created pairs and Buy based on certain metrics"

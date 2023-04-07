@@ -1,0 +1,1 @@
+"Buy Project as soon as it lauches"
