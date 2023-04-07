@@ -1,0 +1,1 @@
+# Host Script on GCP - Automate Trading Process
