@@ -12,7 +12,7 @@ token_contract_address = '0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce'
 
 #Number of initial Buys transactions
 txn_number = 1001
-# Fetch the first 30 transactions
+# Fetch the first 1000 transactions
 url = f'https://api.etherscan.io/api?module=account&action=tokentx&contractaddress={token_contract_address}&page=1&offset={txn_number}&sort=asc&apikey={etherscan_api_key}'
 response = requests.get(url)
 
