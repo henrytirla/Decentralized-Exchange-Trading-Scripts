@@ -14,7 +14,7 @@ import sys
 #create a config,py and configure your variables as used in this script
 import config
 import webbrowser
-import rugdoc
+
 
 
 
