@@ -506,6 +506,23 @@ else:
 if totalLpBalance < 20:
     print(style.RED+("LP BALANCE TOO LOW --Likely a scam"))
 
+
+def get_deployer_address(contract_address):
+    url = f'https://api.bscscan.com/api?module=account&action=txlist&address={contract_address}&startblock=0&endblock=99999999&page=1&offset=3&sort=asc&apikey={config.bsc_api}'
+    response = requests.get(url)
+    data = response.json()
+
+    if data['status'] == '1':
+        for tx in data['result']:
+            if tx['to'] == contract_address.lower():
+                return tx['from']
+    else:
+        raise Exception('Error while fetching transactions: ' + data['message'])
+
+deployer_address = get_deployer_address(contract_address)
+print('Deployer address:', style.YELLOW+ deployer_address, style.RED+("It's important to check if holders interacted in a Suspicion way"))
+
+
 def get_creation_timestamp(contract_address):
     url = f'https://api.bscscan.com/api?module=account&action=txlist&address={contract_address}&startblock=0&endblock=99999999&page=1&offset=3&sort=asc&apikey={config.bsc_api}'
     response = requests.get(url)
@@ -528,4 +545,4 @@ seconds = time_diff.seconds
 hours, remainder = divmod(seconds, 3600)
 minutes = remainder // 60
 
-print(f"Pair Created {days} days {hours} hours {minutes} minutes ago")
+print(style.CYAN+f"Pair Created: {days} days {hours} hours {minutes} minutes ago")
