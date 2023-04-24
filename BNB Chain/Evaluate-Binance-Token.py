@@ -3,17 +3,21 @@ print("TOKEN EVALUATION.......BOT")
 
 from web3 import Web3
 import datetime
+#from datetime import datetime, timedelta
+#import datetime
 import threading
 import abi
 import json
 import asyncio
 import requests
-import time
+#import time
 import os
 import sys
 #create a config,py and configure your variables as used in this script
 import config
 import webbrowser
+import requests
+
 
 
 
@@ -36,17 +40,17 @@ class style():  # Class of different text colours - default is white
 currentTimeStamp = ""
 
 
-def getTimestamp():
-    while True:
-        timeStampData = datetime.datetime.now()
-        global currentTimeStamp
-        currentTimeStamp = "[" + timeStampData.strftime("%H:%M:%S.%f")[:-3] + "]"
+# def getTimestamp():
+#     while True:
+#         timeStampData = datetime.datetime.now()
+#         global currentTimeStamp
+#         currentTimeStamp = "[" + timeStampData.strftime("%H:%M:%S.%f")[:-3] + "]"
 
 
 # -------------------------------- INITIALISE ------------------------------------------
 
-timeStampThread = threading.Thread(target=getTimestamp)
-timeStampThread.start()
+# timeStampThread = threading.Thread(target=getTimestamp)
+# timeStampThread.start()
 pancakeSwapRouterAddress = "0x10ED43C718714eb63d5aA57B78B54704E256024E"
 
 #contract_address = input("Enter Contract you wish to evaluate: ")
@@ -501,3 +505,27 @@ else:
 
 if totalLpBalance < 20:
     print(style.RED+("LP BALANCE TOO LOW --Likely a scam"))
+
+def get_creation_timestamp(contract_address):
+    url = f'https://api.bscscan.com/api?module=account&action=txlist&address={contract_address}&startblock=0&endblock=99999999&page=1&offset=3&sort=asc&apikey={config.bsc_api}'
+    response = requests.get(url)
+    data = response.json()
+
+    if data['status'] == '1':
+        for tx in data['result']:
+            if tx['to'] == contract_address.lower():
+                return int(tx['timeStamp'])
+    else:
+        raise Exception('Error while fetching transactions: ' + data['message'])
+
+creation_timestamp = get_creation_timestamp(contract_address)
+
+creation_date =  datetime.datetime.fromtimestamp(creation_timestamp)
+now = datetime.datetime.utcnow()
+time_diff = now - creation_date
+days = time_diff.days
+seconds = time_diff.seconds
+hours, remainder = divmod(seconds, 3600)
+minutes = remainder // 60
+
+print(f"Pair Created {days} days {hours} hours {minutes} minutes ago")
