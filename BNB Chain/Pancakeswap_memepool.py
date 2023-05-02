@@ -72,7 +72,7 @@ while x == True:
 
 
                 def get_contract_abi(contract_address):
-                    bscscan_api_key = 'KFEM9CQIBQVGZWTDGW5VDZGSM5ZYVGJ6KR'
+                    bscscan_api_key = config.bsc_api
                     url = f'https://api.bscscan.com/api?module=contract&action=getsourcecode&address={contract_address}&apikey={bscscan_api_key}'
                     response = requests.get(url)
 
