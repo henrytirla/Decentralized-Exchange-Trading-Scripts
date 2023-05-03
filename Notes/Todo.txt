@@ -1,1 +1,3 @@
 # Host Script on GCP - Automate Trading Process
+
+#Create UI for memepool script and after LP
