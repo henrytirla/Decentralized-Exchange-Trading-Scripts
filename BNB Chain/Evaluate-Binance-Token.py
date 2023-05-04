@@ -338,7 +338,7 @@ if contract_owner != "NULL":
     Ownerliquidity_percentage = checkOwnerlp/totalLpBalance * 100
     percent_lp = Ownerliquidity_percentage
     if percent_lp > 90:
-        print(style.RED +"Ower  Has too many LP tokens", checkOwnerlp,"Percentage",Ownerliquidity_percentage,"%")
+        print(style.RED +"Owner has too many LP tokens----SCAM", checkOwnerlp,"Percentage he owns: ",Ownerliquidity_percentage,"%")
         #exit()
     else:
         print(style.MAGENTA +"Ower LP tokens", checkOwnerlp,"Percentage",Ownerliquidity_percentage,"%")
