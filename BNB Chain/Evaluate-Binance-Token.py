@@ -401,7 +401,7 @@ if(checkLocked >=1):
     my_date = f"{value:%d-%m-%Y %H:%M:%S}"
     print(style.MAGENTA+"[PINKY V2] Locked With Percentage Locked: ",pinkyliquidity_percentage,"%")
     print("UNLOCK DATE & TIME: ",my_date)
-    #webbrowser.open("https://twitter.com/search?q=%24" + symbol)
+    webbrowser.open("https://twitter.com/search?q=%24" + symbol )
     #webbrowser.open('https://dexscreener.com/bsc/' + contract_address)
 elif checkLocked2 >= 1:
     print("---------CHECK IF LOCK------\n")
@@ -410,6 +410,7 @@ elif checkLocked2 >= 1:
     print(style.MAGENTA+"[UNICRYPT] Locked With Percentage Locked: ",unicryptliquidity_percentage,"%")
     Unicryptlockinfo = unicrypt.functions.tokenLocks(getLpAddress, 0).call()
 
+
     #print(Unicryptlockinfo)
     unlocked_date = Unicryptlockinfo[3]
     timestamp = unlocked_date
@@ -417,6 +418,7 @@ elif checkLocked2 >= 1:
     my_date = f"{value:%d-%m-%Y %H:%M:%S}"
     print("UNLOCK DATE: ", my_date)
     webbrowser.open("https://twitter.com/search?q=%24" + symbol)
+
     webbrowser.open('https://bscscan.com/token/' + getLpAddress + "#balances")
 
 
@@ -443,7 +445,8 @@ elif checkLocked04 >1:
     trustswapcryptOwnerlp = lpContract.functions.balanceOf(trustswapaddress).call() / lpDECIMAL
     trustswapliquidity_percentage = trustswapcryptOwnerlp / totalLpBalance * 100
     print(style.YELLOW + "[TRUSTWAP] Locked With Percentage Locked: ", trustswapliquidity_percentage, "%")
-    #webbrowser.open("https://twitter.com/search?q=%24" + symbol)
+    webbrowser.open("https://twitter.com/search?q=%24" + symbol)
+
     #webbrowser.open('https://dexscreener.com/bsc/' + contract_address)
 
 elif BalanceDeadlp > 0:
@@ -520,7 +523,7 @@ def get_deployer_address(contract_address):
         raise Exception('Error while fetching transactions: ' + data['message'])
 
 deployer_address = get_deployer_address(contract_address)
-print('Deployer address:', style.YELLOW+ deployer_address, style.RED+("It's important to check if holders interacted in a Suspicion way"))
+print('Deployer address:', style.YELLOW+ deployer_address)
 
 
 def get_creation_timestamp(contract_address):
