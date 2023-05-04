@@ -194,6 +194,7 @@ if(checkLocked == 1):
     my_date = f"{value:%d-%m-%Y %H:%M:%S}"
     print(style.MAGENTA+"[PINKY V2] Locked With Percentage Locked: ",pinkyliquidity_percentage,"%")
     print("UNLOCK DATE: ",my_date)
+    webbrowser.open("https://twitter.com/search?q=%24" + symbol)
 elif checkLocked02 >= 1:
     print("---------CHECK IF LOCK------\n")
     unicryptOwnerlp = lpContract.functions.balanceOf(unicript).call() / lpDECIMAL
@@ -206,11 +207,13 @@ elif checkLocked02 >= 1:
     value = datetime.datetime.fromtimestamp(timestamp)
     my_date = f"{value:%d-%m-%Y %H:%M:%S}"
     print("UNLOCK DATE: ", my_date)
+    webbrowser.open("https://twitter.com/search?q=%24" + symbol)
 
 elif checkLocked03 >1:
     trustswapcryptOwnerlp = lpContract.functions.balanceOf(trustswap).call() / lpDECIMAL
     trustswapliquidity_percentage = trustswapcryptOwnerlp / totalLpBalance * 100
     print(style.YELLOW + "[TRUSTWAP] Locked With Percentage Locked: ", trustswapliquidity_percentage, "%")
+    webbrowser.open("https://twitter.com/search?q=%24" + symbol)
 
 elif BalanceDeadlp > 0:
      checkDeadlp = lpContract.functions.balanceOf(dead_address).call() / lpDECIMAL
@@ -218,6 +221,7 @@ elif BalanceDeadlp > 0:
      percent_lp = Ownerliquidity_percentage
      #print(style.RED + "Watch out for scam, DONT TRUST LP TOKENS HERE STORED IN DEAD WALLETS")
      print(style.GREEN + "DEAD WALLET LP tokens", checkDeadlp, "Percentage", Ownerliquidity_percentage, "%")
+     webbrowser.open("https://twitter.com/search?q=%24" + symbol)
 
 
 elif contract_owner == null_address:
