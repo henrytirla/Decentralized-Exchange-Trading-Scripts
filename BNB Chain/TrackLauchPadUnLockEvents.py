@@ -1,6 +1,5 @@
 "Pinksale, Unicrypt, TrustswapSecurity Lock events"
 
-
 """Currently only tracks pinksale Lock Events Code can be easily modified to intergrate different lauchpads"""
 from web3 import Web3
 
