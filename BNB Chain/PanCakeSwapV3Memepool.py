@@ -8,7 +8,6 @@ from web3.middleware import geth_poa_middleware
 import requests
 import config
 import datetime
-from abi_decoder import add_ABI, decode_method, decode_calls,decode_multicall_data,state
 
 
 
@@ -111,8 +110,7 @@ def format_time_difference(creation_date):
 
     return days,formatted_time
 
-abi = json.loads(v3pcsAbi)
-add_ABI(abi)
+
 x= True
 count=0
 while x == True:
@@ -136,9 +134,7 @@ while x == True:
                     print(style.GREEN+"Transaction_Hash " + tx_hash)
                     print(style.BLUE+"Input",data)
                     #print(style.GREEN+"Transaction Log",trans)
-                    abi = json.loads(v3pcsAbi)
-                    add_ABI(abi)
-                    decoded_data = decode_method(data)
+
                     # decoded_calls = decode_calls(data, abi)
                     # print(style.RED+"Decodeded Input",decoded_calls)
                     decoded = v3pcsContract.decode_function_input(data)

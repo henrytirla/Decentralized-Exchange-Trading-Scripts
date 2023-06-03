@@ -26,7 +26,7 @@ class style():  # Class of different text colours - default is white
 # Connect to the Ethereum blockchain using your ethereum node eg Alchemy, Infura
 
 
-web3 = Web3(Web3.HTTPProvider("https://eth-mainnet.g.alchemy.com/v2/lTlatSTYDZmCv6wVLRIDff7S3kZhL2dq"))
+web3 = Web3(Web3.HTTPProvider("https://eth-mainnet.g.alchemy.com/v2/WoUWFd2SYi7sNbmTTaT_fWMPCOUZ8yDI"))
 
 # Define the Uniswap Router and Factory addresses
 router_address = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
@@ -142,10 +142,12 @@ while x == True:
                 data = trans['input']
                 to = trans['to']
 
-                #print(to, tx_hash)
+
+                # print(tx_hash)
 
 
                 if to == v3router_address:
+
                     current_block = web3.eth.blockNumber
                     #print("Transaction", to)
                     # print(style.YELLOW+"V3----ROUTER",current_block,to, tx_hash)
@@ -163,10 +165,10 @@ while x == True:
 
                     #print(decoded)
 
-                    print(style.YELLOW + "UniswapV3-------MEMEPOOL")
-                    print(input_str)
-                    print(decoded)
+                    # print(input_str)
+                    # print(decoded)
 
+                    print(style.YELLOW + "UniswapV3-------MEMEPOOL")
 
                     print(style.YELLOW +'https://etherscan.io/tx/' + tx_hash)
                     print("Fucntion Name", function_name)
@@ -196,6 +198,7 @@ while x == True:
 
 
                 elif to == router_address:
+
                     current_block = web3.eth.blockNumber
                     #print(style.BLUE+"V2----ROUTER",current_block,to, tx_hash)
 
@@ -215,6 +218,7 @@ while x == True:
 
                     if check_functions[function_name]==True:
                         print(style.BLUE + "V2----ROUTER")
+
                         print('https://etherscan.com/tx/' + tx_hash)
                         print(function_name)
 
