@@ -4,6 +4,12 @@ import webbrowser
 import datetime
 import requests
 import json
+# import sys; print(sys.path)
+import urllib.request
+from web3_input_decoder import decode_constructor, decode_function
+
+import web3_input_decoder
+
 
 class style():  # Class of different text colours - default is white
     BLACK = '\033[30m'
@@ -20,7 +26,7 @@ class style():  # Class of different text colours - default is white
 # Connect to the Ethereum blockchain using your ethereum node eg Alchemy, Infura
 
 
-web3 = Web3(Web3.HTTPProvider("Enter Your Node"))
+web3 = Web3(Web3.HTTPProvider("https://eth-mainnet.g.alchemy.com/v2/lTlatSTYDZmCv6wVLRIDff7S3kZhL2dq"))
 
 # Define the Uniswap Router and Factory addresses
 router_address = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
@@ -62,7 +68,7 @@ v3pcsContract = web3.eth.contract(address=v3router_address, abi=v3_router_abi)
 #swap_functions =["multicall","swapETHForExactTokens","swapExactETHForTokens","swapExactETHForTokensSupportingFeeOnTransferTokens","swapExactTokensForETH","swapExactTokensForETHSupportingFeeOnTransferTokens","swapExactTokensForTokens","swapExactTokensForTokensSupportingFeeOnTransferTokens","swapTokensForExactETH","swapTokensForExactTokens","addLiquidityETH"]
 swap_functions =["swapETHForExactTokens","swapExactETHForTokens","swapExactETHForTokensSupportingFeeOnTransferTokens","addLiquidityETH"]
 
-check_functions ={"swapETHForExactTokens":True, "swapExactETHForTokens":True,"swapExactETHForTokensSupportingFeeOnTransferTokens":True,"addLiquidityETH":True} #,'multicall':True
+check_functions ={"swapETHForExactTokens":True, "swapExactETHForTokens":True,"swapExactETHForTokensSupportingFeeOnTransferTokens":True,"addLiquidityETH":True,"execute":True} #,'multicall':True
 
 arr =[]
 
@@ -148,6 +154,7 @@ while x == True:
                     #print(decoded)
 
                     decoded_str = str(decoded[0])
+                    input_str = str(decoded[2])
                     start_index = decoded_str.find(" ") + 1
                     end_index = decoded_str.find("(")
                     function_name = decoded_str[start_index:end_index]
@@ -157,6 +164,8 @@ while x == True:
                     #print(decoded)
 
                     print(style.YELLOW + "UniswapV3-------MEMEPOOL")
+                    print(input_str)
+                    print(decoded)
 
 
                     print(style.YELLOW +'https://etherscan.io/tx/' + tx_hash)
@@ -199,14 +208,15 @@ while x == True:
                     path = decoded[1].get('path', [])
                     #print(path)
                     #print("Fucntion Name", function_name)
-                    print(style.GREEN+ "V2----ROUTER")
-                    print('https://etherscan.com/tx/' + tx_hash)
-                    print(function_name)
+                    # print(style.GREEN+ "V2----ROUTER")
+                    # print('https://etherscan.com/tx/' + tx_hash)
+                    # print(function_name)
 
 
                     if check_functions[function_name]==True:
                         print(style.BLUE + "V2----ROUTER")
                         print('https://etherscan.com/tx/' + tx_hash)
+                        print(function_name)
 
                         token_contract_address = path[1]
 
@@ -218,6 +228,7 @@ while x == True:
                             time_since_creation = format_time_difference(creation_date)
                             print(
                                 style.GREEN + f"METHOD----- {function_name} (Name: {token_name}, Symbol: {token_symbol}), Creation: {time_since_creation}")
+                            print("Token Contract: ",token_contract_address)
 
                             # print(style.GREEN + f"METHOD----- {arr[-1]} (Name: {token_name}, Symbol: {token_symbol})")
                     elif function_name =="addLiquidityETH":
@@ -233,12 +244,14 @@ while x == True:
 
                     decoded = sushi_swap.decode_function_input(data)
                     decoded_str = str(decoded[0])
+                    input_str=str(decoded[2])
                     start_index = decoded_str.find(" ") + 1
                     end_index = decoded_str.find("(")
                     function_name = decoded_str[start_index:end_index]
 
                     path = decoded[1].get('path', [])
                     print(style.MAGENTA + "Universal----Router")
+                    print(input_str)
 
                     print(style.MAGENTA + 'https://etherscan.com/tx/' + tx_hash)
                     print("Fucntion Name", function_name)

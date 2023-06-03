@@ -54,4 +54,3 @@ if response.status_code == 200:
         print('Error fetching transactions:', data['message'])
 else:
     print('Error fetching transactions. Status code:', response.status_code)
-
