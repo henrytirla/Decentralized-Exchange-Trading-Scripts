@@ -26,7 +26,7 @@ class style():  # Class of different text colours - default is white
 # Connect to the Ethereum blockchain using your ethereum node eg Alchemy, Infura
 
 
-web3 = Web3(Web3.HTTPProvider("https://eth-mainnet.g.alchemy.com/v2/WoUWFd2SYi7sNbmTTaT_fWMPCOUZ8yDI"))
+web3 = Web3(Web3.HTTPProvider(""))
 
 # Define the Uniswap Router and Factory addresses
 router_address = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
