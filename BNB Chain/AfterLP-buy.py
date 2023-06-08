@@ -1,10 +1,15 @@
-"Focus on buys immediately after liquitidy is added"
 
+"""
+You actually see early transactions of a project and it's a high determinant of it's success
+You just have to know what to fine
+This script can help you spot good wallets to follow.
+
+"""
 import requests
 import json
 
 
-api_key = 'Enter Your API KEY'
+api_key = 'KFEM9CQIBQVGZWTDGW5VDZGSM5ZYVGJ6KR'
 
 # Prompt user to input the token contract address and number of wallets
 contract_address = input("Enter the token contract address: ")
