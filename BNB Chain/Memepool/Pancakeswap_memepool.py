@@ -5,7 +5,7 @@ import webbrowser
 import json
 from web3.middleware import geth_poa_middleware
 import requests
-import config
+
 import datetime
 
 
