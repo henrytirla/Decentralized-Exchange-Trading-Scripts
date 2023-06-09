@@ -1,5 +1,7 @@
 "BUY A SPECIFIC TOKEN ON PancakeSwap"
 
+"NOTE this script doesn't work for certain tokensupporting transfer fees I have to manually calculate the amount out token "
+
 print("Loading...")
 
 from web3 import Web3
@@ -7,7 +9,7 @@ import datetime
 import json
 import time
 import sys
-import config
+import config2
 
 
 
@@ -35,7 +37,7 @@ web3 = Web3(Web3.HTTPProvider("https://bsc-dataseed2.binance.org/"))
 
 if web3.isConnected():
     print(style.YELLOW + " BSC Node successfully connected")
-balance = web3.eth.getBalance(config.WalletAddress) # here balance is in wei
+balance = web3.eth.getBalance(config2.WalletAddress) # here balance is in wei
 b =web3.fromWei(balance,"ether")
 
 # pancakeswap factory
@@ -61,7 +63,7 @@ tokenNameABI = json.loads('[ { "anonymous": false, "inputs": [ { "indexed": true
 
 
 def updateTitle():
-    walletBalance = web3.fromWei(web3.eth.get_balance(config.WalletAddress),
+    walletBalance = web3.fromWei(web3.eth.get_balance(config2.WalletAddress),
                                  'ether')  # There are references to ether in the code but it's set to BNB, its just how Web3 was originally designed
     walletBalance = round(walletBalance, -(int("{:e}".format(walletBalance).split('e')[
                                                    1]) - 4))  # the number '4' is the wallet balance significant figures + 1, so shows 5 sig figs
@@ -79,7 +81,71 @@ tokenNameABI = json.loads(
 snipeBNBAmount = (input("\nEnter Amount in BNB you want to spend: "))
 
 
+def Buy():
+    tokenAddress = input("\nEnter Token address you want to buy: ")
+    tokenAddress = web3.toChecksumAddress(tokenAddress)
+    contract = web3.eth.contract(address=pancakeSwapRouterAddress, abi=pancakeABI)
 
+    getTokenName = web3.eth.contract(address=tokenAddress, abi=tokenNameABI)
+    tokenSymbol = getTokenName.functions.symbol().call()
+    print("\nTrying to buy... ", tokenSymbol)
+
+    tokenToBuy = web3.toChecksumAddress(tokenAddress)
+    ust_mainet = "0x55d398326f99059fF775485246999027B3197955"
+    bnb_mainet = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+    spend = web3.toChecksumAddress(bnb_mainet)  # wbnb contract address
+
+    nonce = web3.eth.get_transaction_count(config2.WalletAddress)
+
+    # Calculate the expected amount of tokens to receive
+    bnb_amount = web3.toWei(snipeBNBAmount, 'ether')
+    path = [spend, tokenToBuy]
+    amounts_out = contract.functions.getAmountsOut(bnb_amount, path).call()
+    amount_out_min = amounts_out[-1]  # The last element in the amounts_out list is the expected token amount
+
+    # Apply a slippage tolerance (e.g., 1%)
+    slippage_tolerance = 0.1  # 1%
+    amount_out_min = int(amount_out_min * (1 - slippage_tolerance))
+
+    # # Update the expected amount of tokens to receive just before executing the swap
+    # amounts_out = contract.functions.getAmountsOut(bnb_amount, path).call()
+    # amount_out_min = amounts_out[-1]  # The last element in the amounts_out list is the expected token amount
+    #
+    # # Apply the slippage tolerance
+    # amount_out_min = int(amount_out_min * (1 - slippage_tolerance))
+
+
+    pancakeswap2_txn = contract.functions.swapExactETHForTokensSupportingFeeOnTransferTokens(
+        amount_out_min,
+        path,
+        config2.WalletAddress,
+        (int(time.time()) + 10000)
+    ).buildTransaction({
+        'from': config2.WalletAddress,
+        'value': bnb_amount,
+        'gas': 300000,  # Modify gas here
+        'gasPrice': web3.toWei('10', 'gwei'),
+        'nonce': nonce,
+    })
+
+    # Sign transaction with priavte key here
+    try:
+        signed_txn = web3.eth.account.sign_transaction(pancakeswap2_txn, config2.private2)
+        print(style.GREEN + "Transaction Sent")
+        tx_token = web3.eth.send_raw_transaction(signed_txn.rawTransaction)  # BUY THE TOKEN
+        txHash = str(web3.toHex(tx_token))
+        tx_receipt = web3.eth.wait_for_transaction_receipt(txHash, timeout=20)
+
+        if tx_receipt.status == 1:
+            print(
+                style.GREEN + " Successfully Bought " + tokenSymbol + " for " + style.GREEN + " BNB - TX ID: ",
+                'https://www.bscscan.com/tx/' + txHash)
+        else:
+                        print(
+                            style.RED  + " Sorry Transaction Failed" + tokenSymbol + " for " + style.GREEN + " BNB - TX ID: ",
+                            'https://www.bscscan.com/tx/' + txHash)
+    except:
+            print(style.RED  + " Transaction failed.")
 
 def Buy():
 
@@ -100,7 +166,7 @@ def Buy():
     bnb_mainet ="0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
     spend = web3.toChecksumAddress(bnb_mainet)  # wbnb contract address
 
-    nonce = web3.eth.get_transaction_count(config.WalletAddress)
+    nonce = web3.eth.get_transaction_count(config2.WalletAddress)
     #swapExactETHForTokens
     #swapExactETHForTokensSupportingFeeOnTransferTokens()
     #swapExactTokensForTokens buy with wbnb
@@ -115,21 +181,21 @@ def Buy():
        # tokenA, tokenB when buying with 2 token
          0, # tokenB,
         [spend, tokenToBuy],
-        config.WalletAddress,
+        config2.WalletAddress,
         (int(time.time()) + 10000)
     ).buildTransaction({
 
-        'from': config.WalletAddress,
+        'from': config2.WalletAddress,
         #'value': web3.toWei(0.01, 'ether'),
         'value': web3.toWei(snipeBNBAmount, 'ether'),
         # This is the Token(BNB) amount you want to Swap from  | Comment out for token
         'gas': 287644, #Modify gas here
         'gasPrice': web3.toWei('5', 'gwei'),
-        'nonce': web3.eth.get_transaction_count(config.WalletAddress),
+        'nonce': web3.eth.get_transaction_count(config2.WalletAddress),
     })
     # Sign transaction with priavte key here
     try:
-        signed_txn = web3.eth.account.sign_transaction(pancakeswap2_txn, config.private2)
+        signed_txn = web3.eth.account.sign_transaction(pancakeswap2_txn, config2.private2)
         print(style.GREEN + "Transaction Sent")
        # time.sleep(2)
         tx_token = web3.eth.send_raw_transaction(signed_txn.rawTransaction)  # BUY THE TOKEN
@@ -147,8 +213,6 @@ def Buy():
                 'https://www.bscscan.com/tx/' + txHash)
     except:
         print(style.RED  + " Transaction failed.")
-
-
 
 if __name__ == '__main__':
     Buy()
