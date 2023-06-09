@@ -1,8 +1,9 @@
-# Token Investment Monitoring
+# LIST OF TOKENS I AM BUYING THE DIP
 NOT FINANCIAL ADVICE 
+Will update this list if this repo got 25 Stars, too many of you are cloning  a star.
+
 The tokens below are just a sample and not my investment choices
 
-This document tracks the list of tokens you have invested in, the network they are associated with, and their respective addresses.
 
 ## Tokens
 
