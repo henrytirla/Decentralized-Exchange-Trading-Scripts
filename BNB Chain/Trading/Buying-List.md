@@ -1,4 +1,6 @@
 # Token Investment Monitoring
+NOT FINANCIAL ADVICE 
+The tokens below are just a sample and not my investment choices
 
 This document tracks the list of tokens you have invested in, the network they are associated with, and their respective addresses.
 
