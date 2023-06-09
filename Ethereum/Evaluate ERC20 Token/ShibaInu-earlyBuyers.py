@@ -16,7 +16,7 @@ txn_number = 1001
 url = f'https://api.etherscan.io/api?module=account&action=tokentx&contractaddress={token_contract_address}&page=1&offset={txn_number}&sort=asc&apikey={etherscan_api_key}'
 response = requests.get(url)
 
-csv_filename = 'early-token-transactions.csv'
+csv_filename = '../early-token-transactions.csv'
 
 # Check if the CSV file exists, if not create it and write the header
 if not os.path.exists(csv_filename):

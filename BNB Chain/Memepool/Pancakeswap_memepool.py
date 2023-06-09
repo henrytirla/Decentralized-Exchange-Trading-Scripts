@@ -24,7 +24,9 @@ class style():  # Class of different text colours - default is white
     RESET = '\033[0m'
 
 # Connect to the Ethereum blockchain using the Infura node
-web3 = Web3(Web3.HTTPProvider("https://bsc-dataseed2.binance.org/"))
+web3 = Web3(Web3.HTTPProvider("https://blue-spring-snowflake.bsc.quiknode.pro/b9ff6c1e7ee51543d189b4f1e89f5c735869d6d9/"))
+
+#web3 = Web3(Web3.HTTPProvider("https://bsc-dataseed2.binance.org/"))
 
 web3.middleware_onion.inject(geth_poa_middleware, layer=0)
 
@@ -56,8 +58,10 @@ def get_token_name_symbol(web3, contract_address, abi):
     token_contract = web3.eth.contract(address=contract_address, abi=abi)
     token_name = token_contract.functions.name().call()
     token_symbol = token_contract.functions.symbol().call()
+    token_decimals = token_contract.functions.decimals().call()
 
-    return token_name, token_symbol
+
+    return token_name, token_symbol, token_decimals
 
 
 def get_contract_abi(contract_address):
@@ -164,11 +168,11 @@ while x == True:
                             token_abi_json = get_contract_abi(token_contract_address)
                             if token_abi_json:
                                 token_abi = json.loads(token_abi_json)
-                                token_name, token_symbol = get_token_name_symbol(web3, token_contract_address, token_abi)
+                                token_name, token_symbol ,token_decimals = get_token_name_symbol(web3, token_contract_address, token_abi)
                                 creation_date = get_contract_creation_date(token_contract_address)
                                 days,time_since_creation = format_time_difference(creation_date)
                                 print("Token Address: ",token_contract_address)
-                                print(style.GREEN + f"METHOD----- {arr[-1]} (Name: {token_name}, Symbol: {token_symbol}), Creation: {time_since_creation}")
+                                print(style.GREEN + f"METHOD----- {arr[-1]} (Name: {token_name}, Symbol: {token_symbol}, Decimal: {token_decimals}), Creation: {time_since_creation}")
                                 #print(style.GREEN + f"METHOD----- {arr[-1]} (Name: {token_name}, Symbol: {token_symbol})")
 
 
