@@ -1,6 +1,8 @@
 # LIST OF TOKENS I AM BUYING THE DIP
-NOT FINANCIAL ADVICE 
-Will update this list if this repo got 25 Stars, too many of you are cloning without leaving a star.
+
+This is for informational purposes only and should not be considered financial advice. I will update this list if this repository receives 25 stars. Many of you are cloning without leaving a star, so please consider showing your support by giving it a star.
+
+
 
 The tokens below are just a sample and not my investment choices
 
