@@ -1,0 +1,1 @@
+"Monitor token liquidity pools and automatically execute token purchases upon detecting the addition of liquidity."
