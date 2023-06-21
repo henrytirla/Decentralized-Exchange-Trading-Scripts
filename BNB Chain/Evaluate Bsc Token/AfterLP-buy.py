@@ -32,7 +32,7 @@ if data['status'] == "1":
         if tx['from'] != contract_address and tx['to'] != contract_address:
             if tx['from'] not in wallets:
                 wallets.append(tx['from'])
-                print(f"{len(wallets)}. Wallet: {tx['from']}, TxHash: {tx['hash']}")
+                print(f"{len(wallets)}. Wallet: {tx['from']}, TxHash: https://bscscan.com/tx/{tx['hash']}")
 
                 if len(wallets) >= num_wallets:
                     break
