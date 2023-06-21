@@ -28,9 +28,8 @@ class style():  # Class of different text colours - default is white
     RESET = '\033[0m'
 
 # Connect to the Ethereum blockchain using the Infura node
-web3 = Web3(Web3.HTTPProvider("https://blue-spring-snowflake.bsc.quiknode.pro/b9ff6c1e7ee51543d189b4f1e89f5c735869d6d9/"))
 
-#web3 = Web3(Web3.HTTPProvider("https://bsc-dataseed2.binance.org/"))
+web3 = Web3(Web3.HTTPProvider("https://bsc-dataseed2.binance.org/"))
 
 web3.middleware_onion.inject(geth_poa_middleware, layer=0)
 
@@ -131,14 +130,13 @@ while x == True:
                 if  to == v3pcsRouter:
                     #print(style.YELLOW + "PANCAKESWAP-------MEMEPOOL")
                     decoded = v3pcsContract.decode_function_input(data)
-                    print(style.GREEN+"Transaction_Hash " + tx_hash)
-                    print(style.BLUE+"Input",data)
+                    #print(style.BLUE+"Input",data)
                     #print(style.GREEN+"Transaction Log",trans)
 
                     # decoded_calls = decode_calls(data, abi)
                     # print(style.RED+"Decodeded Input",decoded_calls)
                     decoded = v3pcsContract.decode_function_input(data)
-                    print(style.RED+"Decodeded Input",decoded)
+                    #print(style.RED+"Decodeded Input",decoded)
                     # first, decode the multicall transaction data
                     multicall_decoded = v3pcsContract.decode_function_input(data)
 
@@ -149,6 +147,32 @@ while x == True:
                     nested_call_decoded = v3pcsContract.decode_function_input(multicall_data)
 
                     print(style.YELLOW+"Nested Calls",nested_call_decoded)
+                    # params = nested_call_decoded[1]['params']
+                    # print("Params[1]",params[1])
+
+                    # if 'path' in nested_call_decoded[1]:
+                    #     path = nested_call_decoded[1]['path']
+                    #
+                    #     first_element = path[0]
+                    #     print(style.BLUE+"First element of path:", first_element)
+
+                    if 'path' in nested_call_decoded[1]:
+                        # Handle case where 'path' is present
+                        path = nested_call_decoded[1]['path']
+                        first_element = path[0]
+                        print(style.BLUE+"First element of path:", first_element)
+                    else:
+                        # Handle case where 'params' is present
+                        params = nested_call_decoded[1]['params']
+                        #length_of_params = len(params)
+                        first_element = params[0]
+
+                        print(style.CYAN+"First element of params:", first_element)
+
+
+
+                    print(style.GREEN+"Transaction_Hash " + tx_hash)
+
 
                     # data = decoded_data['params'][1][1]
                     # decoded_calls = decode_multicall_data(data, state)
