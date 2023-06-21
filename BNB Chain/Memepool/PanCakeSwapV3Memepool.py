@@ -105,7 +105,7 @@ def format_time_difference(creation_date):
     seconds = time_diff.seconds
     hours, remainder = divmod(seconds, 3600)
     minutes = remainder // 60
-    formatted_time = style.CYAN + f" {days} days {hours} hours {minutes} minutes ago"
+    formatted_time =  f" {days} days {hours} hours {minutes} minutes ago"
 
     return days,formatted_time
 
@@ -159,82 +159,41 @@ while x == True:
                     if 'path' in nested_call_decoded[1]:
                         # Handle case where 'path' is present
                         path = nested_call_decoded[1]['path']
-                        first_element = path[0]
-                        print(style.BLUE+"First element of path:", first_element)
-                    else:
-                        # Handle case where 'params' is present
-                        params = nested_call_decoded[1]['params']
-                        #length_of_params = len(params)
-                        first_element = params[0]
-
-                        print(style.CYAN+"First element of params:", first_element)
+                        token_contract= path[-1]
+                        creation_date = get_contract_creation_date(token_contract)
+                        days, time_since_creation = format_time_difference(creation_date)
 
 
-
-                    print(style.GREEN+"Transaction_Hash " + tx_hash)
-
-
-                    # data = decoded_data['params'][1][1]
-                    # decoded_calls = decode_multicall_data(data, state)
-
-                #
-                #     #print("Decoded", decoded)
-                #     #count += 1
-                #     #print('https://bscscan.com/tx/' + tx_hash, ": Count", count)
-                #     #print(decoded)
-                #
-                #     # Extract function name
-                #     decoded_str = str(decoded[0])
-                #     start_index = decoded_str.find(" ") + 1
-                #     end_index = decoded_str.find("(")
-                #     function_name = decoded_str[start_index:end_index]
-                #     path = decoded[1].get('path', [])
-
-                    # if path and path[0] == '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'and path[1] != '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c' and check_functions[function_name] == True  :
-                    #     print(style.YELLOW + "PANCAKESWAP-------MEMEPOOL")
-                    #     count+=1
-                    #     #print(decoded)
-                    #     print('https://bscscan.com/tx/' + tx_hash, ": Count", count)
-                    #
-                    #     for swapFunc in range(len(swap_functions)):
-                    #         if swap_functions[swapFunc] == function_name:
-                    #             arr.append(swap_functions[swapFunc])
-                    #
-                    #     #print(style.GREEN + "METHOD-----", arr[-1])
-                    #     token_contract_address = path[1]
-                    #     creation_date = get_contract_creation_date(token_contract_address)
-                    #     days,time_since_creation = format_time_difference(creation_date)
-                    #
-                    #     if days< 50:
-                    #
-                    #
-                    #
-                    #         token_abi_json = get_contract_abi(token_contract_address)
-                    #         if token_abi_json:
-                    #             token_abi = json.loads(token_abi_json)
-                    #             token_name, token_symbol ,token_decimals = get_token_name_symbol(web3, token_contract_address, token_abi)
-                    #             creation_date = get_contract_creation_date(token_contract_address)
-                    #             days,time_since_creation = format_time_difference(creation_date)
-                    #             print("Token Address: ",token_contract_address)
-                    #             print(style.GREEN + f"METHOD----- {arr[-1]} (Name: {token_name}, Symbol: {token_symbol}, Decimal: {token_decimals}), Creation: {time_since_creation}")
-                    #             #print(style.GREEN + f"METHOD----- {arr[-1]} (Name: {token_name}, Symbol: {token_symbol})")
-                    #
-                    #
-                    #         else:
-                    #             print(style.GREEN + "METHOD-----", arr[-1])
-                    #
-                    #
-                    #         if arr[-1] == "addLiquidityETH":
-                    #             webbrowser.open('https://bscscan.com/tx/' + tx_hash)
-                    #     else:
-                    #         pass
+                        if path[0] =="0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c":
+                            if days < 50:  # Set how many days the token is old
+                                print(style.GREEN + "Transaction_Hash " + tx_hash)
+                                token_abi_json = get_contract_abi(token_contract)
+                                token_abi = json.loads(token_abi_json)
+                                token_name, token_symbol ,token_decimals = get_token_name_symbol(web3, token_contract, token_abi)
+                                creation_date = get_contract_creation_date(token_contract)
+                                #print("Creation Date",creation_date)
+                                #print(time_since_creation)
+                                print("Token Address: ", token_contract)
+                                print(style.CYAN + f"(Name: {token_name}, Symbol: {token_symbol}, Decimal: {token_decimals}), Creation: {time_since_creation}")
 
 
-                #     else:
-                #         #print(style.RED+"NO Router match")
-                #         pass
-                # else:
-                #      pass
+
+
+
+
+                    # else:
+                    #     # Handle case where 'params' is present
+                    #     print(style.GREEN + "Transaction_Hash Param" + tx_hash)
+                    #
+                    #     params = nested_call_decoded[1]['params']
+                    #     #length_of_params = len(params)
+                    #     first_element = params[0]
+                    #
+                    #     print(style.CYAN+"First element of params:", first_element)
+
+
+
+
 
 
 
