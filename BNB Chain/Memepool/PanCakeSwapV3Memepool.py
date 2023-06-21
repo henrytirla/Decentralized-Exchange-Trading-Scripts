@@ -146,15 +146,8 @@ while x == True:
                     # now, decode the nested call
                     nested_call_decoded = v3pcsContract.decode_function_input(multicall_data)
 
-                    print(style.YELLOW+"Nested Calls",nested_call_decoded)
-                    # params = nested_call_decoded[1]['params']
-                    # print("Params[1]",params[1])
+                    #print(style.YELLOW+"Nested Calls",nested_call_decoded)
 
-                    # if 'path' in nested_call_decoded[1]:
-                    #     path = nested_call_decoded[1]['path']
-                    #
-                    #     first_element = path[0]
-                    #     print(style.BLUE+"First element of path:", first_element)
 
                     if 'path' in nested_call_decoded[1]:
                         # Handle case where 'path' is present
@@ -171,8 +164,7 @@ while x == True:
                                 token_abi = json.loads(token_abi_json)
                                 token_name, token_symbol ,token_decimals = get_token_name_symbol(web3, token_contract, token_abi)
                                 creation_date = get_contract_creation_date(token_contract)
-                                #print("Creation Date",creation_date)
-                                #print(time_since_creation)
+
                                 print("Token Address: ", token_contract)
                                 print(style.CYAN + f"(Name: {token_name}, Symbol: {token_symbol}, Decimal: {token_decimals}), Creation: {time_since_creation}")
 
