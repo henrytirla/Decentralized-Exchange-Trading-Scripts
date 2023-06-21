@@ -13,7 +13,7 @@ api_key = 'KFEM9CQIBQVGZWTDGW5VDZGSM5ZYVGJ6KR'
 
 # Prompt user to input the token contract address and number of wallets
 contract_address = input("Enter the token contract address: ")
-num_wallets = int(input("Enter the number of wallets to display: "))
+num_wallets = int(input("Enter the number of Transactions to display: "))
 
 # Define the BscScan API URL
 url = f"https://api.bscscan.com/api?module=account&action=tokentx&contractaddress={contract_address}&apikey={api_key}"
