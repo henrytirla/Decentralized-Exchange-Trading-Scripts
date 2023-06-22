@@ -9,12 +9,17 @@ uniswap_contract_address = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'  # Repla
 
 def handle_new_block(block):
     for tx_hash in block['transactions']:
-        tx = w3.eth.getTransaction(tx_hash)
 
-        if tx['to'].lower() == uniswap_contract_address.lower():
-            # Process the transaction
-            print("Transaction interacting with Uniswap:", w3.toHex(tx['hash']))
-            print("Input", tx['input'])
+        try:
+            tx = w3.eth.getTransaction(tx_hash)
+
+            if tx['to'].lower() == uniswap_contract_address.lower():
+                # Process the transaction
+                print("Transaction interacting with Uniswap:", w3.toHex(tx['hash']))
+                print("Input", tx['input'])
+        except Exception as e:
+            print("An error occurred while processing a transaction:", e)
+
 
 def setup_block_filter():
     new_block_filter = w3.eth.filter('latest')
