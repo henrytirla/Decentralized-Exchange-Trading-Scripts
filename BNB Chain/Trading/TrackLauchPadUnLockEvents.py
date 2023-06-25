@@ -1,7 +1,14 @@
 "Pinksale, Unicrypt, TrustswapSecurity Lock events"
 
+
+
+
 """Currently only tracks pinksale Lock Events Code can be easily modified to intergrate different lauchpads"""
+
+#TODO Implementation of trading stratedy, track unlock events, get Token Contract and monitor for when liquidity is added to the memepool and buy
 from web3 import Web3
+
+
 
 # Set up web3 connection
 w3 = Web3(Web3.HTTPProvider("https://bsc-dataseed2.binance.org/"))
