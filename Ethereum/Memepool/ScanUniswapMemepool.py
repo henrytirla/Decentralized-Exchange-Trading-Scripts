@@ -5,10 +5,10 @@ import datetime
 import requests
 import json
 # import sys; print(sys.path)
-# import urllib.request
-# from web3_input_decoder import decode_constructor, decode_function
-#
-# import web3_input_decoder
+import urllib.request
+from web3_input_decoder import decode_constructor, decode_function
+
+import web3_input_decoder
 
 
 class style():  # Class of different text colours - default is white
