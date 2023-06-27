@@ -5,10 +5,10 @@ import datetime
 import requests
 import json
 # import sys; print(sys.path)
-import urllib.request
-from web3_input_decoder import decode_constructor, decode_function
-
-import web3_input_decoder
+# import urllib.request
+# from web3_input_decoder import decode_constructor, decode_function
+#
+# import web3_input_decoder
 
 
 class style():  # Class of different text colours - default is white
@@ -26,7 +26,7 @@ class style():  # Class of different text colours - default is white
 # Connect to the Ethereum blockchain using your ethereum node eg Alchemy, Infura
 
 
-web3 = Web3(Web3.HTTPProvider("Enter Your node"))
+web3 = Web3(Web3.HTTPProvider("https://eth-mainnet.g.alchemy.com/v2/lTlatSTYDZmCv6wVLRIDff7S3kZhL2dq"))
 
 # Define the Uniswap Router and Factory addresses
 router_address = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
