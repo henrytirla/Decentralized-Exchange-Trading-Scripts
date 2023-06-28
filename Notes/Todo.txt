@@ -1,3 +1,5 @@
 # Host Script on GCP - Automate Trading Process
 
 #Create UI for memepool script and after LP
+
+Make UI of copy trade scripts BNB and Ethereum Network
