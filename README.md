@@ -6,10 +6,10 @@ If you need help to set-up your own degen tool box or craft up your degen idea l
 
 Email - henrytirla@protonmail.com
 
-BITCOIN:   1GdaMqMZyirTkfYe4dyZn5Tox9dVJmT21Z
+Donations;
+BITCOIN: 1GdaMqMZyirTkfYe4dyZn5Tox9dVJmT21Z
 
-
-DONATIONS: 0x9B28885d2FC47C9156601411Dd0d8009D2cC362A - BSC/ETH
+BSC/ETH: 0x9B28885d2FC47C9156601411Dd0d8009D2cC362A
 
 
 
