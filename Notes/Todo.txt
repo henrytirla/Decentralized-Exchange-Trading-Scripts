@@ -1,5 +1,19 @@
-# Host Script on GCP - Automate Trading Process
+Write  articles on how to use these script and get the best out of it
+henrytirla.medium.com add comment of article on each script
+
+
+# Host Script on GCP - Automate Trading Process - Write article
 
 #Create UI for memepool script and after LP
 
 Make UI of copy trade scripts BNB and Ethereum Network
+
+Evaluate tokens  while scanning memepool - Categorize tokens in categories
+
+Build API for erc20 tokens checking for honeypots
+
+Build tool able to read the logic of a smartcontract and detect contract base scams that pass all technical properties.Eg Token Approval Scam
+
+Script to evaluate the profitability of a wallet
+
+
