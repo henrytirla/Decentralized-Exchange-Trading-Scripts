@@ -1,13 +1,14 @@
 "Scan Memepool for all router addresses."
 
 #DoingNOW
-
+#Get Inputs and feed it to the decode_input
+#Handle each input sequentially
 
 import asyncio
 from web3 import Web3
 from eth_abi import decode_abi
 
-w3 = Web3(Web3.HTTPProvider("Enter your node"))
+w3 = Web3(Web3.HTTPProvider(""))
 
 uniswap_router_addresses = [
     '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',  # Uniswap V2 Router
@@ -21,6 +22,7 @@ uniswap_router_addresses = [
 def decode_input_data(input_data):
     # Perform decoding of input data here
     #Todo
+    #check if trancsaction is successful before decoding
     decoded_data = decode_abi(['...'], input_data)
     return decoded_data
 
@@ -33,7 +35,11 @@ async def handle_new_block(block):
                 if tx['to'].lower() == router_address.lower():
                     # Process the transaction
                     #decoded_input_data = decode_input_data(tx['input'])
-                    print("Transaction interacting with Uniswap Router:", tx)
+                    #tx_hash = w3.toHex(tx)
+                    hash= tx['hash']
+                    tx_hash = w3.toHex(hash)
+                    print(tx_hash)
+                    print("Transaction interacting with Uniswap Router:", tx['to'])
                     #print("Decoded Input Data:", decoded_input_data)
                     print("---")
         except Exception as e:
