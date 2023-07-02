@@ -21,7 +21,7 @@ class style():  # Class of different text colours - default is white
     UNDERLINE = '\033[4m'
     RESET = '\033[0m'
 
-w3 = Web3(Web3.HTTPProvider(""))
+w3 = Web3(Web3.HTTPProvider("https://mainnet.infura.io/v3/b28812c62af1405e90af0ee79ea42a41"))
 
 
 uniswap_router_addresses = [
@@ -49,6 +49,11 @@ def decode_input_data(input_data, router):
 
     contract = w3.eth.contract(address=router, abi=abi)
     decoded_data = contract.decode_function_input(input_data)
+    decoded_str = str(decoded_data[0])
+    start_index = decoded_str.find(" ") + 1
+    end_index = decoded_str.find("(")
+    function_name = decoded_str[start_index:end_index]
+    print(style.CYAN+function_name)
 
     return decoded_data
 
