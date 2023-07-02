@@ -21,7 +21,7 @@ class style():  # Class of different text colours - default is white
     UNDERLINE = '\033[4m'
     RESET = '\033[0m'
 
-w3 = Web3(Web3.HTTPProvider("https://mainnet.infura.io/v3/b28812c62af1405e90af0ee79ea42a41"))
+w3 = Web3(Web3.HTTPProvider(""))
 
 
 uniswap_router_addresses = [
