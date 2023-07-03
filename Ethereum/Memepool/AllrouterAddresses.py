@@ -7,7 +7,8 @@
 import asyncio
 from web3 import Web3
 import json
-from eth_abi import decode_abi
+#from eth_abi import decode_abi
+from uniswap_universal_router_decoder import RouterCodec
 
 class style():  # Class of different text colours - default is white
     BLACK = '\033[30m'
@@ -31,6 +32,7 @@ uniswap_router_addresses = [
     '0xEf1c6E67703c7BD7107eed8303Fbe6EC2554BF6B', # Old Universal Router
     '0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD', #Universal Router
 
+
 ]
 
 
@@ -49,29 +51,44 @@ def decode_input_data(input_data, router):
 
     contract = w3.eth.contract(address=router, abi=abi)
     decoded_data = contract.decode_function_input(input_data)
+    #print(decoded_data)
     decoded_str = str(decoded_data[0])
     start_index = decoded_str.find(" ") + 1
     end_index = decoded_str.find("(")
     function_name = decoded_str[start_index:end_index]
     print(style.CYAN+function_name)
+    if function_name == "execute":
+        codec = RouterCodec()
+        decoded_trx_input = codec.decode.function_input(input_data)
+        return decoded_trx_input
 
-    return decoded_data
+    else:
+       return decoded_data
+
+
+
+
+
+
 
 
 async def handle_new_block(block):
     for tx_hash in block['transactions']:
         try:
-            tx = w3.eth.getTransaction(tx_hash)
+           # tx = w3.eth.getTransaction(tx_hash)
+            tx = w3.eth.get_transaction(tx_hash)
+
 
             for router_address in uniswap_router_addresses:
-                if tx['to'].lower() == router_address.lower():
+                if tx['to'] == router_address:
                     # Process the transaction
                     #decoded_input_data = decode_input_data(tx['input'])
                     #tx_hash = w3.toHex(tx)
                     hash= tx['hash']
-                    tx_hash = w3.toHex(hash)
+                    #tx_hash = w3.toHex(hash)
+                    tx_hash = w3.to_hex(hash)
                     #print(tx_hash)
-                    print(style.YELLOW+"Transaction interacting with Uniswap Router:", tx['to'], "Tx_Hash: ",w3.toHex(hash))
+                    print(style.YELLOW+"Transaction interacting with Uniswap Router:", tx['to'], "Tx_Hash: ",w3.to_hex(hash))
                     print(style.GREEN+"Decoded Input Data:", decode_input_data(tx['input'],tx['to']))
                     print(style.RED+"------------------")
         except Exception as e:
