@@ -1,6 +1,4 @@
 
-
-
 from web3 import Web3
 import requests
 
@@ -20,8 +18,8 @@ decoded = v3UniContract.decode_function_input(sample_input)
 
 print(decoded)
 #
-multicall_data = decoded[1]['data'][0]
+byte_data = decoded[1]['data'][0]
 
-nested_call_decoded = v3UniContract.decode_function_input(multicall_data)
+nested_call_decoded = v3UniContract.decode_function_input(byte_data)
 
 print(nested_call_decoded)
