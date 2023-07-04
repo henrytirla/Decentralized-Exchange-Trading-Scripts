@@ -23,7 +23,7 @@ class style():  # Class of different text colours - default is white
     UNDERLINE = '\033[4m'
     RESET = '\033[0m'
 
-w3 = Web3(Web3.HTTPProvider("Enter your node"))
+w3 = Web3(Web3.HTTPProvider("Enter your nodes"))
 
 
 uniswap_router_addresses = [
