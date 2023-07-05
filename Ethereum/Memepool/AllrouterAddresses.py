@@ -23,7 +23,7 @@ class style():  # Class of different text colours - default is white
     UNDERLINE = '\033[4m'
     RESET = '\033[0m'
 
-w3 = Web3(Web3.HTTPProvider("Enter your nodes"))
+w3 = Web3(Web3.HTTPProvider("Enter Your Node"))
 
 
 uniswap_router_addresses = [
@@ -47,30 +47,34 @@ def get_FunctionName(decoded_data):
     end_index = decoded_str.find("(")
     function_name = decoded_str[start_index:end_index]
     return function_name
-
-# uniswap_v3_path = b"\xc0*\xaa9\xb2#\xfe\x8d\n\x0e ... \xd7\x89"  # bytes or str hex
-# fn_name = "V3_SWAP_EXACT_IN"  # Or V3_SWAP_EXACT_OUT
-# codec = RouterCodec()
-# decoded_path = codec.decode.v3_path(fn_name, uniswap_v3_path)
 def decode_execute(decode_data):
     codec = RouterCodec()
     decoded_trx_input = codec.decode.function_input(decode_data)
-    In_put = decoded_trx_input[1]['inputs'][1]
+    #In_put = decoded_trx_input[1]['inputs'][1]
+    In_put= decoded_trx_input[1]['inputs'][1]
     fn_name= get_FunctionName(In_put)
     print(fn_name)
-    if fn_name == 'V3_SWAP_EXACT_IN':
-       #fn_name = "V3_SWAP_EXACT_IN"
-       print(decoded_trx_input)
+    if fn_name ==  'V3_SWAP_EXACT_IN':
+       #print(decoded_trx_input)
        path = In_put[1]['path']
        decoded_path = codec.decode.v3_path(fn_name, path)
        return fn_name,decoded_path
     elif fn_name == 'V2_SWAP_EXACT_IN':
-         print(decoded_trx_input)
+         #print(decoded_trx_input)
          v2_path= In_put[1]['path']
          return v2_path
-    elif fn_name == "UNWRAP_WETH":
-         print(decoded_trx_input)
-         data= decoded_trx_input[1]['inputs'][0][1]['path']
+    elif fn_name ==  "UNWRAP_WETH":
+         #print(decoded_trx_input)
+         v3_data= decoded_trx_input[1]['inputs'][0]
+
+         if get_FunctionName(v3_data) =='V3_SWAP_EXACT_IN':
+            path=  decoded_trx_input[1]['inputs'][0][1]['path']
+            decoded_path = codec.decode.v3_path('V3_SWAP_EXACT_IN', path)
+            return decoded_path
+         else:
+
+             data= decoded_trx_input[1]['inputs'][0][1]['path']
+
          return fn_name,data
 
 
@@ -99,7 +103,7 @@ def decode_input_data(input_data, router):
         if function_name == "execute":
 
             data= decode_execute(input_data)
-            # return  SwapExact_in , In_put ,decoded_trx_input
+
             return data
         elif function_name == "multicall":
             byte_data = decoded_data[1]['data'][0]
@@ -108,8 +112,7 @@ def decode_input_data(input_data, router):
         else:
             path_ =decoded_data[1]['path']
             return path_
-    # else:
-    #     return "Pass"
+
 
 
 
@@ -126,6 +129,7 @@ async def handle_new_block(block):
 
 
             for router_address in uniswap_router_addresses:
+
                 if tx['to'] == router_address:
                     hash= tx['hash']
                     tx_hash = w3.to_hex(hash)
@@ -138,6 +142,8 @@ async def handle_new_block(block):
 
                             print(style.GREEN+f"Decoded Input Data: {function_name}")
                             print(style.RED+"------------------")
+                else:
+                    pass
 
         except Exception as e:
             print("An error occurred while processing a transaction:", e)
