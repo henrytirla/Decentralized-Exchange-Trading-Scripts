@@ -7,7 +7,7 @@ from web3 import Web3
 import json
 from uniswap_universal_router_decoder import RouterCodec
 
-
+#TODO Aggregation Router 0x1111111254EEB25477B68fb85Ed929f73A960582
 
 
 
@@ -23,7 +23,7 @@ class style():  # Class of different text colours - default is white
     UNDERLINE = '\033[4m'
     RESET = '\033[0m'
 
-w3 = Web3(Web3.HTTPProvider("Enter Your Node"))
+w3 = Web3(Web3.HTTPProvider("Enter Router"))
 
 
 uniswap_router_addresses = [
@@ -133,17 +133,18 @@ async def handle_new_block(block):
                 if tx['to'] == router_address:
                     hash= tx['hash']
                     tx_hash = w3.to_hex(hash)
-                    if tx['to'] == router_address:
+                    #if tx['to'] == router_address:
 
-                        function_name = decode_input_data(tx['input'], tx['to'])
-                        if function_name is not None:
-                            print(style.YELLOW + "Transaction interacting with Uniswap Router:", tx['to'], "Tx_Hash: ",
-                                  w3.to_hex(hash))
+                    function_name = decode_input_data(tx['input'], tx['to'])
+                    if function_name is not None:
+                        print(style.YELLOW + "Transaction interacting with Uniswap Router:", tx['to'], "Tx_Hash: ",
+                              w3.to_hex(hash))
 
-                            print(style.GREEN+f"Decoded Input Data: {function_name}")
-                            print(style.RED+"------------------")
+                        print(style.GREEN+f"Decoded Input Data: {function_name}")
+                        print(style.RED+"------------------")
+                    #break
                 else:
-                    pass
+                    continue
 
         except Exception as e:
             print("An error occurred while processing a transaction:", e)
