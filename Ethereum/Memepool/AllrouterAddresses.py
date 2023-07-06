@@ -23,7 +23,7 @@ class style():  # Class of different text colours - default is white
     UNDERLINE = '\033[4m'
     RESET = '\033[0m'
 
-w3 = Web3(Web3.HTTPProvider("Enter Router"))
+w3 = Web3(Web3.HTTPProvider(""))
 
 
 uniswap_router_addresses = [
@@ -41,41 +41,51 @@ check_functions = {"swapETHForExactTokens": True, "swapExactETHForTokens": True,
                    'multicall': True, 'execute': True}
 
 
+check_functionName= {"V3_SWAP_EXACT_IN":True,"V2_SWAP_EXACT_IN":True,"UNWRAP_WETH":True,"multicall":True}
+
+
 def get_FunctionName(decoded_data):
     decoded_str = str(decoded_data[0])
     start_index = decoded_str.find(" ") + 1
     end_index = decoded_str.find("(")
     function_name = decoded_str[start_index:end_index]
+    print(decoded_data)
     return function_name
+
+
 def decode_execute(decode_data):
     codec = RouterCodec()
     decoded_trx_input = codec.decode.function_input(decode_data)
-    #In_put = decoded_trx_input[1]['inputs'][1]
-    In_put= decoded_trx_input[1]['inputs'][1]
-    fn_name= get_FunctionName(In_put)
+    In_put = decoded_trx_input[1]['inputs'][1]
+    fn_name = get_FunctionName(In_put)
     print(fn_name)
-    if fn_name ==  'V3_SWAP_EXACT_IN':
-       #print(decoded_trx_input)
-       path = In_put[1]['path']
-       decoded_path = codec.decode.v3_path(fn_name, path)
-       return fn_name,decoded_path
-    elif fn_name == 'V2_SWAP_EXACT_IN':
-         #print(decoded_trx_input)
-         v2_path= In_put[1]['path']
-         return v2_path
-    elif fn_name ==  "UNWRAP_WETH":
-         #print(decoded_trx_input)
-         v3_data= decoded_trx_input[1]['inputs'][0]
+    if fn_name in check_functionName and check_functionName[fn_name]:
+        if fn_name == 'V3_SWAP_EXACT_IN':
+            path = In_put[1]['path']
+            decoded_path = codec.decode.v3_path(fn_name, path)
+            return fn_name, decoded_path
+        elif fn_name == 'V3_SWAP_EXACT_OUT':
+            path = In_put[1]['path']
+            decoded_path2 = codec.decode.v3_path(fn_name, path)
+            return fn_name, decoded_path2
 
-         if get_FunctionName(v3_data) =='V3_SWAP_EXACT_IN':
-            path=  decoded_trx_input[1]['inputs'][0][1]['path']
-            decoded_path = codec.decode.v3_path('V3_SWAP_EXACT_IN', path)
-            return decoded_path
-         else:
+        elif fn_name == 'V2_SWAP_EXACT_IN':
+            v2_path = In_put[1]['path']
+            return v2_path
+        elif fn_name == 'UNWRAP_WETH':
+            v3_data = decoded_trx_input[1]['inputs'][0]
+            if get_FunctionName(v3_data) == 'V3_SWAP_EXACT_IN':
+                path = decoded_trx_input[1]['inputs'][0][1]['path']
+                decoded_path = codec.decode.v3_path('V3_SWAP_EXACT_IN', path)
+                return decoded_path
+            else:
+                #print(fn_name,decoded_trx_input)
+                data = decoded_trx_input[1]['inputs'][0][1]['path']
+                return fn_name, data
+    else:
+        return None
 
-             data= decoded_trx_input[1]['inputs'][0][1]['path']
 
-         return fn_name,data
 
 
 
@@ -108,10 +118,13 @@ def decode_input_data(input_data, router):
         elif function_name == "multicall":
             byte_data = decoded_data[1]['data'][0]
             multicall_decoded = contract.decode_function_input(byte_data)
-            return multicall_decoded
+            tokens = [multicall_decoded[1]['params']['tokenOut'], multicall_decoded[1]['params']['tokenIn']]
+
+            return tokens
         else:
             path_ =decoded_data[1]['path']
             return path_
+
 
 
 
