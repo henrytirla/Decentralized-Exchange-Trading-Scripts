@@ -64,10 +64,10 @@ def decode_execute(decode_data):
             path = In_put[1]['path']
             decoded_path = codec.decode.v3_path(fn_name, path)
             return fn_name, decoded_path
-        elif fn_name == 'V3_SWAP_EXACT_OUT':
-            path = In_put[1]['path']
-            decoded_path2 = codec.decode.v3_path(fn_name, path)
-            return fn_name, decoded_path2
+        # elif fn_name == 'V3_SWAP_EXACT_OUT':
+        #     path = In_put[1]['path']
+        #     decoded_path2 = codec.decode.v3_path(fn_name, path)
+        #     return fn_name, decoded_path2
 
         elif fn_name == 'V2_SWAP_EXACT_IN':
             v2_path = In_put[1]['path']
