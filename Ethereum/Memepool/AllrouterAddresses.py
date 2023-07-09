@@ -1,10 +1,12 @@
 "Scan Memepool for all router addresses."
 
-
+#Todo create UI for this script
 
 import asyncio
 from web3 import Web3
 import json
+import requests
+import datetime
 from uniswap_universal_router_decoder import RouterCodec
 
 #TODO Aggregation Router 0x1111111254EEB25477B68fb85Ed929f73A960582
@@ -23,7 +25,7 @@ class style():  # Class of different text colours - default is white
     UNDERLINE = '\033[4m'
     RESET = '\033[0m'
 
-w3 = Web3(Web3.HTTPProvider(""))
+w3 = Web3(Web3.HTTPProvider("Enter Your Node"))
 
 
 uniswap_router_addresses = [
@@ -40,8 +42,8 @@ check_functions = {"swapETHForExactTokens": True, "swapExactETHForTokens": True,
                    "swapExactETHForTokensSupportingFeeOnTransferTokens": True, "addLiquidityETH": True,
                    'multicall': True, 'execute': True}
 
-
-check_functionName= {"V3_SWAP_EXACT_IN":True,"V2_SWAP_EXACT_IN":True,"UNWRAP_WETH":True,"multicall":True}
+#swapExactTokensForTokens
+check_functionName= {"V2_SWAP_EXACT_IN":True,"UNWRAP_WETH":True,"multicall":True}#"exactInputSingle":True,
 
 
 def get_FunctionName(decoded_data):
@@ -49,95 +51,171 @@ def get_FunctionName(decoded_data):
     start_index = decoded_str.find(" ") + 1
     end_index = decoded_str.find("(")
     function_name = decoded_str[start_index:end_index]
-    print(decoded_data)
     return function_name
 
 
-def decode_execute(decode_data):
+def decode_execute(decode_data,function_name):
     codec = RouterCodec()
     decoded_trx_input = codec.decode.function_input(decode_data)
-    In_put = decoded_trx_input[1]['inputs'][1]
-    fn_name = get_FunctionName(In_put)
-    print(fn_name)
-    if fn_name in check_functionName and check_functionName[fn_name]:
-        if fn_name == 'V3_SWAP_EXACT_IN':
-            path = In_put[1]['path']
-            decoded_path = codec.decode.v3_path(fn_name, path)
-            return fn_name, decoded_path
-        # elif fn_name == 'V3_SWAP_EXACT_OUT':
-        #     path = In_put[1]['path']
-        #     decoded_path2 = codec.decode.v3_path(fn_name, path)
-        #     return fn_name, decoded_path2
+    check_V2= decoded_trx_input[1]['inputs'][0]
+    v2fnction= get_FunctionName(check_V2)
 
-        elif fn_name == 'V2_SWAP_EXACT_IN':
-            v2_path = In_put[1]['path']
-            return v2_path
-        elif fn_name == 'UNWRAP_WETH':
-            v3_data = decoded_trx_input[1]['inputs'][0]
-            if get_FunctionName(v3_data) == 'V3_SWAP_EXACT_IN':
-                path = decoded_trx_input[1]['inputs'][0][1]['path']
-                decoded_path = codec.decode.v3_path('V3_SWAP_EXACT_IN', path)
-                return decoded_path
-            else:
-                #print(fn_name,decoded_trx_input)
-                data = decoded_trx_input[1]['inputs'][0][1]['path']
-                return fn_name, data
+    values_to_check = {"V3_SWAP_EXACT_IN", "V2_SWAP_EXACT_IN", "V3_SWAP_EXACT_OUT","V2_SWAP_EXACT_OUT","exactOutput"}
+
+    if v2fnction not in values_to_check:
+        In_put = decoded_trx_input[1]['inputs'][1]
+        fn_name = get_FunctionName(In_put)
+        if fn_name in check_functionName and check_functionName[fn_name]:
+            if fn_name == 'V2_SWAP_EXACT_IN':
+                v2_path = In_put[1]['path']
+                if v2_path[0]== "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2":
+                    # print(style.CYAN + function_name)
+                    # print("Function Name: ", fn_name)
+                    token_address= v2_path[1]
+                    token_abi_json = get_contract_abi(token_address)
+                    if token_abi_json:
+                       token_abi = json.loads(token_abi_json)
+                       token_name, token_symbol = get_token_name_symbol(w3, token_address, token_abi)
+                       token_name, token_symbol = get_token_name_symbol(w3, token_address, token_abi)
+                       creation_date = get_contract_creation_date(token_address)
+                       time_since_creation = format_time_difference(creation_date)
+                       return f"Token Addess {token_address},{style.MAGENTA}Token Name/Symbol {token_name, token_symbol}, {style.CYAN}Creation Time {time_since_creation}"
+
+
+            elif fn_name == 'UNWRAP_WETH':
+                v3_data = decoded_trx_input[1]['inputs'][0]
+                if get_FunctionName(v3_data) == 'V3_SWAP_EXACT_IN':
+                    path = decoded_trx_input[1]['inputs'][0][1]['path']
+                    decoded_path = codec.decode.v3_path('V3_SWAP_EXACT_IN', path)
+                    return decoded_path
+                else:
+                    #print(fn_name,decoded_trx_input)
+                    data = decoded_trx_input[1]['inputs'][0][1]['path']
+                    return fn_name, data
+        else:
+            return None
     else:
         return None
 
+api_key = 'QSD4D9KG1NYTX3Y6CPAR62G9FBW16UZ81Z'
+
+def get_contract_abi(contract_address):
+    bscscan_api_key = api_key
+    url = f'https://api.etherscan.io/api?module=contract&action=getsourcecode&address={contract_address}&apikey={bscscan_api_key}'
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        contract_info = response.json()
+        if 'result' in contract_info and contract_info['result'] and 'ABI' in contract_info['result'][
+            0]:
+            return contract_info['result'][0]['ABI']
+        else:
+            return None
+    else:
+        return None
+def get_contract_creation_date(contract_address):
+       bscscan_api_key = api_key
+       url = f"https://api.etherscan.io/api?module=account&action=txlist&address={contract_address}&startblock=1&endblock=99999999&sort=asc&apikey={bscscan_api_key}"
+
+       response = requests.get(url)
+       data = response.json()
+
+       if data['status'] == '1':
+          creation_transaction = data['result'][0]
+          timestamp = int(creation_transaction['timeStamp'])
+          creation_date = datetime.datetime.fromtimestamp(timestamp)
+          return creation_date
+       else:
+            raise Exception(f"Error: {data['message']}")
 
 
 
+def format_time_difference(creation_date):
+    now = datetime.datetime.utcnow()
+    time_diff = now - creation_date
+    # time_diff += datetime.timedelta(minutes=1)
+    days = time_diff.days
+    seconds = time_diff.seconds
+    hours, remainder = divmod(seconds, 3600)
+    minutes = remainder // 60
+    return  f" {days} days {hours} hours {minutes} minutes ago"
 
+def get_token_name_symbol(web3, contract_address, abi):
+    token_contract = web3.eth.contract(address=contract_address, abi=abi)
+    token_name = token_contract.functions.name().call()
+    token_symbol = token_contract.functions.symbol().call()
 
-
-
-
+    return token_name, token_symbol
 
 def decode_input_data(input_data, router):
+
     with open("router_abi.json") as f:
         routers_abi = json.load(f)
     abi = routers_abi.get(router)
+
 
     if abi is None:
         raise ValueError("ABI not found for the specified router.")
     contract = w3.eth.contract(address=router, abi=abi)
     decoded_data = contract.decode_function_input(input_data)
-
-
     function_name = get_FunctionName(decoded_data)
-
-
     if function_name in check_functions and check_functions[function_name]:
-        print(style.CYAN + function_name)
         if function_name == "execute":
-
-            data= decode_execute(input_data)
-
+            data= decode_execute(input_data,function_name)
             return data
         elif function_name == "multicall":
+
             byte_data = decoded_data[1]['data'][0]
             multicall_decoded = contract.decode_function_input(byte_data)
-            tokens = [multicall_decoded[1]['params']['tokenOut'], multicall_decoded[1]['params']['tokenIn']]
+            Inner_func = get_FunctionName(multicall_decoded)
+            values_to_check = {"swapExactTokensForTokens"}
+            #print("Inner Multicall Function ------",Inner_func)
+            if Inner_func not in values_to_check:
+               #print(style.CYAN + function_name)
+               tokens = [multicall_decoded[1]['params']['tokenOut'], multicall_decoded[1]['params']['tokenIn']]
+               if tokens[0]=='0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2':
 
-            return tokens
+                  token_address = tokens[1]
+                  token_abi_json = get_contract_abi(token_address)
+                  if token_abi_json:
+                      token_abi = json.loads(token_abi_json)
+                      token_name, token_symbol = get_token_name_symbol(w3, token_address, token_abi)
+                      creation_date= get_contract_creation_date(token_address)
+                      time_since_creation = format_time_difference(creation_date)
+                      return f"Token Addess {token_address},{style.MAGENTA}Token Name/Symbol {token_name, token_symbol}, {style.CYAN}Creation Time {time_since_creation}"
+
+        elif function_name == "addLiquidityETH":
+             #print(style.CYAN+function_name)
+             token_address=decoded_data[1]['token']
+             token_abi_json = get_contract_abi(token_address)
+             if token_abi_json:
+                 token_abi = json.loads(token_abi_json)
+                 token_name, token_symbol = get_token_name_symbol(w3, token_address, token_abi)
+                 creation_date = get_contract_creation_date(token_address)
+                 time_since_creation = format_time_difference(creation_date)
+
+             return f"Token Addess {token_address},{style.MAGENTA}Token Name/Symbol {token_name, token_symbol}, {style.CYAN}Creation Time {time_since_creation}"
+
         else:
+            #print(style.CYAN+function_name)
             path_ =decoded_data[1]['path']
-            return path_
+            if path_[0] == '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2':
+                token_address = path_[1]
+                token_abi_json = get_contract_abi(token_address)
+                if token_abi_json:
+                    token_abi = json.loads(token_abi_json)
+                    token_name, token_symbol = get_token_name_symbol(w3, token_address, token_abi)
+                    creation_date = get_contract_creation_date(token_address)
+                    time_since_creation = format_time_difference(creation_date)
+
+                    return f"Token Addess {token_address},{style.MAGENTA}Token Name/Symbol {token_name, token_symbol}, {style.CYAN}Creation Time {time_since_creation}"
 
 
-
-
-
-
-
-
-
-
+count= 0
 async def handle_new_block(block):
+    global count
     for tx_hash in block['transactions']:
         try:
-
             tx = w3.eth.get_transaction(tx_hash)
 
 
@@ -146,14 +224,17 @@ async def handle_new_block(block):
                 if tx['to'] == router_address:
                     hash= tx['hash']
                     tx_hash = w3.to_hex(hash)
-                    #if tx['to'] == router_address:
-
                     function_name = decode_input_data(tx['input'], tx['to'])
                     if function_name is not None:
-                        print(style.YELLOW + "Transaction interacting with Uniswap Router:", tx['to'], "Tx_Hash: ",
-                              w3.to_hex(hash))
+                        count += 1
 
-                        print(style.GREEN+f"Decoded Input Data: {function_name}")
+
+
+
+                        print(count,style.YELLOW + "Tx_Hash: ",
+                              "https://etherscan.io/tx/"+w3.to_hex(hash))
+
+                        print(style.GREEN+f"{function_name}")
                         print(style.RED+"------------------")
                     #break
                 else:
