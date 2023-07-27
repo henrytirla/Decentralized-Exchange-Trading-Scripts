@@ -3,8 +3,11 @@ import json
 from web3 import Web3
 from websockets import connect
 
+"""
+Subscribes to pending transactions 
+https://community.infura.io/t/web3-py-how-to-subscribe-to-pending-ethereum-transactions-in-python/5409
+"""
 
-"Subscribes to pending transactions "
 infura_ws_url="wss://mainnet.infura.io/ws/v3/d617b8c04ea349faa0ccb45aa2b8ad72"
 infura_http_url = 'https://mainnet.infura.io/v3/d617b8c04ea349faa0ccb45aa2b8ad72'
 web3 = Web3(Web3.HTTPProvider(infura_http_url))
