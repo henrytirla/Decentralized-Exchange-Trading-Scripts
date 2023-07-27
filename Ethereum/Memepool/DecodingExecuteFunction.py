@@ -1,4 +1,3 @@
-
 from web3 import Web3
 import requests
 
@@ -11,6 +10,5 @@ decoded_trx_input = codec.decode.function_input(trx_input)
 
 path = decoded_trx_input[1]['inputs'][1][1]['path']
 
-print(decoded_trx_input)
-
-
+# print(decoded_trx_input)
+print(path)
