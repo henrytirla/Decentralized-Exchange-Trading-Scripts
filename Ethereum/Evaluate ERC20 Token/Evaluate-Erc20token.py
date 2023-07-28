@@ -1,7 +1,9 @@
 print("TOKEN EVALUATION.......BOT")
 
 from web3 import Web3
+
 import datetime
+
 import threading
 import json
 import asyncio
@@ -10,6 +12,7 @@ import time
 import os
 import sys
 import webbrowser
+
 
 class style():  # Class of different text colours - default is white
     BLACK = '\033[30m'
@@ -26,17 +29,17 @@ class style():  # Class of different text colours - default is white
 currentTimeStamp = ""
 
 
-def getTimestamp():
-    while True:
-        timeStampData = datetime.datetime.now()
-        global currentTimeStamp
-        currentTimeStamp = "[" + timeStampData.strftime("%H:%M:%S.%f")[:-3] + "]"
-
-
-# -------------------------------- INITIALISE ------------------------------------------
-
-timeStampThread = threading.Thread(target=getTimestamp)
-timeStampThread.start()
+# def getTimestamp():
+#     while True:
+#         timeStampData = datetime.datetime.now()
+#         global currentTimeStamp
+#         currentTimeStamp = "[" + timeStampData.strftime("%H:%M:%S.%f")[:-3] + "]"
+#
+#
+# # -------------------------------- INITIALISE ------------------------------------------
+#
+# timeStampThread = threading.Thread(target=getTimestamp)
+# timeStampThread.start()
 
 "Uniswap V3 Router"
 #0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45
@@ -56,12 +59,12 @@ lpABI ='[{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"con
 
 web3 = Web3(Web3.HTTPProvider(""))
 
-if web3.isConnected():
+if web3.is_connected():
     print(style.CYAN+"Connected to the Ethereum Blockchain")
 
 
 contract_address = input("Enter Contract Address: ")
-contract_address = web3.toChecksumAddress(contract_address)
+contract_address = web3.to_checksum_address(contract_address)
 Eth_Api = "QSD4D9KG1NYTX3Y6CPAR62G9FBW16UZ81Z"  #Change this to your Etherscan API ID
 
 abiCodeGetRequestURL = "https://api.etherscan.io/api?module=contract&action=getabi&address=" + contract_address + "&apikey=" + Eth_Api
@@ -252,19 +255,19 @@ def getReserves(pairAddressforReserves):  # fundamental code for liquidity detec
 
     return pairReserves
 reserves = getReserves(getLpAddress)
-tokenLiquidityAmount = float(web3.fromWei(reserves[1], "ether"))
+tokenLiquidityAmount = float(web3.from_wei(reserves[1], "ether"))
 lp_amount = tokenLiquidityAmount
 #print("LP",lp_amount)
 
 if lp_amount < 950:
    print(style.GREEN+ "Current Liquidity: ", tokenLiquidityAmount, "ETH")
 else:
-    tokenLiquidityAmount = float(web3.fromWei(reserves[0], "ether"))
-    print("Current Liquidity: ", tokenLiquidityAmount, "BNB")
+    tokenLiquidityAmount = float(web3.from_wei(reserves[0], "ether"))
+    print("Current Liquidity: ", tokenLiquidityAmount, "ETH")
 
 
 if totalLpBalance < 20:
-    print(style.RED+("LP BALANCE TOO LOW --Likely a scam"))
+    print(style.RED+("LP BALANCE LESS THAN 20 ETH"))
 
 
 def get_deployer_address(contract_address):
@@ -282,8 +285,8 @@ def get_deployer_address(contract_address):
 deployer_address = get_deployer_address(contract_address)
 print('Deployer address:', style.YELLOW+ deployer_address)
 
-
 def get_creation_timestamp(contract_address):
+    from datetime import datetime
     url = f'https://api.etherscan.io/api?module=account&action=txlist&address={contract_address}&startblock=0&endblock=99999999&page=1&offset=3&sort=asc&apikey=QSD4D9KG1NYTX3Y6CPAR62G9FBW16UZ81Z'
     response = requests.get(url)
     data = response.json()
@@ -291,21 +294,35 @@ def get_creation_timestamp(contract_address):
     if data['status'] == '1':
         for tx in data['result']:
             if tx['to'] == contract_address.lower():
-                return int(tx['timeStamp'])
+                timestamp = int(tx['timeStamp'])
+                formatted_time = datetime.utcfromtimestamp(timestamp).strftime("%d-%m-%Y %H:%M:%S")
+                return formatted_time
     else:
         raise Exception('Error while fetching transactions: ' + data['message'])
 
-creation_timestamp = get_creation_timestamp(contract_address)
 
-creation_date =  datetime.datetime.fromtimestamp(creation_timestamp)
-now = datetime.datetime.utcnow()
-time_diff = now - creation_date
-days = time_diff.days
-seconds = time_diff.seconds
-hours, remainder = divmod(seconds, 3600)
-minutes = remainder // 60
 
-print(style.CYAN+f"Pair Created: {days} days {hours} hours {minutes} minutes ago")
+def calculate_time_difference(creation_time_str):
+    from datetime import datetime, timedelta
+
+    creation_time = datetime.strptime(creation_time_str, "%d-%m-%Y %H:%M:%S")
+    current_time = datetime.utcnow()
+    time_difference = current_time - creation_time
+
+    # Extract days, hours, and minutes from the time difference
+    days = time_difference.days
+    hours, remainder = divmod(time_difference.seconds, 3600)
+    minutes, _ = divmod(remainder, 60)
+
+    return f"{days} days {hours} hours {minutes} minutes ago"
+
+
+
+creation_time = get_creation_timestamp(contract_address)
+time_difference_str = calculate_time_difference(creation_time)
+
+print(style.CYAN+f"Creation Date: {creation_time}")
+print(style.CYAN+f"Created Since: {time_difference_str}")
 
 
 
