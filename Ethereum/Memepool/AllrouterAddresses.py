@@ -35,8 +35,7 @@ uniswap_router_addresses = [
     '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45',  #Uniswap-V3 02 Router
     '0xEf1c6E67703c7BD7107eed8303Fbe6EC2554BF6B', #OldUniversal-Router
     '0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD', #Universal-Router
-
-]
+    ]
 
 check_functions = {"swapETHForExactTokens": True, "swapExactETHForTokens": True,
                    "swapExactETHForTokensSupportingFeeOnTransferTokens": True, "addLiquidityETH": True,
@@ -285,7 +284,7 @@ async def handle_new_block(block):
                         count += 1
                         tx_details= w3.eth.get_transaction(tx_hash)
                         # print()tx_details['blockNumber']
-                        print(style.CYAN+f"Current Block Number: {block['number']}, Latest Block Number: {w3.eth.block_number}",end='\n ')
+                        print(style.CYAN+f"Current Txn Block Number: {block['number']}, Latest Block Number: {w3.eth.block_number}",end='\n ')
                         #print(print_block_numbers())
                         print(count,style.YELLOW + "Tx_Hash: ",
                               "https://etherscan.io/tx/"+tx_hash)
