@@ -73,7 +73,8 @@ def get_deployer_address(contract_address):
     if data['status'] == '1':
         for tx in data['result']:
             if tx['to'] == contract_address.lower():
-                return tx['from']
+                deployer = web3.to_checksum_address(tx['from'])
+                return deployer
     else:
         raise Exception('Error while fetching transactions: ' + data['message'])
 
@@ -160,6 +161,13 @@ if check['status'] == '1':
 else:
     print(style.RED + 'CONTRACT NOT VERIFIED')
     exit()
+deployer_address = get_deployer_address(contract_address)
+print('Token Deployer address:', style.YELLOW+ deployer_address)
+
+if contract_owner == deployer_address:
+    print(style.RED+"Deployer Address owns Contract Proceed with caution", deployer_address)
+
+
 
 print(style.GREEN + name, symbol)
 
@@ -187,8 +195,7 @@ if contract_owner != "NULL":
     else:
         print(style.MAGENTA +"Ower LP tokens", checkOwnerlp,"Percentage",Ownerliquidity_percentage,"%")
 
-deployer_address = get_deployer_address(contract_address)
-print('Token Deployer address:', style.YELLOW+ deployer_address)
+
 
 creation_time = get_creation_timestamp(contract_address)
 time_difference_str = calculate_time_difference(creation_time)
@@ -217,6 +224,7 @@ checkLocked02 = contract_unicrypt.functions.getNumLocksForToken(getLpAddress).ca
 checkLocked03 = contract_trustswapsecure.functions.getTotalTokenBalance(getLpAddress).call()
 
 BalanceDeadlp = lpContract.functions.balanceOf(dead_address).call() / lpDECIMAL
+BalanceNullLp= lpContract.functions.balanceOf(dead_address).call() / lpDECIMAL
 if(checkLocked == 1):
     #print("---------CHECK IF LOCK------\n")
     pinkyOwnerlp = lpContract.functions.balanceOf(pinkysale).call() / lpDECIMAL
@@ -253,21 +261,40 @@ elif checkLocked03 >1:
     webbrowser.open("https://twitter.com/search?q=%24" + symbol)
 
 elif BalanceDeadlp > 0:
-     checkDeadlp = lpContract.functions.balanceOf(dead_address).call() / lpDECIMAL
-     Ownerliquidity_percentage = checkDeadlp / totalLpBalance * 100
+     #checkDeadlp = lpContract.functions.balanceOf(dead_address).call() / lpDECIMAL
+     Ownerliquidity_percentage = BalanceDeadlp / totalLpBalance * 100
      percent_lp = Ownerliquidity_percentage
      #print(style.RED + "Watch out for scam, DONT TRUST LP TOKENS HERE STORED IN DEAD WALLETS")
-     print(style.GREEN + "DEAD WALLET LP tokens", checkDeadlp, "Percentage", Ownerliquidity_percentage, "%")
+     print(style.GREEN + "DEAD WALLET LP tokens", BalanceDeadlp, "Percentage", Ownerliquidity_percentage, "%")
      webbrowser.open("https://twitter.com/search?q=%24" + symbol)
 
 
-elif contract_owner == null_address:
-    Ownerliquidity_percentage = checkOwnerlp / totalLpBalance * 100
-    if Ownerliquidity_percentage < 10:
-        print(style.GREEN+"NULL ADDRESS OWNS :",Ownerliquidity_percentage,"% OF LP TOKENS")
-        webbrowser.open('https://etherscan.com/token/' + getLpAddress + "#balances")
-    else:
-        print(style.RED+"NULL ADDRESS OWNS :",Ownerliquidity_percentage,"% OF LP TOKENS")
+elif BalanceNullLp > 0:
+     Ownerliquidity_percentage = BalanceNullLp / totalLpBalance * 100
+     percent_lp = Ownerliquidity_percentage
+     #print(style.RED + "Watch out for scam, DONT TRUST LP TOKENS HERE STORED IN DEAD WALLETS")
+     print(style.GREEN + "DEAD WALLET LP tokens", BalanceNullLp, "Percentage", Ownerliquidity_percentage, "%")
+     webbrowser.open("https://twitter.com/search?q=%24" + symbol)
+
+# elif contract_owner == null_address:
+#     Ownerliquidity_percentage = checkOwnerlp / totalLpBalance * 100
+#     checkNulllp = lpContract.functions.balanceOf(null_address).call() / lpDECIMAL
+#
+#     if Ownerliquidity_percentage < 10:
+#         print(style.RED+"NULL ADDRESS OWNS A LOW AMOUNT OF LP TOKENS :",Ownerliquidity_percentage,"% OF LP TOKENS")
+#         webbrowser.open('https://etherscan.com/token/' + getLpAddress + "#balances")
+#     else:
+#         print(style.RED+"NULL ADDRESS OWNS :",Ownerliquidity_percentage,"% OF LP TOKENS")
+#
+# elif contract_owner == dead_address:
+#     Ownerliquidity_percentage = checkOwnerlp / totalLpBalance * 100
+#     checkDeadlp = lpContract.functions.balanceOf(null_address).call() / lpDECIMAL
+#
+#     if Ownerliquidity_percentage < 10:
+#         print(style.GREEN+"NULL ADDRESS OWNS :",Ownerliquidity_percentage,"% OF LP TOKENS")
+#         webbrowser.open('https://etherscan.com/token/' + getLpAddress + "#balances")
+#     else:
+#         print(style.RED+"NULL ADDRESS OWNS :",Ownerliquidity_percentage,"% OF LP TOKENS")
 
 
 
