@@ -2,11 +2,14 @@
 Useful scripts to automate trading on different DEX.
 These tools are mostly the ground up to build degen-tools 
 
-If you need help to set up your own degen toolbox or craft up your degen idea let's connect.
+If you need help setting up your own degen toolbox or crafting up your degen idea let's connect.
+
+If you are using these scripts your feedback will be appreciated. Graphic User Interface will be done based on user feedback
 
 Email - henrytirla@protonmail.com
 
-Instant Messaging: [Telegram](https://t.me/henrytirla)
+
+Instant Messaging: [Let's Chat](https://t.me/henrytirla)
 
 BITCOIN: 1GdaMqMZyirTkfYe4dyZn5Tox9dVJmT21Z
 
