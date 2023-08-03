@@ -165,7 +165,8 @@ deployer_address = get_deployer_address(contract_address)
 print('Token Deployer address:', style.YELLOW+ deployer_address)
 
 if contract_owner == deployer_address:
-    print(style.RED+"Deployer Address owns Contract Proceed with caution", deployer_address)
+    print(style.RED+"🚨PROCEED WITH CAUTI0N !!!")
+    print(style.RED+"Deployer Address owns Contract ", deployer_address)
 
 
 
@@ -190,6 +191,7 @@ if contract_owner != "NULL":
     Ownerliquidity_percentage = checkOwnerlp/totalLpBalance * 100
     percent_lp = Ownerliquidity_percentage
     if percent_lp > 90:
+        print(style.RED+" 🚨PROCEED WITH CAUTION ")
         print(style.RED +"Owner  Has too many LP tokens", checkOwnerlp,"Percentage",Ownerliquidity_percentage,"%")
         #exit()
     else:
@@ -300,7 +302,7 @@ elif BalanceNullLp > 0:
 
 
 else:
-    print(style.RED+("PROCEED WITH CAUTION "))
+    print(style.RED+("🚨 PROCEED WITH CAUTION !!! "))
     print(style.RED+("Liquidity is not Locked by certfied authority proceed with extreme caution"))
     #print(style.YELLOW+"- OZ Timelock address: 0xbc7210c2116b0a763027f6b8563e7888a9fe2de5")
     #webbrowser.open('https://dexscreener.com/tokens/' + contract_address)
@@ -316,15 +318,15 @@ tokenLiquidityAmount = float(web3.from_wei(reserves[1], "ether"))
 lp_amount = tokenLiquidityAmount
 #print("LP",lp_amount)
 
-if lp_amount < 950:
+if lp_amount < 5:
    print(style.GREEN+ "Current Liquidity: ", tokenLiquidityAmount, "ETH")
 else:
     tokenLiquidityAmount = float(web3.from_wei(reserves[0], "ether"))
-    print("Current Liquidity: ", tokenLiquidityAmount, "ETH")
+    print(style.RED+"🚨PROCEED WITH CAUTION !!!")
+    print(style.RED+"LP BALANCE LESS THAN 5 ETH: ", tokenLiquidityAmount, "ETH")
 
 
-if totalLpBalance < 20:
-    print(style.RED+("LP BALANCE LESS THAN 20 ETH"))
+
 
 
 
