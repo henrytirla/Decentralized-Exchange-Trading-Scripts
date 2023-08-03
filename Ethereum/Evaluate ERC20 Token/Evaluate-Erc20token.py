@@ -1,5 +1,6 @@
 print("TOKEN EVALUATION.......BOT")
 
+
 from web3 import Web3
 import datetime
 import requests
@@ -19,6 +20,8 @@ class style():  # Class of different text colours - default is white
     WHITE = '\033[37m'
     UNDERLINE = '\033[4m'
     RESET = '\033[0m'
+
+print(style.GREEN+f"For Analysis of contract funcntions I recommend Dex Screener--Go+Security")
 
 def get_creation_timestamp(contract_address):
     from datetime import datetime
@@ -337,6 +340,7 @@ if lp_amount < 5:
 else:
     tokenLiquidityAmount = float(web3.from_wei(reserves[0], "ether"))
     print(style.GREEN+" Current Liquidity", tokenLiquidityAmount, "ETH")
+
 
 
 
