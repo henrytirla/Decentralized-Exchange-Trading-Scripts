@@ -12,8 +12,7 @@ uniswap_v2_pair_abi = '[{"inputs":[],"payable":false,"stateMutability":"nonpayab
 
 uniswap_v2_pair = w3.eth.contract(address=lp_address, abi=uniswap_v2_pair_abi)
 
-tokenA_address = uniswap_v2_pair.functions.token0().call()
-tokenB_address = uniswap_v2_pair.functions.token1().call()
+
 
 
 
