@@ -319,11 +319,11 @@ lp_amount = tokenLiquidityAmount
 #print("LP",lp_amount)
 
 if lp_amount < 5:
-   print(style.GREEN+ "Current Liquidity: ", tokenLiquidityAmount, "ETH")
+    print(style.RED + "🚨PROCEED WITH CAUTION !!!")
+    print(style.GREEN+ "LP BALANCE LESS THAN 5 ETH: ", tokenLiquidityAmount, "ETH")
 else:
     tokenLiquidityAmount = float(web3.from_wei(reserves[0], "ether"))
-    print(style.RED+"🚨PROCEED WITH CAUTION !!!")
-    print(style.RED+"LP BALANCE LESS THAN 5 ETH: ", tokenLiquidityAmount, "ETH")
+    print(style.GREEN+" Current Liquidity", tokenLiquidityAmount, "ETH")
 
 
 
