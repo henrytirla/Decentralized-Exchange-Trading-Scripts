@@ -164,6 +164,14 @@ else:
 deployer_address = get_deployer_address(contract_address)
 print('Token Deployer address:', style.YELLOW+ deployer_address)
 
+deployer_balance = contract.functions.balanceOf(deployer_address).call() / DECIMAL
+percent_deployerBalance = deployer_balance / totalSupply * 100
+
+if percent_deployerBalance > 50:
+   print(style.RED+f"Deployer Address Owns: {percent_deployerBalance}")
+else:
+    print(style.GREEN+f"Deployer Owns: %{round(percent_deployerBalance,2)} of Total Supply")
+
 if contract_owner == deployer_address:
     print(style.RED+"🚨PROCEED WITH CAUTI0N !!!")
     print(style.RED+"Deployer Address owns Contract ", deployer_address)
