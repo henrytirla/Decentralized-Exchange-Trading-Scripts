@@ -12,6 +12,7 @@ from uniswap_universal_router_decoder import RouterCodec
 
 #TODO Aggregation Router 0x1111111254EEB25477B68fb85Ed929f73A960582
 
+"Not an Optimal approach memepool 2.0 should be more optimal"
 
 
 class style():  # Class of different text colours - default is white
@@ -263,6 +264,7 @@ count= 0
 async def handle_new_block(block):
     global count
     for tx_hash in block['transactions']:
+
         try:
 
             tx = w3.eth.get_transaction(tx_hash)
