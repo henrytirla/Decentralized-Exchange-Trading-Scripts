@@ -63,8 +63,13 @@ def lock_time_difference(creation_time_str):
     days = time_difference.days
     hours, remainder = divmod(time_difference.seconds, 3600)
     minutes, _ = divmod(remainder, 60)
+    if days< 365:
+        return f"  {days} days {hours} hours {minutes} minutes ago"
+    else:
+        return f" {years} years   {hours} hours {minutes} minutes ago"
 
-    return f" {years} years  {days} days {hours} hours {minutes} minutes ago"
+
+
 def get_deployer_address(contract_address):
     url = f'https://api.etherscan.io/api?module=account&action=txlist&address={contract_address}&startblock=0&endblock=99999999&page=1&offset=3&sort=asc&apikey=QSD4D9KG1NYTX3Y6CPAR62G9FBW16UZ81Z'
     response = requests.get(url)
