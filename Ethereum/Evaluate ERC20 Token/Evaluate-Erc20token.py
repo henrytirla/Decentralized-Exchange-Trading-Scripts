@@ -21,7 +21,7 @@ class style():  # Class of different text colours - default is white
     UNDERLINE = '\033[4m'
     RESET = '\033[0m'
 
-print(style.GREEN+f"For Analysis of contract funcntions I recommend Dex Screener--Go+Security")
+print(style.GREEN+f"For Analysis of contract funcntions I recommend Dex Screener--Go+Security and Holder token distribution https://app.bubblemaps.io/")
 
 def get_creation_timestamp(contract_address):
     from datetime import datetime
@@ -336,6 +336,8 @@ lp_amount = tokenLiquidityAmount
 
 if lp_amount < 5:
     print(style.RED + "🚨PROCEED WITH CAUTION !!!")
+    tokenLiquidityAmount = float(web3.from_wei(reserves[0], "ether"))
+
     print(style.RED+ "LP BALANCE LESS THAN 5 ETH: ", tokenLiquidityAmount, "ETH")
 else:
     tokenLiquidityAmount = float(web3.from_wei(reserves[0], "ether"))
