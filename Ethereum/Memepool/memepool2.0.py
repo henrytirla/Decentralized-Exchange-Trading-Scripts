@@ -3,6 +3,13 @@ from web3 import Web3
 import requests
 w3 = Web3(Web3.HTTPProvider("https://eth-mainnet.g.alchemy.com/v2/lTlatSTYDZmCv6wVLRIDff7S3kZhL2dq"))
 import time
+
+
+#Todo Add token Name
+#Todo Evaluate certain metrics of a token on the get go
+# Buy With Using 1inch Aggregator router for cheap gas fees
+# Store this being bought in a list just to see what is happening in the market for newly created pairs
+#Todo Brainstorm Improvement
 class style():  # Class of different text colours - default is white
     BLACK = '\033[30m'
     RED = '\033[31m'
