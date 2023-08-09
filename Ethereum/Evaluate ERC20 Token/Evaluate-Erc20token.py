@@ -318,8 +318,6 @@ elif checkLocked02 >= 1:
     webbrowser.open("https://dexscreener.com/ethereum/" + getLpAddress)
 
 elif checkLocked03 >1:
-    print("LP",checkLocked03)
-
     trustswapcryptOwnerlp = lpContract.functions.balanceOf(trustswap).call() / lpDECIMAL
     trustswapliquidity_percentage = trustswapcryptOwnerlp / totalLpBalance * 100
     TrustSwaplockinfo = contract_trustswapsecure.functions.getDepositsByWithdrawalAddress(deployer_address).call()
@@ -331,11 +329,9 @@ elif checkLocked03 >1:
     my_date = f"{value:%d-%m-%Y %H:%M:%S}"
     print("UNLOCK DATE: ", my_date)
     print(style.YELLOW + f"TOKEN LOCKED FOR: {lock_time_difference(my_date)}")
-    print("Lock Info",TrustSwaplockinfo_)
     reserves = getReserves(getLpAddress)
     tokenLiquidityAmount = float(web3.from_wei(reserves[1], "ether"))
     lp_amount = tokenLiquidityAmount
-    # print("LP",lp_amount)
 
     if lp_amount < 5:
         print(style.RED + "🚨PROCEED WITH CAUTION !!!")
