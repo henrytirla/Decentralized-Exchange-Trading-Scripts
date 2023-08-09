@@ -189,8 +189,9 @@ print('Token Deployer address:', style.YELLOW+ deployer_address)
 deployer_balance = contract.functions.balanceOf(deployer_address).call() / DECIMAL
 percent_deployerBalance = deployer_balance / totalSupply * 100
 
-if percent_deployerBalance > 50:
-   print(style.RED+f"Deployer Address Owns: {percent_deployerBalance}")
+if percent_deployerBalance> 1:
+   print(style.RED + "🚨PROCEED WITH CAUTI0N !!!")
+   print(style.RED+f"Deployer Address Owns: %{percent_deployerBalance} of Total Supply")
 else:
     print(style.GREEN+f"Deployer Owns: %{round(percent_deployerBalance,2)} of Total Supply")
 
