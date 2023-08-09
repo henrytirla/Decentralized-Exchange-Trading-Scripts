@@ -278,10 +278,10 @@ if(checkLocked == 1):
     lp_amount = tokenLiquidityAmount
     # print("LP",lp_amount)
     if lp_amount < 5:
-        print(style.RED + "🚨PROCEED WITH CAUTION !!!")
+        print(style.RED + "🚨PROCEED WITH CAUTION !!!  LP BALANCE LESS THAN 5 ETH:")
         tokenLiquidityAmount = float(web3.from_wei(reserves[get_token_from_lp(getLpAddress)], "ETH"))
 
-        print(style.RED + "LP BALANCE LESS THAN 5 ETH: ", round(tokenLiquidityAmount,2), "ETH")
+        print(style.RED + "CURRENT LP BALANCE: ", round(tokenLiquidityAmount,2), "ETH")
     else:
         tokenLiquidityAmount = float(web3.from_wei(reserves[get_token_from_lp(getLpAddress)], "ether"))
         print(style.GREEN + "Current Liquidity", round(tokenLiquidityAmount,2), "ETH")
@@ -307,10 +307,10 @@ elif checkLocked02 >= 1:
     # print("LP",lp_amount)
 
     if lp_amount < 5:
-        print(style.RED + "🚨PROCEED WITH CAUTION !!!")
+        print(style.RED + "🚨PROCEED WITH CAUTION !!!  LP BALANCE LESS THAN 5 ETH:")
         tokenLiquidityAmount = float(web3.from_wei(reserves[get_token_from_lp(getLpAddress)], "ether"))
 
-        print(style.RED + "LP BALANCE LESS THAN 5 ETH: ", round(tokenLiquidityAmount,2), "ETH")
+        print(style.RED + "CURRENT LP BALANCE : ", round(tokenLiquidityAmount,2), "ETH")
     else:
         tokenLiquidityAmount = float(web3.from_wei(reserves[get_token_from_lp(getLpAddress)], "ether"))
         print(style.GREEN + "Current Liquidity", round(tokenLiquidityAmount,2), "ETH")
@@ -335,10 +335,10 @@ elif checkLocked03 >1:
     lp_amount = tokenLiquidityAmount
 
     if lp_amount < 5:
-        print(style.RED + "🚨PROCEED WITH CAUTION !!!")
+        print(style.RED + "🚨PROCEED WITH CAUTION !!!  LP BALANCE LESS THAN 5 ETH:")
         tokenLiquidityAmount = float(web3.from_wei(reserves[get_token_from_lp(getLpAddress)], "ether"))
 
-        print(style.RED + "LP BALANCE LESS THAN 5 ETH: ", round(tokenLiquidityAmount,2), "ETH")
+        print(style.RED + "CURRENT LP BALANCE : ", round(tokenLiquidityAmount,2), "ETH")
     else:
         tokenLiquidityAmount = float(web3.from_wei(reserves[get_token_from_lp(getLpAddress)], "ether"))
         print(style.GREEN + "Current Liquidity", round(tokenLiquidityAmount,2), "ETH")
