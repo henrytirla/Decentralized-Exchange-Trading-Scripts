@@ -59,13 +59,6 @@ def check_liquidity(lp_address):
         print('No liquidity balance detected')
 
 
-def run_lp_check():
-    if lp_address != web3.to_checksum_address('0x0000000000000000000000000000000000000000'):
-        print('LP address detected:', lp_address)
-        check_liquidity(lp_address)
-    else:
-        print('No LP address found')
-
 
 def run_lp_check():
     lp_address = contract.functions.getPair(contract_address, WETH).call()
