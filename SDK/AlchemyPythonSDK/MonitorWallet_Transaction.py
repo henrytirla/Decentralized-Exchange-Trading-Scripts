@@ -18,7 +18,6 @@ url = f"https://eth-mainnet.g.alchemy.com/v2/{api_key}"
 alchemy_ws_url="wss://eth-mainnet.g.alchemy.com/v2/WoUWFd2SYi7sNbmTTaT_fWMPCOUZ8yDI"
 
 
-# Used if you want to monitor ETH transactions to a specific address
 account = '0xbd2C6a28a156377bD75C363aD8f849c68922b4Dc'
 
 
