@@ -19,18 +19,11 @@ logs	Emits logs attached to a new block that match certain topic filters.
 
 api_key = "Enter your Alcheny API KEY HERE"
 network = Network.ETH_MAINNET
-# choose the maximum number of retries to perform, default is 5
-max_retries = 3
+
 
 url = f"https://eth-mainnet.g.alchemy.com/v2/{api_key}"
 alchemy_ws_url="wss://eth-mainnet.g.alchemy.com/v2/WoUWFd2SYi7sNbmTTaT_fWMPCOUZ8yDI"
-
-
-account = '0xbd2C6a28a156377bD75C363aD8f849c68922b4Dc'
-
-
 alchemy= Alchemy(api_key,network)
-mainet_wss="wss://eth-mainnet.g.alchemy.com/v2/WoUWFd2SYi7sNbmTTaT_fWMPCOUZ8yDI"
 async def subscribe_to_pending_transactions():
     ws_url = alchemy_ws_url
     subscription_data = {
