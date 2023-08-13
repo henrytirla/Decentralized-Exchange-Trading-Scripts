@@ -7,7 +7,15 @@ from websockets import connect
 
 
 from alchemy import Alchemy, Network
+"""
+for reference Subscription Type	Description
+alchemy_minedTransactions	Emits full transaction objects or hashes that are mined on the network based on provided filters and block tags.
+alchemy_pendingTransactions	Emits full transaction objects or hashes that are sent to the network, marked as "pending", based on provided filters.
+newPendingTransactions	Emits transaction hashes that are sent to the network and marked as "pending".
+newHeads	Emits new blocks that are added to the blockchain.
+logs	Emits logs attached to a new block that match certain topic filters.
 
+"""
 
 api_key = "Enter your Alcheny API KEY HERE"
 network = Network.ETH_MAINNET
