@@ -29,10 +29,8 @@ V2SwapContract = "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"
 
 
 tokenAddress= input("Enter Token Address ")
-#tokenAddress="0x903ff0ba636e32de1767a4b5eeb55c155763d8b7"
 tokenAddress=web3.to_checksum_address(tokenAddress)
 #walletAddress= input("Enter Wallet Address")
-walletAddress="0xd86c7d48d07f3be6a163e6c49bf4ce0ef543662b"
 walletAddress=web3.to_checksum_address(walletAddress)
 
 tokenContract = web3.eth.contract(address=tokenAddress, abi=tokenAbi)
