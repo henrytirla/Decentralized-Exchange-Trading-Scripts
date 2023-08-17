@@ -222,7 +222,7 @@ def sellTokens(tokenAddress,WalletAddress):
     })
 
     try:
-        signed_txn = web3.eth.account.sign_transaction(approve, private_key="11c2a828e9d9dedbf58479f21374cdee2590798fc93d9dce015094a406180ce7")
+        signed_txn = web3.eth.account.sign_transaction(approve, private_key="")
         tx_token = web3.eth.send_raw_transaction(signed_txn.rawTransaction)
         print(style.GREEN + "Approved: " + web3.to_hex(tx_token))
     except:
