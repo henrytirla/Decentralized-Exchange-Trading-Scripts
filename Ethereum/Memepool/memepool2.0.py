@@ -132,7 +132,7 @@ def get_token_from_lp(lpAddres):
         return tokenB_address
 
 
-
+token_logs={}
 
 def process_logs(logs):
     for log in logs:
@@ -141,26 +141,32 @@ def process_logs(logs):
 
         if src_address in router_addresses_set and dst_address not in router_addresses_set:
             token_contract = get_token_from_lp(dst_address)
+            check_log=token_logs.get(token_contract,False)
+            #print("CheckLog",check_log)
 
-            creation_date = get_contract_creation_date(token_contract)
-            num_days = get_Days(creation_date)
-            time_diff = calculate_time_difference(creation_date)
-            creation_date = get_contract_creation_date(token_contract)
-            num_days=get_Days(creation_date)
-            time_diff= calculate_time_difference(creation_date)
+            if not check_log:
+                creation_date = get_contract_creation_date(token_contract)
+                num_days = get_Days(creation_date)
+                time_diff = calculate_time_difference(creation_date)
+                creation_date = get_contract_creation_date(token_contract)
+                num_days=get_Days(creation_date)
+                time_diff= calculate_time_difference(creation_date)
 
-            if num_days < txn_filter:
-                token_abi_json = get_contract_abi(token_contract)
+                if num_days < txn_filter and check_log == False:
+                    token_abi_json = get_contract_abi(token_contract)
 
-                if token_abi_json:
-                    token_abi = json.loads(token_abi_json)
-                    token_name, token_symbol = get_token_name_symbol(w3, token_contract, token_abi)
-                    print(f"Token Contract: {token_contract}, " + style.RESET,end='\n')
-                    print(style.MAGENTA+f"Token Name/Symbol {token_name, token_symbol}" + style.CYAN +  f" Creation Time:  {time_diff}" + style.RESET,end='\n')
-                    print(f"Transfer of {round(w3.from_wei(log.args.wad, 'ether'), 2)} WETH from {src_address} to {dst_address}, Transaction Hash: https://etherscan.io/tx/{w3.to_hex(log.transactionHash)}")
-                    print("---------")
-            else:
-                continue
+                    if token_abi_json  :
+                        token_abi = json.loads(token_abi_json)
+                        token_name, token_symbol = get_token_name_symbol(w3, token_contract, token_abi)
+                        print(f"Token Contract: {token_contract}, " + style.RESET,end='\n')
+                        print(style.MAGENTA+f"Token Name/Symbol {token_name, token_symbol}" + style.CYAN +  f" Creation Time:  {time_diff}" + style.RESET,end='\n')
+                        print(f"Transfer of {round(w3.from_wei(log.args.wad, 'ether'), 2)} WETH from {src_address} to {dst_address}, Transaction Hash: https://etherscan.io/tx/{w3.to_hex(log.transactionHash)}")
+                        print("---------")
+                        token_logs[token_contract] = True
+
+
+                else:
+                    continue
 
 router_addresses_set = set(uniswap_router_addresses)
 
