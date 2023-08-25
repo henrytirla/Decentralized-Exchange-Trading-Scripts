@@ -68,6 +68,19 @@ def getTotalBuys(to_address, contract_address):
     length= len(result['transfers'])
     token_name= result['transfers'][0].asset
     return length, token_name
+def get_Days(creation_time_str):
+    from datetime import datetime, timedelta
+
+    creation_time = datetime.strptime(creation_time_str, "%d-%m-%Y %H:%M:%S")
+    current_time = datetime.utcnow()
+    time_difference = current_time - creation_time
+
+    # Extract days, hours, and minutes from the time difference
+    days = time_difference.days
+    hours, remainder = divmod(time_difference.seconds, 3600)
+    minutes, _ = divmod(remainder, 60)
+
+    return days
 
 async def process_transaction(transaction_hash):
     #await asyncio.sleep(5)  # Simulate some processing time
@@ -75,29 +88,32 @@ async def process_transaction(transaction_hash):
     receipt =  alchemy.core.get_transaction_receipt(transaction_hash)
     WalletAddress = receipt['from']
     tokenBought = receipt['logs'][2]['address']
-    if receipt['logs'][0]['address'] == WETH:
+    if receipt['status'] == 1:
+        if receipt['logs'][0]['address'] == WETH:
 
-        try:
-            numberOfBuys, tokenName = getTotalBuys(WalletAddress, tokenBought)
-            creation_time = get_creation_timestamp(tokenBought)
-            time_difference_str = calculate_time_difference(creation_time)
-            print(numberOfBuys, tokenName)
-        except Exception as e:
-            print("Error",e)
+            try:
+                numberOfBuys, tokenName = getTotalBuys(WalletAddress, tokenBought)
+                creation_time = get_creation_timestamp(tokenBought)
+                time_difference_str = calculate_time_difference(creation_time)
+                num_days= get_Days(creation_time)
+                print(numberOfBuys, tokenName)
+                if numberOfBuys ==1 and num_days < 1:
+                   print(style.GREEN + f"Buy Detected from {WalletAddress}: # of tokenBought {tokenBought} {style.RED}Creation Time: {time_difference_str} ",style.RESET)
+            except Exception as e:
+                print("Error",e)
 
 
-        print(style.GREEN + f"Buy Detected from {WalletAddress}: # of tokenBought {tokenBought} {style.RED}Creation Time: {time_difference_str} ",
-              style.RESET)
 
 
-        print("-----------------------")
-    else:
-        # numberOfBuys, tokenName = getTotalBuys(WalletAddress, tokenBought)
-        # Number of Sells {numberOfBuys}
-        # print(numberOfBuys,tokenName)
-        print(style.MAGENTA + f"This is a sale {WalletAddress}: # of tokenSold {tokenBought}  ",
-              style.RESET)
-        print("------------------------")
+
+            print("-----------------------")
+        else:
+            # numberOfBuys, tokenName = getTotalBuys(WalletAddress, tokenBought)
+            # Number of Sells {numberOfBuys}
+            # print(numberOfBuys,tokenName)
+            print(style.MAGENTA + f"This is a sale {WalletAddress}: # of tokenSold {tokenBought}  ",
+                  style.RESET)
+            print("------------------------")
 
 
 
