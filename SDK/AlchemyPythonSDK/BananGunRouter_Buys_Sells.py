@@ -84,7 +84,7 @@ def get_Days(creation_time_str):
 
 async def process_transaction(transaction_hash):
     #await asyncio.sleep(5)  # Simulate some processing time
-    print(f"{getTimestamp()} Processing transaction: {transaction_hash}")
+    #print(f"{getTimestamp()} Processing transaction: {transaction_hash}")
     receipt =  alchemy.core.get_transaction_receipt(transaction_hash)
     WalletAddress = receipt['from']
     tokenBought = receipt['logs'][2]['address']
@@ -96,9 +96,10 @@ async def process_transaction(transaction_hash):
                 creation_time = get_creation_timestamp(tokenBought)
                 time_difference_str = calculate_time_difference(creation_time)
                 num_days= get_Days(creation_time)
-                print(numberOfBuys, tokenName)
+                #print(numberOfBuys, tokenName)
                 if numberOfBuys ==1 and num_days < 1:
-                   print(style.GREEN + f"Buy Detected from {WalletAddress}: # of tokenBought {tokenBought} {style.RED}Creation Time: {time_difference_str} ",style.RESET)
+                   print(style.GREEN + f"Buy Detected from {WalletAddress}:Token Name: {tokenName} tokenBought {tokenBought} {style.RED}Creation Time: {time_difference_str} ",style.RESET)
+                   print("-----------------------")
             except Exception as e:
                 print("Error",e)
 
@@ -106,14 +107,13 @@ async def process_transaction(transaction_hash):
 
 
 
-            print("-----------------------")
+
         else:
-            # numberOfBuys, tokenName = getTotalBuys(WalletAddress, tokenBought)
-            # Number of Sells {numberOfBuys}
-            # print(numberOfBuys,tokenName)
-            print(style.MAGENTA + f"This is a sale {WalletAddress}: # of tokenSold {tokenBought}  ",
-                  style.RESET)
-            print("------------------------")
+            pass
+            # print(style.MAGENTA + f"This is a sale {WalletAddress}: # of tokenSold {tokenBought}  ",
+            #       style.RESET)
+            # print("------------------------")
+
 
 
 
@@ -137,6 +137,7 @@ async def subscribe_to_pending_transactions():
                 queue.append(transaction_hash)
 
 async def process_queue():
+    print(style.GREEN+"Scanning Transaction.....",style.RESET)
     while True:
         if queue:
             transaction_hash = queue.pop(0)
