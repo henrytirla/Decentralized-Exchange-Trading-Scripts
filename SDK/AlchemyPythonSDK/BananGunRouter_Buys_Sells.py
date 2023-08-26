@@ -88,12 +88,16 @@ async def process_transaction(transaction_hash):
     #await asyncio.sleep(5)  # Simulate some processing time
     #print(f"{getTimestamp()} Processing transaction: {transaction_hash}")
     receipt =  alchemy.core.get_transaction_receipt(transaction_hash)
-    WalletAddress = receipt['from']
-    tokenBought = receipt['logs'][2]['address']
-    check_log = tokenlogs.get(tokenBought, False)
+    # WalletAddress = receipt['from']
+    # tokenBought = receipt['logs'][2]['address']
+    # check_log = tokenlogs.get(tokenBought, False)
 
     if receipt['status'] == 1:
+
         if receipt['logs'][0]['address'] == WETH:
+            WalletAddress = receipt['from']
+            tokenBought = receipt['logs'][2]['address']
+            check_log = tokenlogs.get(tokenBought, False)
             if not check_log:
                 try:
                     numberOfBuys, tokenName = getTotalBuys(WalletAddress, tokenBought)
@@ -102,11 +106,13 @@ async def process_transaction(transaction_hash):
                     num_days= get_Days(creation_time)
                     #print(numberOfBuys, tokenName)
                     if numberOfBuys ==1 and num_days < 1:
-                       print(style.GREEN + f"Buy Detected from {WalletAddress}:Token Name: {tokenName} tokenBought {tokenBought} {style.RED}Creation Time: {time_difference_str} ",style.RESET)
+                       print(style.GREEN + f" Router {receipt['to']} Buy Detected from {WalletAddress}:Token Name: {tokenName} tokenBought {tokenBought} {style.RED}Creation Time: {time_difference_str} ",style.RESET)
                        tokenlogs[tokenBought]= True
                        print("-----------------------")
                 except Exception as e:
-                    print("Error",e)
+                    #print("Error",e,transaction_hash)
+                    pass
+
             else:
                 pass
                 # print(style.MAGENTA + f"This is a sale {WalletAddress}: # of tokenSold {tokenBought}  ",
@@ -114,14 +120,14 @@ async def process_transaction(transaction_hash):
                 # print("------------------------")
 
 
-
+#0x58dF81bAbDF15276E761808E872a3838CbeCbcf9 Banana Gun router
 
 async def subscribe_to_pending_transactions():
     async with websockets.connect(alchemy_ws_url) as websocket:
         subscription_payload = {
             "jsonrpc": "2.0",
             "method": "eth_subscribe",
-            "params": ["alchemy_minedTransactions", {"addresses": [{"to": "0x58dF81bAbDF15276E761808E872a3838CbeCbcf9"}], "includeRemoved": False, "hashesOnly": True}],
+            "params": ["alchemy_minedTransactions", {"addresses": [{"to": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"}], "includeRemoved": False, "hashesOnly": True}],
             "id": 1
         }
 
