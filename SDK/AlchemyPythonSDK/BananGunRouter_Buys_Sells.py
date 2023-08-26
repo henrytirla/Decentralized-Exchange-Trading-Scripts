@@ -82,37 +82,36 @@ def get_Days(creation_time_str):
 
     return days
 
+tokenlogs={}
+
 async def process_transaction(transaction_hash):
     #await asyncio.sleep(5)  # Simulate some processing time
     #print(f"{getTimestamp()} Processing transaction: {transaction_hash}")
     receipt =  alchemy.core.get_transaction_receipt(transaction_hash)
     WalletAddress = receipt['from']
     tokenBought = receipt['logs'][2]['address']
+    check_log = tokenlogs.get(tokenBought, False)
+
     if receipt['status'] == 1:
         if receipt['logs'][0]['address'] == WETH:
-
-            try:
-                numberOfBuys, tokenName = getTotalBuys(WalletAddress, tokenBought)
-                creation_time = get_creation_timestamp(tokenBought)
-                time_difference_str = calculate_time_difference(creation_time)
-                num_days= get_Days(creation_time)
-                #print(numberOfBuys, tokenName)
-                if numberOfBuys ==1 and num_days < 1:
-                   print(style.GREEN + f"Buy Detected from {WalletAddress}:Token Name: {tokenName} tokenBought {tokenBought} {style.RED}Creation Time: {time_difference_str} ",style.RESET)
-                   print("-----------------------")
-            except Exception as e:
-                print("Error",e)
-
-
-
-
-
-
-        else:
-            pass
-            # print(style.MAGENTA + f"This is a sale {WalletAddress}: # of tokenSold {tokenBought}  ",
-            #       style.RESET)
-            # print("------------------------")
+            if not check_log:
+                try:
+                    numberOfBuys, tokenName = getTotalBuys(WalletAddress, tokenBought)
+                    creation_time = get_creation_timestamp(tokenBought)
+                    time_difference_str = calculate_time_difference(creation_time)
+                    num_days= get_Days(creation_time)
+                    #print(numberOfBuys, tokenName)
+                    if numberOfBuys ==1 and num_days < 1:
+                       print(style.GREEN + f"Buy Detected from {WalletAddress}:Token Name: {tokenName} tokenBought {tokenBought} {style.RED}Creation Time: {time_difference_str} ",style.RESET)
+                       tokenlogs[tokenBought]= True
+                       print("-----------------------")
+                except Exception as e:
+                    print("Error",e)
+            else:
+                pass
+                # print(style.MAGENTA + f"This is a sale {WalletAddress}: # of tokenSold {tokenBought}  ",
+                #       style.RESET)
+                # print("------------------------")
 
 
 
