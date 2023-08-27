@@ -1,0 +1,1 @@
+#TODO Evealuate token with Honeypot.is API
