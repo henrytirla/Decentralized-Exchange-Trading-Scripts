@@ -106,7 +106,7 @@ async def process_transaction(transaction_hash):
                     num_days= get_Days(creation_time)
                     #print(numberOfBuys, tokenName)
                     if numberOfBuys ==1 and num_days < 1:
-                       print(style.GREEN + f" Router {receipt['to']} Buy Detected from {WalletAddress}:Token Name: {tokenName} tokenBought {tokenBought} {style.RED}Creation Time: {time_difference_str} ",style.RESET)
+                       print(style.GREEN + f" Router {receipt['to']} Buy Detected from {WalletAddress}:Token Name: {tokenName} tokenBought {tokenBought} {style.RED}Token Creation Time: {time_difference_str} TXN HASh---https://etherscan.io/tx/{transaction_hash} ",style.RESET)
                        tokenlogs[tokenBought]= True
                        print("-----------------------")
                 except Exception as e:
