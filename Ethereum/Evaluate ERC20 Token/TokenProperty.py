@@ -8,7 +8,6 @@ import time
 import webbrowser
 import json
 
-
 class style():  # Class of different text colours - default is white
     BLACK = '\033[30m'
     RED = '\033[31m'
@@ -21,7 +20,7 @@ class style():  # Class of different text colours - default is white
     UNDERLINE = '\033[4m'
     RESET = '\033[0m'
 
-print(style.GREEN+f"For Analysis of contract funcntions I recommend Dex Screener--Go+Security and Holder token distribution https://app.bubblemaps.io/")
+print(style.GREEN+f"This gives you an overview of token Property. It does not take into consideration the smartcontract")
 
 def get_creation_timestamp(contract_address):
     from datetime import datetime
@@ -357,13 +356,13 @@ elif BalanceDeadlp > 0:
      webbrowser.open("https://dexscreener.com/ethereum/" + getLpAddress)
 
 
-elif BalanceNullLp > 0:
-     Ownerliquidity_percentage = BalanceNullLp / totalLpBalance * 100
-     percent_lp = Ownerliquidity_percentage
-     #print(style.RED + "Watch out for scam, DONT TRUST LP TOKENS HERE STORED IN DEAD WALLETS")
-     print(style.GREEN + "NULL WALLET LP tokens", BalanceNullLp, "Percentage", Ownerliquidity_percentage, "%")
-     webbrowser.open("https://twitter.com/search?q=%24" + symbol)
-     webbrowser.open("https://dexscreener.com/ethereum/" + getLpAddress)
+# elif BalanceNullLp > 0:
+#      Ownerliquidity_percentage = BalanceNullLp / totalLpBalance * 100
+#      percent_lp = Ownerliquidity_percentage
+#      #print(style.RED + "Watch out for scam, DONT TRUST LP TOKENS HERE STORED IN DEAD WALLETS")
+#      print(style.GREEN + "NULL WALLET LP tokens", BalanceNullLp, "Percentage", Ownerliquidity_percentage, "%")
+#      webbrowser.open("https://twitter.com/search?q=%24" + symbol)
+#      webbrowser.open("https://dexscreener.com/ethereum/" + getLpAddress)
 
 else:
     print(style.RED+("🚨 PROCEED WITH CAUTION !!! "))
