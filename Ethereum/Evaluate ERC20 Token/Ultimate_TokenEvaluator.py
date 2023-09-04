@@ -17,10 +17,7 @@ class style():
     RESET = '\033[0m'
 
 def analyze_token(token_address):
-    #web3 = Web3(Web3.HTTPProvider("https://eth-mainnet.g.alchemy.com/v2/lTlatSTYDZmCv6wVLRIDff7S3kZhL2dq"))
 
-    # token_address = input("Enter Token Address: ")
-    # token_address = "0x4Ed4a9047401617B83891bE7b63e5B229B67e6DC"
     data = Token(access_token=None).token_security(
         chain_id="1", addresses=[token_address]
     )
@@ -46,7 +43,7 @@ def analyze_token(token_address):
 
         if response.status_code == 200:
             data = response.json()
-            # print(data)
+
 
             flags = data['flags']
             liquidity = data['pair']['liquidity']
@@ -54,7 +51,6 @@ def analyze_token(token_address):
             pair_address = data['pair']['pair']['address']
             creation_timestamp = int(data['pair']['createdAtTimestamp'])
 
-            # get_liquidity_lock_info(pair_address)
 
             is_honeypot = data['honeypotResult']['isHoneypot']
 
