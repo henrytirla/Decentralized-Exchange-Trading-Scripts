@@ -1,5 +1,7 @@
 "Watch Jareth From Subway Transactions"
 
+#TODO copytrade transactions based on certain metrics
+
 from web3 import Web3
 import requests
 import time
