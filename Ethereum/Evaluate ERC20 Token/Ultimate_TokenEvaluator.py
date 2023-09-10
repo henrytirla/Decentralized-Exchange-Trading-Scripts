@@ -164,7 +164,7 @@ def analyze_token(token_address):
         print(style.YELLOW+"SMART CONTRACT SECURITY CHECKS",style.RESET)
 
         print("============================================")
-        criteria_met = False
+     
 
         if owner_address == creator_address:
             print(style.RED, "🚨 Deployer Address Owns Contract 🚨", style.RESET)
@@ -204,7 +204,7 @@ def analyze_token(token_address):
 
                 if lp_holder.is_locked == 1 and float(lp_holder.percent) > 0.05 and result.lp_holders[
                     0].is_contract == 1:
-                    criteria_met = True
+                   
                     if result.lp_holders[0].locked_detail != None:
                         end_time_str = result.lp_holders[0].locked_detail[0].end_time
                         opt_time_str = result.lp_holders[0].locked_detail[0].opt_time
@@ -218,54 +218,54 @@ def analyze_token(token_address):
                         print(f"Number of days locked: {days_locked} days, {hours} Hours, {minutes} minutes")
                         print(f"Locked Percentage: {formatted_percentage}  Provider : {tag}")
                     else:
-                        criteria_met = True
+                       
                         print(f"Locked Percentage: {formatted_percentage}  Provider : {tag}")
                 elif lp_holder.is_locked == 0 and lp_holder.address!= creator_address and lp_holder.address != creator_address:
-                    #criteria_met = False
+                  
                     print(style.RED + f"UNKNOWN Address {lp_holder.address} OWNS {formatted_percentage} of LP TOKENS",style.RESET)
 
 
                 elif lp_holder.is_locked == 1 and float(lp_holder.percent) > 0.05:
 
                     if lp_holder.address == owner_address:
-                        criteria_met = False
+                        
 
                         print(style.RED + f"Owner owns {formatted_percentage} of LP TOKENS", style.RESET)
                     elif lp_holder.address == creator_address:
-                        criteria_met = False
+                   
                         print(style.RED + f"Creator owns {formatted_percentage} of LP TOKENS", style.RESET)
                     elif lp_holder.address == null_address:
-                        criteria_met = True
+                        
                         print(f"NUll Address Owns {formatted_percentage} of LP TOKESN")
                     elif lp_holder.address == dead_address:
-                        criteria_met = True
+                        
                         print(f"DEAD  Address Owns {formatted_percentage} of LP TOKESN")
                 elif lp_holder.is_locked == 0 and float(lp_holder.percent) > 0.05:
 
                     if lp_holder.address == owner_address:
-                        criteria_met = False
+                        
 
                         print(style.RED + f"Owner owns {formatted_percentage} of LP TOKENS", style.RESET)
                     elif lp_holder.address == creator_address:
-                        criteria_met = False
+                        
                         print(style.RED + f"Creator owns {formatted_percentage} of LP TOKENS", style.RESET)
                 elif lp_holder.is_locked == 0 and float(lp_holder.percent) > 0.05:
 
                     if lp_holder.address == owner_address and owner_address == null_address:
-                        criteria_met = True
+                        
                         print(style.GREEN + f"NULL ADDRESS  owns {formatted_percentage} of LP TOKENS", style.RESET)
                     elif lp_holder.address == creator_address and owner_address == null_address:
 
-                        criteria_met = True
+                        
                         print(
                             style.RED + f"Creator owns {formatted_percentage} of LP TOKENS ---This might be actually locked",
                             style.RESET)
                         
                     elif lp_holder.address == null_address:
-                        criteria_met = True
+                      
                         print(f"NUll Address Owns {formatted_percentage} of LP TOKESN")
                     elif lp_holder.address == dead_address:
-                        criteria_met = True
+                        
                         print(f"DEAD Address Owns {formatted_percentage} of LP TOKESN")
                 
         else:
