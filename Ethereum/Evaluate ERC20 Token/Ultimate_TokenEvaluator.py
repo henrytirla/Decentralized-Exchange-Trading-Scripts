@@ -263,10 +263,10 @@ def analyze_token(token_address):
                         
                     elif lp_holder.address == null_address:
                       
-                        print(f"NUll Address Owns {formatted_percentage} of LP TOKESN")
+                        print(f"NUll Address Owns {formatted_percentage} of LP TOKENS")
                     elif lp_holder.address == dead_address:
                         
-                        print(f"DEAD Address Owns {formatted_percentage} of LP TOKESN")
+                        print(f"DEAD Address Owns {formatted_percentage} of LP TOKENS")
                 
         else:
             print("UNKNOWN ADDRESS OWNS LP TOKENS")
