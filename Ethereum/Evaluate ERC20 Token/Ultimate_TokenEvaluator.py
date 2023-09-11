@@ -196,7 +196,7 @@ def analyze_token(token_address):
         print(style.YELLOW + "ANALYZING LIQUIDITY POOL TOKENS", style.RESET)
         print("============================================")
 
-        if int(result.lp_holder_count) > 0:
+        if  result.lp_holders != None:
             for lp_holder in result.lp_holders:
                 tag = lp_holder.tag
                 locked_percentage = float(lp_holder.percent) * 100
