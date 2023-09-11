@@ -4,7 +4,8 @@ import secrets
 
 # Connect to the Ethereum blockchain using the Infura node
 
-web3 = Web3(Web3.HTTPProvider("Enter infura Node here"))
+web3 = Web3(Web3.HTTPProvider("https://eth-mainnet.g.alchemy.com/v2/lTlatSTYDZmCv6wVLRIDff7S3kZhL2dq"))
+
 # Define the number of addresses to generate
 num_addresses = 10
 
@@ -16,4 +17,4 @@ for i in range(num_addresses):
 
     # Print the address and private key
     print(f"Address: {address.address}")
-    print(f"Private key: {address.privateKey.hex()}")
+    print(f"Private key: {address._private_key.hex()}")
