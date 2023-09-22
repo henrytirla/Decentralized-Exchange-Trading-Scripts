@@ -2,6 +2,8 @@ import requests
 import datetime
 from goplus.token import Token
 from dateutil import parser
+import time
+
 
 
 # API endpoint URL
@@ -20,6 +22,8 @@ class style():  # Class of different text colours - default is white
     RESET = '\033[0m'
 
 
+# Construct the query parameters
+
 def analyze_token(token_address):
     null_address = "0x0000000000000000000000000000000000000000"
     dead_address = "0x000000000000000000000000000000000000dead"
@@ -29,6 +33,7 @@ def analyze_token(token_address):
     result = data1.result[token_address.lower()]
     params = {"address": token_address}
     response = requests.get(url, params=params)
+
 
     if result.is_open_source == str(1):
         print("============================================")
@@ -40,6 +45,9 @@ def analyze_token(token_address):
     if response.status_code == 200:
         data = response.json()
         simulation_Success= data['simulationSuccess']
+        if not simulation_Success:
+            print(style.RED + f"HONEYPOT EXECUTION REVERTED\n" + style.RESET)
+            return
         column_width = 20
         pair_address = data['pair']['pair']['address']
         creation_timestamp = int(data['pair']['createdAtTimestamp'])
@@ -51,7 +59,7 @@ def analyze_token(token_address):
         hours, remainder = divmod(time_difference.seconds, 3600)
         minutes, _ = divmod(remainder, 60)
 
-        # Combine measures into a single variable
+        # Combine calculations into a single variable
         formatted_time_difference = f"{days} days, {hours} hours, {minutes} minutes ago"
         tokenAddress= data['token']['address']
         token_name = data['token']['name']
@@ -59,8 +67,11 @@ def analyze_token(token_address):
         token_decimals = data['token']['decimals']
         token_total_holders = data['token']['totalHolders']
         liquidity = data['pair']['liquidity']
-        highest_tax= data['holderAnalysis']['highestTax']
-        average_tax= data['holderAnalysis']['averageTax']
+        pair_address= data['pairAddress']
+        creation_txnHash=data['pair']['creationTxHash']
+
+        
+
 
 
 
@@ -87,14 +98,13 @@ def analyze_token(token_address):
                 print(f"{'Token Decimals:':{column_width - 18}}{token_decimals:{column_width - 18}}")
                 print(f"{'Current Holders:':{column_width - 20}}{style.GREEN}{token_total_holders:{column_width - 20}}",
                       style.RESET)
-                print(f"{'AverageTax:':{column_width - 20}}{style.RED}{round(average_tax,2):{column_width - 20}}", style.RESET)
-                print(f"{'Highest Tax:':{column_width - 20}}{style.RED}{highest_tax:{column_width - 20}}", style.RESET)
                 print(f"Current Liquidity {style.GREEN} ${round(liquidity, 2)}", style.RESET)
                 print(f"Token Created :{style.BLUE} {formatted_time_difference}", style.RESET)
+                print(f"Pair Address: {style.BLUE} {pair_address}", style.RESET)
+                print(f"Creation TxnHash: {style.BLUE} {creation_txnHash}", style.RESET)
 
         owner_address = result.owner_address
         creator_address = result.creator_address
-       
 
         expected_outcomes = {
             "Open Source": 1,
@@ -118,7 +128,7 @@ def analyze_token(token_address):
             "Owner Balance Percent": 2.000000,
             "Creator Balance Percent": 2.000000
         }
-
+        
         buy_tax_value = result.buy_tax
         sell_tax_value = result.sell_tax
 
@@ -126,7 +136,6 @@ def analyze_token(token_address):
             print(buy_tax_value)  # This will print "Unknown"
             buy_tax_value = "Unknown"
         else:
-            #buy_tax_value = int(buy_tax_value)
             buy_tax_value = round(float(buy_tax_value) * 100, 1)
 
         if isinstance(sell_tax_value, str) and sell_tax_value == "Unknown" or sell_tax_value == '':
@@ -153,7 +162,6 @@ def analyze_token(token_address):
             ("Is Honeypot", result.is_honeypot),
             ("Has Blacklist", result.is_blacklisted),
             ("Has Whitelist", result.is_whitelisted),
-            # ("Is Anti-Whale", result.is_anti_whale),
             ("Trading Cooldown", result.trading_cooldown),
             ("Personal Slippage Modifiable", result.personal_slippage_modifiable),
             ("Owner Balance Percent", round(float(result.owner_percent) * 100, 2)),
@@ -164,15 +172,41 @@ def analyze_token(token_address):
         print(style.YELLOW+"SMART CONTRACT SECURITY CHECKS",style.RESET)
 
         print("============================================")
-     
+        criteria_met = False
 
         if owner_address == creator_address:
-            print(style.RED, "🚨 Deployer Address Owns Contract 🚨", style.RESET)
-            # return
-
+            print(f"{style.RED}🚨 Deployer Address Owns Contract 🚨", style.RESET)
+            #return
+        else:
+            print(f"{style.GREEN}Owner Address: {owner_address}", style.RESET)
         
+        all_true = True
+
+
+        def evaluate_property(property_name, actual_value, expected_value):
+            global all_true
+            all_true= False
+            check_property={"Buy Tax": False,"Sell Tax": False,"Proxy Contract":True,"Mintable":True,"Can Take Back Ownership":True,"Owner Change Balance":True,"Hidden Owner":True,"Has External Calls":True,"Transfer Pausable":True,"Cannot Sell All":True,"Tax Modifiable":True,"Is Honeypot":True,"Has Blacklist":True,"Has Whitelist":True,"Trading Cooldown":True,"Creator Balance Percent":False,"Owner Balance Percent":False,"Open Source":False}
+            if actual_value <= expected_value:
+               all_true = True
+               return True
+            elif actual_value > expected_value and check_property[property_name]==False:
+                print(style.RED + f"{property_name}: {actual_value} > {expected_value}" + style.RESET)
+                all_true = False
+                return False
+            elif actual_value > expected_value and (owner_address == null_address or owner_address == dead_address) and check_property[property_name]==True:
+                all_true = True
+                return all_true
+            else:
+               print(style.RED + f"{property_name}: {actual_value} > {expected_value}" + style.RESET)
+               all_true = False
+               return all_true
+
+        res = []
         for check_name, check_result in security_checks:
             expected_value = float(expected_outcomes[check_name])
+
+
 
             if check_result is None or check_result == '':
                 actual_value = "Unknown"
@@ -184,11 +218,22 @@ def analyze_token(token_address):
                 actual_value = check_result
             else:
                 actual_value = float(check_result)
+
             if isinstance(actual_value, float):
-                if expected_outcomes[check_name] != actual_value:
-                    print(style.RED + f"{check_name}: {actual_value} -{style.GREEN}Expected <= {expected_outcomes[check_name]}" + style.RESET)
-            elif isinstance(actual_value, str) and str(actual_value) != str(expected_outcomes[check_name]):
-                print(style.RED + f"{check_name}: {actual_value} -{style.GREEN}Expected <= {expected_outcomes[check_name]}" + style.RESET)
+                r=evaluate_property(check_name, actual_value, expected_value)
+                res.append(r)
+
+
+
+        if any(val is False for val in res):
+           print(f"{style.RED}SMART CONTRACT DOES NOT MATCH OUR CRITERIA", style.RESET)
+
+
+        else:
+            print(f"{style.GREEN}SMART CONTRACT MATCHES OUR CRITERIA", style.RESET)
+
+
+
 
 
         print("============================================")
@@ -196,7 +241,7 @@ def analyze_token(token_address):
         print(style.YELLOW + "ANALYZING LIQUIDITY POOL TOKENS", style.RESET)
         print("============================================")
 
-        if  result.lp_holders != None:
+        if  result.lp_holders != None: #and result.lp_holders> 1
             for lp_holder in result.lp_holders:
                 tag = lp_holder.tag
                 locked_percentage = float(lp_holder.percent) * 100
@@ -204,7 +249,7 @@ def analyze_token(token_address):
 
                 if lp_holder.is_locked == 1 and float(lp_holder.percent) > 0.05 and result.lp_holders[
                     0].is_contract == 1:
-                   
+                    criteria_met = True
                     if result.lp_holders[0].locked_detail != None:
                         end_time_str = result.lp_holders[0].locked_detail[0].end_time
                         opt_time_str = result.lp_holders[0].locked_detail[0].opt_time
@@ -218,62 +263,85 @@ def analyze_token(token_address):
                         print(f"Number of days locked: {days_locked} days, {hours} Hours, {minutes} minutes")
                         print(f"Locked Percentage: {formatted_percentage}  Provider : {tag}")
                     else:
-                       
+                        criteria_met = True
                         print(f"Locked Percentage: {formatted_percentage}  Provider : {tag}")
                 elif lp_holder.is_locked == 0 and lp_holder.address!= creator_address and lp_holder.address != creator_address:
-                  
                     print(style.RED + f"UNKNOWN Address {lp_holder.address} OWNS {formatted_percentage} of LP TOKENS",style.RESET)
 
 
                 elif lp_holder.is_locked == 1 and float(lp_holder.percent) > 0.05:
 
                     if lp_holder.address == owner_address:
-                        
+                        criteria_met = False
 
                         print(style.RED + f"Owner owns {formatted_percentage} of LP TOKENS", style.RESET)
                     elif lp_holder.address == creator_address:
-                   
+                        criteria_met = False
                         print(style.RED + f"Creator owns {formatted_percentage} of LP TOKENS", style.RESET)
                     elif lp_holder.address == null_address:
-                        
+                        criteria_met = True
                         print(f"NUll Address Owns {formatted_percentage} of LP TOKESN")
                     elif lp_holder.address == dead_address:
-                        
+                        criteria_met = True
                         print(f"DEAD  Address Owns {formatted_percentage} of LP TOKESN")
                 elif lp_holder.is_locked == 0 and float(lp_holder.percent) > 0.05:
 
                     if lp_holder.address == owner_address:
-                        
+                        criteria_met = False
 
                         print(style.RED + f"Owner owns {formatted_percentage} of LP TOKENS", style.RESET)
                     elif lp_holder.address == creator_address:
-                        
+                        criteria_met = False
                         print(style.RED + f"Creator owns {formatted_percentage} of LP TOKENS", style.RESET)
                 elif lp_holder.is_locked == 0 and float(lp_holder.percent) > 0.05:
 
                     if lp_holder.address == owner_address and owner_address == null_address:
-                        
+                        criteria_met = True
                         print(style.GREEN + f"NULL ADDRESS  owns {formatted_percentage} of LP TOKENS", style.RESET)
                     elif lp_holder.address == creator_address and owner_address == null_address:
 
-                        
+                        criteria_met = True
                         print(
                             style.RED + f"Creator owns {formatted_percentage} of LP TOKENS ---This might be actually locked",
                             style.RESET)
-                        
-                    elif lp_holder.address == null_address:
                       
-                        print(f"NUll Address Owns {formatted_percentage} of LP TOKENS")
+                    elif lp_holder.address == null_address:
+                        criteria_met = True
+                        print(f"NUll Address Owns {formatted_percentage} of LP TOKESN")
                     elif lp_holder.address == dead_address:
-                        
-                        print(f"DEAD Address Owns {formatted_percentage} of LP TOKENS")
-                
+                        criteria_met = True
+                        print(f"DEAD Address Owns {formatted_percentage} of LP TOKESN")
+            
         else:
             print("UNKNOWN ADDRESS OWNS LP TOKENS")
-        #### CHECKING BUYING CONDITION####
-        #PREMIUM SERVICE
-        #############################
-       
+        #### CHECKING BUYING CONDITION
+        security_checks_dict = dict(security_checks)
+        if criteria_met:
+            if owner_address == null_address or owner_address == dead_address:
+                token_total_holders = data['token']['totalHolders']
+                liquidity = data['pair']['liquidity']
+                if(token_total_holders< 50 and  liquidity<6000 or token_total_holders<=65 and liquidity< 15000 or token_total_holders>100 and liquidity> 10000 ):
+                    if (security_checks_dict.get("Buy Tax") <= expected_outcomes["Buy Tax"] and security_checks_dict.get(
+                            "Sell Tax") <= expected_outcomes["Sell Tax"] and security_checks_dict.get(
+                        "Owner Balance Percent") <= expected_outcomes[
+                         "Owner Balance Percent"] and security_checks_dict.get("Creator Balance Percent") <=
+                           expected_outcomes["Creator Balance Percent"]
+                        
+                            ):
+                        print(style.GREEN,"============================================",style.RESET)
+
+                        print(style.GREEN, "This token Matches buying criteria")
+                        print(style.GREEN, "BUYING", style.RESET)
+                        #print(Buy_Token(token_address, 0.00634))
+
+
+
+
+                    else:
+                        print(style.RED,"============================================",style.RESET)
+
+                        print(style.RED, "BOT NOT BUYING")
+        print(style.RESET,"============================================")
 
 
 
