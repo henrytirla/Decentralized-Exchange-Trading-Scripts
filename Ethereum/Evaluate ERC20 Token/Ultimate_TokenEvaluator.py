@@ -317,7 +317,7 @@ def analyze_token(token_address):
         #### CHECKING BUYING CONDITION
         security_checks_dict = dict(security_checks)
         if criteria_met:
-            if owner_address == null_address or owner_address == dead_address:
+            if owner_address == null_address or owner_address == dead_address or days_locked in range(60,182) and owner_address in (None, null_address, dead_address):
                 token_total_holders = data['token']['totalHolders']
                 liquidity = data['pair']['liquidity']
                 if (token_total_holders < 50 and liquidity < 6000) or (token_total_holders < 70 and round(liquidity) in range(5000, 15001)) or (token_total_holders > 100 and liquidity > 10000):
