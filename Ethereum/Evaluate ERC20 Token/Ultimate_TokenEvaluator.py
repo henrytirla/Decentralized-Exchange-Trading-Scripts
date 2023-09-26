@@ -320,7 +320,7 @@ def analyze_token(token_address):
             if owner_address == null_address or owner_address == dead_address:
                 token_total_holders = data['token']['totalHolders']
                 liquidity = data['pair']['liquidity']
-                if(token_total_holders< 50 and  liquidity<6000 or token_total_holders<=65 and liquidity< 15000 or token_total_holders>100 and liquidity> 10000 ):
+                if (token_total_holders < 50 and liquidity < 6000) or (token_total_holders < 70 and round(liquidity) in range(5000, 15001)) or (token_total_holders > 100 and liquidity > 10000):
                     if (security_checks_dict.get("Buy Tax") <= expected_outcomes["Buy Tax"] and security_checks_dict.get(
                             "Sell Tax") <= expected_outcomes["Sell Tax"] and security_checks_dict.get(
                         "Owner Balance Percent") <= expected_outcomes[
