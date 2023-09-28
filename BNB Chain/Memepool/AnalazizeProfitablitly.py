@@ -1,3 +1,7 @@
-"This script aims to analyze the profitability of an EOA"
+"""This script aims to analyze the profitability of an EOA
 
-#TODO
+https://dexcheck.ai/app/address-analyzer/
+
+
+""""
+
