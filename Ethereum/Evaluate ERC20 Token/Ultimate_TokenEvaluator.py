@@ -101,7 +101,7 @@ def analyze_token(token_address):
                 print(f"Current Liquidity {style.GREEN} ${round(liquidity, 2)}", style.RESET)
                 print(f"Token Created :{style.BLUE} {formatted_time_difference}", style.RESET)
                 print(f"Pair Address: {style.BLUE} {pair_address}", style.RESET)
-                print(f"Creation TxnHash: {style.BLUE} {creation_txnHash}", style.RESET)
+                print(f"Creation TxnHash: {style.BLUE} https://etherscan.io/tx/{creation_txnHash}", style.RESET)
 
         owner_address = result.owner_address
         creator_address = result.creator_address
