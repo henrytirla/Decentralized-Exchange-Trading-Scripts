@@ -293,11 +293,12 @@ def analyze_token(token_address):
             all_true= False
             check_property={"Buy Tax": False,"Sell Tax": False,"Proxy Contract":True,"Mintable":True,"Can Take Back Ownership":True,"Owner Change Balance":True,"Hidden Owner":True,"Has External Calls":True,"Transfer Pausable":True,"Cannot Sell All":True,"Tax Modifiable":True,"Personal Slippage Modifiable":True,"Slippage Modifiable":True,"Is Honeypot":True,"Has Blacklist":True,"Has Whitelist":True,"Trading Cooldown":True,"Creator Balance Percent":False,"Owner Balance Percent":False,"Open Source":False,"Contract Balance Percent":False}
             if actual_value <= expected_value:
-               print(style.GREEN + f"{property_name}: {actual_value} <= {expected_value}" + style.RESET)
+               #print(style.GREEN + f"{property_name}: {actual_value} <= {expected_value}" + style.RESET)
                all_true = True
                return True
          
             elif actual_value > expected_value and check_property[property_name]==False:
+                print(style.RED + f"{property_name}: {actual_value} > {expected_value}" + style.RESET)
                 all_true = False
                 return False
             elif actual_value > expected_value and (owner == null_address or owner == dead_address) and check_property[property_name]==True:
