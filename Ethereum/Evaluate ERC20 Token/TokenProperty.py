@@ -1,3 +1,6 @@
+
+#TODO Refactored code from procedural to object oriented for easu read and understanding
+
 print("TOKEN EVALUATION.......BOT")
 
 
