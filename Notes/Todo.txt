@@ -1,6 +1,8 @@
 Write  articles on how to use these script and get the best out of it
 henrytirla.medium.com add comment of article on each script
 
+Make youtube Videos explaining scripts and how they can be relevant.
+
 
 # Host Script on GCP - Automate Trading Process - Write article
 
