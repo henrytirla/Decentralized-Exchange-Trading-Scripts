@@ -6,8 +6,6 @@ If you need help setting up your own degen toolbox or crafting up your degen ide
 
 If you are using these scripts your feedback will be appreciated. Graphic User Interface will be done based on user feedback
 
-Youtube: https://www.youtube.com/@henrytirla
-
 Email - henrytirla@protonmail.com
 
 
