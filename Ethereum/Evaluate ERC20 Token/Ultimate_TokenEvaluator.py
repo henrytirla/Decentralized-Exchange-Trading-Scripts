@@ -1,14 +1,21 @@
+import sys
 import requests
+import json
 import datetime
 from goplus.token import Token
 from dateutil import parser
 import time
+import buy_token
+from buy_token import Buy_Token
 from web3 import Web3
-
-
+from alchemy import Alchemy, Network
+api_key = "BLHi-AZvCt6LjvO8W7nFtloBJFZa393M"
+network = Network.ETH_MAINNET
+alchemy = Alchemy(api_key, network)
 
 # API endpoint URL
 url = "https://api.honeypot.is/v2/IsHoneypot"
+
 
 class style():  # Class of different text colours - default is white
     BLACK = '\033[30m'
@@ -22,6 +29,8 @@ class style():  # Class of different text colours - default is white
     UNDERLINE = '\033[4m'
     RESET = '\033[0m'
 
+
+# Construct the query parameters
 web3 = Web3(Web3.HTTPProvider("https://eth-mainnet.g.alchemy.com/v2/lTlatSTYDZmCv6wVLRIDff7S3kZhL2dq"))
 tokenmodel_abi = '[{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount0","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount1","type":"uint256"},{"indexed":true,"internalType":"address","name":"to","type":"address"}],"name":"Burn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount0","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount1","type":"uint256"}],"name":"Mint","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount0In","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount1In","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount0Out","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount1Out","type":"uint256"},{"indexed":true,"internalType":"address","name":"to","type":"address"}],"name":"Swap","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint112","name":"reserve0","type":"uint112"},{"indexed":false,"internalType":"uint112","name":"reserve1","type":"uint112"}],"name":"Sync","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"constant":true,"inputs":[],"name":"DOMAIN_SEPARATOR","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"MINIMUM_LIQUIDITY","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"PERMIT_TYPEHASH","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"to","type":"address"}],"name":"burn","outputs":[{"internalType":"uint256","name":"amount0","type":"uint256"},{"internalType":"uint256","name":"amount1","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"factory","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getReserves","outputs":[{"internalType":"uint112","name":"_reserve0","type":"uint112"},{"internalType":"uint112","name":"_reserve1","type":"uint112"},{"internalType":"uint32","name":"_blockTimestampLast","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_token0","type":"address"},{"internalType":"address","name":"_token1","type":"address"}],"name":"initialize","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"kLast","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"to","type":"address"}],"name":"mint","outputs":[{"internalType":"uint256","name":"liquidity","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"nonces","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"uint256","name":"deadline","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"permit","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"price0CumulativeLast","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"price1CumulativeLast","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"to","type":"address"}],"name":"skim","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"amount0Out","type":"uint256"},{"internalType":"uint256","name":"amount1Out","type":"uint256"},{"internalType":"address","name":"to","type":"address"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"swap","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"sync","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"token0","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"token1","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]'
 
@@ -39,19 +48,90 @@ def get_deployer_address(contract_address):
     else:
         raise Exception('Error while fetching transactions: ' + data['message'])
 
-def lock_time_difference(creation_time_str):
 
+def lock_time_difference(creation_time_str):
     from datetime import datetime, timedelta
 
     creation_time = datetime.strptime(creation_time_str, "%d-%m-%Y %H:%M:%S")
     current_time = datetime.utcnow()
-    time_difference = creation_time - current_time  
+    time_difference = creation_time - current_time  # Swap the positions for correct future time difference
 
     years = time_difference.days // 365
     days = time_difference.days
     hours, remainder = divmod(time_difference.seconds, 3600)
     minutes, _ = divmod(remainder, 60)
-    return days ,hours, minutes
+    return days, hours, minutes
+
+
+def get_numberBuys(contract_address, pair_address):
+    url = "https://eth-mainnet.g.alchemy.com/v2/lTlatSTYDZmCv6wVLRIDff7S3kZhL2dq"
+    payload = {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "method": "alchemy_getAssetTransfers",
+        "params": [
+            {
+                "fromBlock": "0x0",
+                "toBlock": "latest",
+                "category": ["erc20"],
+                "withMetadata": False,
+                "excludeZeroValue": True,
+                "maxCount": "0x3e8",
+                "fromAddress": pair_address,
+                "contractAddresses": [contract_address],
+                "order": "asc"
+            }
+        ]
+    }
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/json"
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    response_data = json.loads(response.text)
+
+    unique_to_addresses = set()
+    for t in response_data['result']['transfers']:
+        unique_to_addresses.add(t['to'])
+
+    return len(unique_to_addresses)-1
+
+def get_SellNumber(pairAddress, contract_address):
+    url = "https://eth-mainnet.g.alchemy.com/v2/lTlatSTYDZmCv6wVLRIDff7S3kZhL2dq"
+    payload = {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "method": "alchemy_getAssetTransfers",
+        "params": [
+            {
+                "fromBlock": "0x0",
+                "toBlock": "latest",
+                "category": ["erc20"],
+                "withMetadata": False,
+                "excludeZeroValue": True,
+                "maxCount": "0x3e8",
+                "toAddress": pairAddress,
+                "contractAddresses": [contract_address],
+                "order": "asc"
+            }
+        ]
+    }
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/json"
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    response_data = json.loads(response.text)
+
+    total_transfers = len(response_data['result']['transfers'])
+    unique_from_addresses = set()
+    for t in response_data['result']['transfers']:
+        unique_from_addresses.add(t['from'])
+
+    return total_transfers-1, len(unique_from_addresses)-1
+
 
 def get_owner_and_balance(token_address):
     Eth_Api = "QSD4D9KG1NYTX3Y6CPAR62G9FBW16UZ81Z"  # Change this to your Etherscan API ID
@@ -61,14 +141,15 @@ def get_owner_and_balance(token_address):
     tokenmodel_abi = '[{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount0","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount1","type":"uint256"},{"indexed":true,"internalType":"address","name":"to","type":"address"}],"name":"Burn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount0","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount1","type":"uint256"}],"name":"Mint","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount0In","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount1In","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount0Out","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount1Out","type":"uint256"},{"indexed":true,"internalType":"address","name":"to","type":"address"}],"name":"Swap","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint112","name":"reserve0","type":"uint112"},{"indexed":false,"internalType":"uint112","name":"reserve1","type":"uint112"}],"name":"Sync","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"constant":true,"inputs":[],"name":"DOMAIN_SEPARATOR","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"MINIMUM_LIQUIDITY","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"PERMIT_TYPEHASH","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"to","type":"address"}],"name":"burn","outputs":[{"internalType":"uint256","name":"amount0","type":"uint256"},{"internalType":"uint256","name":"amount1","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"factory","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getReserves","outputs":[{"internalType":"uint112","name":"_reserve0","type":"uint112"},{"internalType":"uint112","name":"_reserve1","type":"uint112"},{"internalType":"uint32","name":"_blockTimestampLast","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_token0","type":"address"},{"internalType":"address","name":"_token1","type":"address"}],"name":"initialize","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"kLast","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"to","type":"address"}],"name":"mint","outputs":[{"internalType":"uint256","name":"liquidity","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"nonces","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"uint256","name":"deadline","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"permit","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"price0CumulativeLast","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"price1CumulativeLast","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"to","type":"address"}],"name":"skim","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"amount0Out","type":"uint256"},{"internalType":"uint256","name":"amount1Out","type":"uint256"},{"internalType":"address","name":"to","type":"address"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"swap","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"sync","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"token0","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"token1","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]'
     ownership_function = '{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"}'
     getOwner_function = '{"inputs":[],"name":"getOwner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"}'
-    token_address= web3.to_checksum_address(token_address)
+    #{"inputs": [],"name": "owner","outputs": [{"internalType": "address","name": "","type": "address"}],"stateMutability": "view","type": "function"}
+
+    token_address = web3.to_checksum_address(token_address)
     contract = web3.eth.contract(address=token_address, abi=tokenmodel_abi)
     decimals = contract.functions.decimals().call()
     DECIMAL = 10 ** decimals
     totalSupply = contract.functions.totalSupply().call() / DECIMAL
     check = resultAbi
     contract_owner = "NULL"
-
 
     if check['status'] == '1':
         abi = check['result']
@@ -81,6 +162,8 @@ def get_owner_and_balance(token_address):
             contract_owner = owner
             owner_balance = contract.functions.balanceOf(owner).call() / DECIMAL
             percent_owner = owner_balance / totalSupply * 100
+
+            # Return owner and percent_owner values
             return owner, round(percent_owner, 2)
         elif getOwner_function in abi:
             contract = web3.eth.contract(address=token_address, abi=abi)
@@ -90,14 +173,314 @@ def get_owner_and_balance(token_address):
             owner_balance = contract.functions.balanceOf(owner).call() / DECIMAL
             percent_owner = owner_balance / totalSupply * 100
 
+            # Return owner and percent_owner values
             return owner, round(percent_owner, 2)
-       
+
     else:
         contract_owner = None
 
+        # If no owner information is found, return None for both values
     return contract_owner, None
 
+def get_creation_timestamp(contract_address):
+    from datetime import datetime
+    url = f'https://api.etherscan.io/api?module=account&action=txlist&address={contract_address}&startblock=0&endblock=99999999&page=1&offset=3&sort=asc&apikey=QSD4D9KG1NYTX3Y6CPAR62G9FBW16UZ81Z'
+    response = requests.get(url)
+    data = response.json()
 
+    if data['status'] == '1':
+        for tx in data['result']:
+            if tx['to'] == contract_address.lower():
+                timestamp = int(tx['timeStamp'])
+                formatted_time = datetime.utcfromtimestamp(timestamp).strftime("%d-%m-%Y %H:%M:%S")
+                return formatted_time
+    else:
+        raise Exception('Error while fetching transactions: ' + data['message'])
+
+def calculate_time_difference(creation_time_str):
+    from datetime import datetime, timedelta
+
+    creation_time = datetime.strptime(creation_time_str, "%d-%m-%Y %H:%M:%S")
+    current_time = datetime.utcnow()
+    time_difference = current_time - creation_time
+
+    # Extract days, hours, and minutes from the time difference
+    days = time_difference.days
+    hours, remainder = divmod(time_difference.seconds, 3600)
+    minutes, _ = divmod(remainder, 60)
+
+    return f"{days} days {hours} hours {minutes} minutes ago"
+
+def get_Days(creation_time_str):
+    from datetime import datetime, timedelta
+
+    creation_time = datetime.strptime(creation_time_str, "%d-%m-%Y %H:%M:%S")
+    current_time = datetime.utcnow()
+    time_difference = current_time - creation_time
+
+    # Extract days, hours, and minutes from the time difference
+    days = time_difference.days
+    hours, remainder = divmod(time_difference.seconds, 3600)
+    minutes, _ = divmod(remainder, 60)
+
+    return days ,hours,minutes
+
+import requests
+import json
+from web3 import Web3
+
+def getOwnerPercentage_LpHash(contract_address, pair_address):
+    contract = web3.eth.contract(address=contract_address, abi=tokenmodel_abi)
+    decimals = contract.functions.decimals().call()
+    DECIMAL = 10 ** decimals
+    totalSupply = contract.functions.totalSupply().call() / DECIMAL
+
+    url = "https://eth-mainnet.g.alchemy.com/v2/lTlatSTYDZmCv6wVLRIDff7S3kZhL2dq"
+
+    payload = {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "method": "alchemy_getAssetTransfers",
+        "params": [
+            {
+                "fromBlock": "0x0",
+                "toBlock": "latest",
+                "category": ["erc20"],
+                "withMetadata": False,
+                "excludeZeroValue": True,
+                "maxCount": "0x3e8",
+                'toAddress': pair_address,
+                "contractAddresses": [contract_address],
+                "order": "asc"
+            }
+        ]
+    }
+
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/json"
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    response_data = json.loads(response.text)
+
+    txn_hash = None
+    first_transfer_to_pair_value = 0
+
+    if response_data['result']['transfers'][0]['to'] == pair_address.lower():
+        txn_hash = response_data['result']['transfers'][0]['hash']
+        first_transfer_to_pair_value = int(response_data['result']['transfers'][0]['value'])
+
+    owner_percentage = ((totalSupply - round(first_transfer_to_pair_value,1)) / totalSupply) * 100
+
+    return round(owner_percentage, 2), txn_hash
+
+def get_InitialLP(transaction_hash):
+
+
+    receipt = alchemy.core.get_transaction_receipt(transaction_hash)
+
+    target_topics = [
+        Web3.to_bytes(hexstr="0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"),
+        Web3.to_bytes(hexstr="0x0000000000000000000000007a250d5630b4cf539739df2c5dacb4c659f2488d")
+    ]
+
+    for log in receipt['logs']:
+        if log['topics'][0:2] == target_topics:
+            hex_data = log['data'].hex()
+            decoded_data = Web3.to_int(hexstr=hex_data)
+            decoded_data_in_ether = Web3.from_wei(decoded_data, 'ether')
+            return decoded_data_in_ether
+
+    return None
+
+def get_PreloadedWallets(contract_address, pair_address):
+
+    contract = web3.eth.contract(address=contract_address, abi=tokenmodel_abi)
+    decimals = contract.functions.decimals().call()
+    DECIMAL = 10 ** decimals
+    totalSupply = contract.functions.totalSupply().call() / DECIMAL
+    dead_address="0x000000000000000000000000000000000000dead"
+
+    url = "https://eth-mainnet.g.alchemy.com/v2/lTlatSTYDZmCv6wVLRIDff7S3kZhL2dq"
+
+    payload = {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "method": "alchemy_getAssetTransfers",
+        "params": [
+            {
+                "fromBlock": "0x0",
+                "toBlock": "latest",
+                "category": ["erc20"],
+                "withMetadata": False,
+                "excludeZeroValue": True,
+                "maxCount": "0x3e8",
+                #'toAddress': pair_address,
+                "contractAddresses": [contract_address],
+                "order": "asc"
+            }
+        ]
+    }
+
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/json"
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    response_data = json.loads(response.text)
+
+    unique_to_addresses = {}
+    total_value = 0
+    owner= response_data['result']['transfers'][0]['to']
+    contract_lower = contract_address.lower()
+    pair_lower = pair_address.lower()
+    total_value = 0
+    total_value_to_dead=0
+    total_value_to_contract=0
+    unique_to_addresses = {}
+    percentDistributed = 0.0
+    percentToContract=0.0
+    percentToDead=0.0
+    contract_to_pair= False
+
+    # Loop through the transfers
+    for t in response_data['result']['transfers']:
+        if t['from'].lower() == owner.lower() and t['to'].lower() not in (contract_lower, pair_lower,dead_address):
+            # Update total_value
+            total_value += int(t['value'])
+
+            # Update unique_to_addresses dictionary
+            if t['to'] not in unique_to_addresses:
+                unique_to_addresses[t['to']] = []
+            unique_to_addresses[t['to']].append(t['hash'])
+
+        if t['to'] == "0x000000000000000000000000000000000000dead":
+            total_value_to_dead += int(t['value'])
+            percentToDead = (total_value_to_dead / totalSupply) * 100
+        if t['from'] == owner and t['to'] == pair_lower:
+            #print(style.RED, "Contract Address Loaded Wallet", style.RESET)
+            contract_to_pair = True
+        if t['to'] == contract_address:
+           total_value_to_contract += int(t['value'])
+           percentToContract= (total_value_to_contract/ totalSupply) * 100
+
+
+    percentDistributed = (total_value / totalSupply) * 100
+    # Return None if conditions are met
+    if contract_to_pair== True:
+         print(style.GREEN, "Deployer Address---Added Liquidity -> Pair ADDRESS", style.RESET)
+    else:
+        print(style.RED, "Contract Address---Added Liquidity -> Pair ADDRESS", style.RESET)
+
+    if len(unique_to_addresses.keys()) == 0 or percentDistributed == 100 :
+        print(style.GREEN,"NO PRELOADED WALLETS",style.RESET)
+
+
+
+
+
+    else:
+
+        # Otherwise, print results
+        print(f"Value sent to dead {total_value_to_dead} {style.GREEN} Percentage to Dead Address {percentToDead}",
+              style.RESET)
+        print(f"Value sent to Contract Address {total_value_to_contract}  Percentage to DeadValue {percentToContract}")
+
+        # print(f"Total Value: {total_value}")
+        print(f"Percentage Distributed: {style.GREEN}{round(percentDistributed, 1)}", style.RESET)
+        print(f"Number of Preloaded Wallet Addresses: {len(unique_to_addresses.keys())}")
+        print(f"Total Distributed Tokens {style.GREEN}{percentToDead + percentDistributed}", style.RESET)
+
+
+def fetch_transfers(contract_address, pair_address, page_key=None):
+    # Initialize API settings
+    pair_address= pair_address.lower()
+    contract_address= contract_address.lower()
+    url = "https://eth-mainnet.g.alchemy.com/v2/lTlatSTYDZmCv6wVLRIDff7S3kZhL2dq"
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/json"
+    }
+
+    # Initialize counters and sets for summary
+    total_transactions = 0
+    total_buys = 0
+    total_sells = 0
+    unique_buying_wallets = set()
+    unique_selling_wallets = set()
+    unique_smartcontract_txn=set()
+
+    all_transfers = []
+
+    while True:
+        payload = {
+            "id": 1,
+            "jsonrpc": "2.0",
+            "method": "alchemy_getAssetTransfers",
+            "params": [
+                {
+                    "fromBlock": "0x0",
+                    "toBlock": "latest",
+                    "category": ["erc20"],
+                    "withMetadata": False,
+                    "excludeZeroValue": True,
+                    "maxCount": "0x3e8",
+                    "contractAddresses": [contract_address],
+                    "order": "asc"
+                }
+            ]
+        }
+
+        if page_key:
+            payload["params"][0]["pageKey"] = page_key
+
+        # Fetch data
+        response = requests.post(url, json=payload, headers=headers)
+        response_data = response.json()
+
+        # Process data
+        transfers = response_data.get('result', {}).get('transfers', [])
+        all_transfers.extend(transfers)
+
+        for t in transfers:
+            total_transactions += 1
+
+            to_address = t.get('to')
+            from_address = t.get('from')
+
+            if to_address == pair_address and from_address != contract_address:
+                
+                total_sells += 1
+                unique_selling_wallets.add(from_address)
+            
+
+
+            elif from_address == pair_address:
+              
+                total_buys += 1
+                unique_buying_wallets.add(to_address)
+               
+
+            elif from_address != "0x0000000000000000000000000000000000000000" and to_address != contract_address and from_address!= contract_address:
+                unique_smartcontract_txn.add(to_address)
+                
+
+        # Check for pagination
+        page_key = response_data.get('result', {}).get('pageKey')
+        if not page_key:
+            break
+
+    # Print Summary
+    return {
+        "Total Transactions": total_transactions,
+        "Total Buys": total_buys,
+        "Unique Buying Wallets": len(unique_buying_wallets),
+        "Total Sells": total_sells,
+        "Unique Selling Wallets": len(unique_selling_wallets) ,
+        "Transaction Involving Contracts": len(unique_smartcontract_txn)
+    }
 
 
 
@@ -105,7 +488,11 @@ def analyze_token(token_address):
     token_address = web3.to_checksum_address(token_address)
 
 
+
+
     contract = web3.eth.contract(address=token_address, abi=tokenmodel_abi)
+
+
     deployer_address = get_deployer_address(token_address)
     decimals = contract.functions.decimals().call()
     DECIMAL = 10 ** decimals
@@ -116,14 +503,32 @@ def analyze_token(token_address):
 
     null_address = "0x0000000000000000000000000000000000000000"
     dead_address = "0x000000000000000000000000000000000000dEaD"
-    #dead_address = "0x000000000000000000000000000000000000dead"
 
     ##GOPLUS SECURITY####
     data1 = Token(access_token=None).token_security(
         chain_id="1", addresses=[token_address])
     result = data1.result[token_address.lower()]
+    # print(result)
     params = {"address": token_address}
     response = requests.get(url, params=params)
+
+    owner, percent_owner = get_owner_and_balance(token_address)
+
+    if owner == deployer_address:
+        print(f"{style.RED}🚨 Deployer Address Owns Contract 🚨", style.RESET)
+        #return
+
+    elif owner==None:
+        print(f"{style.RED}CONTRACT IS NOT VERIFIED {owner}", style.RESET)
+        return
+
+
+    elif owner not in (null_address, dead_address) and "0x" in owner:
+        print(f"{style.RED}UNKNOWN ADDRESS OWNS CONTRACT {owner}", style.RESET)
+        return
+
+
+
     Eth_Api = "QSD4D9KG1NYTX3Y6CPAR62G9FBW16UZ81Z"
     abiCodeGetRequestURL = "https://api.etherscan.io/api?module=contract&action=getabi&address=" + token_address + "&apikey=" + Eth_Api
     resultAbi = requests.get(url=abiCodeGetRequestURL).json()
@@ -134,63 +539,93 @@ def analyze_token(token_address):
         print(style.RED + f"NOT OPEN SOURCE" + style.RESET)
         return
 
-
-
     if response.status_code == 200:
         data = response.json()
-     
-        simulation_Success= data['simulationSuccess']
-       
+        lptype = data['pair']['pair']['type']
+
+        
+
+        simulation_Success = data['simulationSuccess']
+        if not simulation_Success:
+            print(style.RED + f"{data['simulationError']}\n" + style.RESET)
+            return
+        if simulation_Success:
+
+            sell_Tax = data['simulationResult']['sellTax']
+            #holders_averageTax = data['holderAnalysis']['averageTax']
+            if round(sell_Tax) > 90:
+                print(style.RED, data["flags"], style.RESET)
+                #return
+
+
+        # honeypot_reason = data['honeypotResult'].get('honeypotReason', None)
         column_width = 20
         pair_address = data['pair']['pair']['address']
         creation_timestamp = int(data['pair']['createdAtTimestamp'])
         datetime_obj = datetime.datetime.utcfromtimestamp(creation_timestamp)
         current_time = datetime.datetime.utcnow()
+        # Calculate the time difference
         time_difference = current_time - datetime_obj
         days = time_difference.days
         hours, remainder = divmod(time_difference.seconds, 3600)
         minutes, _ = divmod(remainder, 60)
 
+        # Combine calculations into a single variable
         formatted_time_difference = f"{days} days, {hours} hours, {minutes} minutes ago"
-        tokenAddress= data['token']['address']
+        tokenAddress = data['token']['address']
         token_name = data['token']['name']
         token_symbol = data['token']['symbol']
         token_decimals = data['token']['decimals']
         token_total_holders = data['token']['totalHolders']
         liquidity = data['pair']['liquidity']
-        pair_address= data['pairAddress']
-        creation_txnHash=data['pair']['creationTxHash']
+        pair_address = data['pairAddress']
+        creation_txnHash = data['pair']['creationTxHash']
 
-        if simulation_Success :
-           is_honeypot= data['honeypotResult']['isHoneypot']
-
-           if  is_honeypot :
-               flags = data['flags']
-               honeypot_reason = data['honeypotResult'].get('honeypotReason', None)
-               print(style.RED + f"EXECUTION REVERTED\n{honeypot_reason}\n   {flags}" + style.RESET)
-               return
+        initialOwner_Percentage, AddLp_Hash = getOwnerPercentage_LpHash(token_address, pair_address)
+        initial_lp= get_InitialLP(AddLp_Hash)
 
 
+        if simulation_Success:
+            is_honeypot = data['honeypotResult']['isHoneypot']
+
+            if is_honeypot:
+                flags = data['flags']
+                honeypot_reason = data['honeypotResult'].get('honeypotReason', None)
+                print(style.RED + f"EXECUTION REVERTED\n{honeypot_reason}\n   {flags}" + style.RESET)
+                return
 
 
-           else:
+
+
+            else:
                 print("============================================")
-                print(style.YELLOW+f"TOKEN INFORMATION",style.RESET)
+                print(style.YELLOW + f"TOKEN INFORMATION", style.RESET)
                 print("============================================")
                 print(f"{'Token Address:':{column_width - 18}}{tokenAddress:{column_width - 18}}")
                 print(f"{'Token Name:':{column_width - 18}}{token_name:{column_width - 18}}")
                 print(f"{'Token Symbol:':{column_width - 18}}{token_symbol:{column_width - 18}}")
                 print(f"{'Token Decimals:':{column_width - 18}}{token_decimals:{column_width - 18}}")
+                print(f"{'Total Supply:':{column_width - 18}}{totalSupply:{column_width - 18}}")
+
                 print(f"{'Current Holders:':{column_width - 20}}{style.GREEN}{token_total_holders:{column_width - 20}}",
                       style.RESET)
-               # print(f"{'AverageTax:':{column_width - 20}}{style.RED}{round(average_tax,2):{column_width - 20}}", style.RESET)
-                #print(f"{'Highest Tax:':{column_width - 20}}{style.RED}{highest_tax:{column_width - 20}}", style.RESET)
                 print(f"Current Liquidity {style.GREEN} ${round(liquidity, 2)}", style.RESET)
                 print(f"Token Created :{style.BLUE} {formatted_time_difference}", style.RESET)
                 print(f"Pair Address: {style.BLUE} https://etherscan.io/token/{pair_address}#balances", style.RESET)
                 print(f"Creation TxnHash: {style.BLUE} https://etherscan.io/tx/{creation_txnHash}", style.RESET)
+                if initialOwner_Percentage >5:
+                    print(f"True Owner Percentage :{style.RED} {initialOwner_Percentage}", style.RESET)
+                else:
+                    print(f"True Owner Percentage :{style.GREEN} {initialOwner_Percentage}", style.RESET)
 
-      
+                print(f"Initial Liquidity (ETH):{style.BLUE} {initial_lp},{style.BLUE} https://etherscan.io/tx/{AddLp_Hash}", style.RESET)
+                print(f"Deployer Transaction Count: {style.BLUE} {web3.eth.get_transaction_count(deployer_address)}", style.RESET)
+                #print(f"POOL TYPE {lptype }")
+
+
+
+
+
 
         expected_outcomes = {
             "Open Source": 1,
@@ -212,15 +647,14 @@ def analyze_token(token_address):
             "Trading Cooldown": 0,
             "Personal Slippage Modifiable": 0,
             "Slippage Modifiable": 0,
-            "Owner Balance Percent": 1.000000,
-            "Creator Balance Percent": 1.000000,
-            "Contract Balance Percent": 1.000000
+            "Contract Owner Balance Percent": 1.000000,
+            "Deployer Balance Percent": 1.000000,
+            "Contract Balance Percent": 2.000000
 
         }
-        
+
         buy_tax_value = result.buy_tax
         sell_tax_value = result.sell_tax
-
 
         if isinstance(buy_tax_value, str) and buy_tax_value == "Unknown" or buy_tax_value == '':
             print(buy_tax_value)  # This will print "Unknown"
@@ -233,17 +667,15 @@ def analyze_token(token_address):
             sell_tax_value = "Unknown"
         else:
             sell_tax_value = round(float(sell_tax_value) * 100, 1)
-
-        owner, percent_owner = get_owner_and_balance(token_address)
         contract_balance = contract.functions.balanceOf(tokenAddress).call() / DECIMAL
-        percent_contract = round(contract_balance / totalSupply * 100,2)
+        percent_contract = round(contract_balance / totalSupply * 100, 2)
 
 
 
         security_checks = [
             ("Open Source", result.is_open_source),
-            ("Buy Tax", round(data['simulationResult']['buyTax'],2)),
-            ("Sell Tax", round(data['simulationResult']['sellTax'],2)),
+                                                                                                                                                                                                                            ("Buy Tax", round(data['simulationResult']['buyTax'], 2)),
+                                                                                                                                                                                                                            ("Sell Tax", round(data['simulationResult']['sellTax'], 2)),
             ("Proxy Contract", result.is_proxy),
             ("Mintable", result.is_mintable),
             ("Can Take Back Ownership", result.can_take_back_ownership),
@@ -260,25 +692,40 @@ def analyze_token(token_address):
             ("Trading Cooldown", result.trading_cooldown),
             ("Personal Slippage Modifiable", result.personal_slippage_modifiable),
             ("Slippage Modifiable", result.slippage_modifiable),
-            ("Owner Balance Percent", percent_owner),
-            ("Creator Balance Percent", percent_deployerBalance),
-            ("Contract Balance Percent",percent_contract)
+            ("Contract Owner Balance Percent", percent_owner),
+            ("Deployer Balance Percent", percent_deployerBalance),
+            ("Contract Balance Percent", percent_contract)
         ]
+
         print("============================================")
 
-        print(style.YELLOW+"SMART CONTRACT SECURITY CHECKS",style.RESET)
+        print(style.YELLOW + "INITIAL TOKEN DISTRIBUTION ANALYSIS", style.RESET)
+        print("============================================")
+       #Preloaded Wallets
+        get_PreloadedWallets(token_address,pair_address)
+
+
+
+
+
+
+        print("============================================")
+
+        print(style.YELLOW + "SMART CONTRACT SECURITY CHECKS", style.RESET)
 
         print("============================================")
         criteria_met = False
-        print(owner,deployer_address)
+        
         if owner == deployer_address:
             print(f"{style.RED}🚨 Deployer Address Owns Contract 🚨", style.RESET)
+            #return
 
-        elif owner in (null_address,dead_address):
+        elif owner in (null_address, dead_address):
             print(f"{style.GREEN}CONTRACT IS RENOUNCED OWNER {owner}", style.RESET)
-        elif owner not in (null_address,dead_address) and "0x" in owner:
-            print(f"{style.RED}UNKNOWN ADDRESS OWNES CONTRACT {owner}", style.RESET)
-
+        elif owner not in (null_address, dead_address) and "0x" in owner:
+            print(f"{style.RED}UNKNOWN ADDRESS OWNS CONTRACT {owner}", style.RESET)
+            return
+     
 
         else:
             owner = "NULL"
@@ -287,35 +734,41 @@ def analyze_token(token_address):
 
         all_true = True
 
-
         def evaluate_property(property_name, actual_value, expected_value):
             global all_true
-            all_true= False
-            check_property={"Buy Tax": False,"Sell Tax": False,"Proxy Contract":True,"Mintable":True,"Can Take Back Ownership":True,"Owner Change Balance":True,"Hidden Owner":True,"Has External Calls":True,"Transfer Pausable":True,"Cannot Sell All":True,"Tax Modifiable":True,"Personal Slippage Modifiable":True,"Slippage Modifiable":True,"Is Honeypot":True,"Has Blacklist":True,"Has Whitelist":True,"Trading Cooldown":True,"Creator Balance Percent":False,"Owner Balance Percent":False,"Open Source":False,"Contract Balance Percent":False}
+            all_true = False
+            check_property = {"Buy Tax": False, "Sell Tax": False, "Proxy Contract": True, "Mintable": False,
+                              "Can Take Back Ownership": False, "Owner Change Balance": True, "Hidden Owner": False,
+                              "Has External Calls": True, "Transfer Pausable": "Yellow", "Cannot Sell All": True,
+                              "Tax Modifiable": True, "Personal Slippage Modifiable": "Yellow", "Slippage Modifiable": "Yellow",
+                              "Is Honeypot": True, "Has Blacklist":"Yellow", "Has Whitelist": True,
+                              "Trading Cooldown": "Yellow", "Deployer Balance Percent": False,
+                              "Contract Owner Balance Percent": False, "Open Source": False, "Contract Balance Percent": False}
             if actual_value <= expected_value:
-               #print(style.GREEN + f"{property_name}: {actual_value} <= {expected_value}" + style.RESET)
-               all_true = True
-               return True
-         
-            elif actual_value > expected_value and check_property[property_name]==False:
+                all_true = True
+
+                return True
+
+            elif actual_value > expected_value and check_property[property_name] == False:
                 print(style.RED + f"{property_name}: {actual_value} > {expected_value}" + style.RESET)
                 all_true = False
                 return False
-            elif actual_value > expected_value and (owner == null_address or owner == dead_address) and check_property[property_name]==True:
+            elif actual_value > expected_value and check_property[property_name] == "Yellow":
+                print(style.CYAN + f"{property_name}: {actual_value} > {expected_value}" + style.RESET)
+               
+            elif actual_value > expected_value and (owner == null_address or owner == dead_address) and check_property[
+                property_name] == True:
 
 
                 all_true = True
                 return all_true
             else:
-               all_true = False
-               return all_true
-
+                all_true = False
+                return all_true
 
         res = []
         for check_name, check_result in security_checks:
             expected_value = float(expected_outcomes[check_name])
-
-
 
             if check_result is None or check_result == '':
                 actual_value = "Unknown"
@@ -328,23 +781,33 @@ def analyze_token(token_address):
                 actual_value = float(check_result)
 
             if isinstance(actual_value, float):
-                r=evaluate_property(check_name, actual_value, expected_value)
+                r = evaluate_property(check_name, actual_value, expected_value)
                 res.append(r)
 
+        smartContract_check = False
 
-        smartContract_check=False
 
- 
-        if owner!= "NULL":
-            if any(val is False for val in res) :
+        #### CHECKING BALANCE OF CONTRACT ADDRESS ####
+
+        if owner != "NULL":
+            if any(val is False for val in res):
                 print(f"{style.RED}SMART CONTRACT DOES NOT MATCH OUR CRITERIA", style.RESET)
-
-
             else:
                 print(f"{style.GREEN}SMART CONTRACT MATCHES OUR CRITERIA", style.RESET)
                 smartContract_check = True
         else:
             print(f"{style.RED}SMART CONTRACT DOES NOT MATCH OUR CRITERIA", style.RESET)
+            #return
+
+        print("============================================")
+        print(style.YELLOW + f"BUY AND SELL ANALYSIS", style.RESET)
+        print("============================================")
+
+        Transfer_results = fetch_transfers(token_address, pair_address)
+        for k, v in Transfer_results.items():
+            print(f"{k}: {v}")
+
+
 
         print("============================================")
 
@@ -357,7 +820,7 @@ def analyze_token(token_address):
         lpdecimals = lpContract.functions.decimals().call()
         lpDECIMAL = 10 ** lpdecimals
         totalLpBalance = lpContract.functions.totalSupply().call() / lpDECIMAL
-        print(style.GREEN +'Total Lp Balance: ' + str(totalLpBalance))
+        print(style.GREEN + 'Total Lp Balance: ' + str(totalLpBalance))
 
         def getReserves(pairAddressforReserves):
             router = web3.eth.contract(address=pairAddressforReserves, abi=lpABI)
@@ -376,14 +839,15 @@ def analyze_token(token_address):
                 return 0
             elif tokenB_address == WETH:
                 return 1
-        if owner != "NULL" and owner not in (null_address,dead_address):
-            owner =web3.to_checksum_address(owner)
+
+        if owner != "NULL" and owner not in (null_address, dead_address):
+            owner = web3.to_checksum_address(owner)
             checkOwnerlp = lpContract.functions.balanceOf(owner).call() / lpDECIMAL
             Ownerliquidity_percentage = checkOwnerlp / totalLpBalance * 100
             percent_lp = Ownerliquidity_percentage
             checkDeployerLp = lpContract.functions.balanceOf(deployer_address).call() / lpDECIMAL
             deployerLiquidity_percentage = checkDeployerLp / totalLpBalance * 100
-            percent_lp2= deployerLiquidity_percentage
+            percent_lp2 = deployerLiquidity_percentage
             if percent_lp > 50:
 
                 print(style.RED + "Owner  Has too many LP tokens", checkOwnerlp, "Percentage",
@@ -394,7 +858,6 @@ def analyze_token(token_address):
 
                 print(style.RED + "Deployer  Has too many LP tokens", checkDeployerLp, "Percentage",
                       deployerLiquidity_percentage, "%")
-
 
         pinkysale = "0x71B5759d73262FBb223956913ecF4ecC51057641"
         unicript = "0x663A5C229c09b049E36dCc11a9B0d4a8Eb9db214"
@@ -419,6 +882,7 @@ def analyze_token(token_address):
         BalanceDeadlp = lpContract.functions.balanceOf(dead_address).call() / lpDECIMAL
         BalanceNullLp = lpContract.functions.balanceOf(null_address).call() / lpDECIMAL
         if (checkLocked == 1):
+            # print("---------CHECK IF LOCK------\n")
             pinkyOwnerlp = lpContract.functions.balanceOf(pinkysale).call() / lpDECIMAL
             pinkyliquidity_percentage = pinkyOwnerlp / totalLpBalance * 100
             pinkylockinfo = contract_pinkcrypt.functions.getLocksForToken(pair_address, 0, 1).call()
@@ -428,23 +892,22 @@ def analyze_token(token_address):
             my_date = f"{value:%d-%m-%Y %H:%M:%S}"
             print(style.MAGENTA + "[PINKY V2] Locked With Percentage Locked: ", pinkyliquidity_percentage, "%")
             print("UNLOCK DATE: ", my_date)
-            days ,hours,minutes= lock_time_difference(my_date)
+            days, hours, minutes = lock_time_difference(my_date)
             print(style.YELLOW + f"TOKEN LOCKED FOR: {days} days {hours} hours {minutes} minutes")
-            if days>=90:
-               criteria_met = True
+            if days >= 90:
+                criteria_met = True
 
             reserves = getReserves(pair_address)
+            print(reserves)
             tokenLiquidityAmount = float(web3.from_wei(reserves[1], "ether"))
             lp_amount = tokenLiquidityAmount
             if lp_amount < 5:
-                tokenLiquidityAmount = float(web3.from_wei(reserves[get_token_from_lp(pair_address)], "ETH"))
-
-                print(style.RED + "CURRENT LP BALANCE: ", round(tokenLiquidityAmount, 2), "ETH")
+                    print(style.RED + "CURRENT LP BALANCE: ", round(tokenLiquidityAmount, 2), "ETH")
             else:
-                tokenLiquidityAmount = float(web3.from_wei(reserves[get_token_from_lp(pair_address)], "ether"))
                 print(style.GREEN + "Current Liquidity", round(tokenLiquidityAmount, 2), "ETH")
 
         elif checkLocked02 >= 1:
+            # print("---------CHECK IF LOCK------\n")
             unicryptOwnerlp = lpContract.functions.balanceOf(unicript).call() / lpDECIMAL
             unicryptliquidity_percentage = unicryptOwnerlp / totalLpBalance * 100
             print(style.MAGENTA + "[UNICRYPT] Locked With Percentage Locked: ", unicryptliquidity_percentage, "%")
@@ -454,7 +917,7 @@ def analyze_token(token_address):
             value = datetime.datetime.fromtimestamp(timestamp)
             my_date = f"{value:%d-%m-%Y %H:%M:%S}"
             print("UNLOCK DATE: ", my_date)
-            days ,hours,minutes= lock_time_difference(my_date)
+            days, hours, minutes = lock_time_difference(my_date)
             if days >= 90:
                 criteria_met = True
             print(style.YELLOW + f"TOKEN LOCKED FOR: {days} days {hours} hours {minutes} minutes")
@@ -471,93 +934,126 @@ def analyze_token(token_address):
                 tokenLiquidityAmount = float(web3.from_wei(reserves[get_token_from_lp(pair_address)], "ether"))
                 print(style.GREEN + "Current Liquidity", round(tokenLiquidityAmount, 2), "ETH")
 
-         
+       
+
 
         elif checkLocked03 > 1:
             trustswapcryptOwnerlp = lpContract.functions.balanceOf(trustswap).call() / lpDECIMAL
             trustswapliquidity_percentage = trustswapcryptOwnerlp / totalLpBalance * 100
-            TrustSwaplockinfo = contract_trustswapsecure.functions.getDepositsByWithdrawalAddress(
-                deployer_address).call()
-            print(trustswapliquidity_percentage)
-
-            TrustSwaplockinfo_ = contract_trustswapsecure.functions.lockedToken(TrustSwaplockinfo[0]).call()
-
-            print(style.YELLOW + "[TRUSTWAP] Locked With Percentage Locked: ", trustswapliquidity_percentage, "%")
-            unlocked_date = TrustSwaplockinfo_[3]
-            timestamp = unlocked_date
-            value = datetime.datetime.fromtimestamp(timestamp)
-            my_date = f"{value:%d-%m-%Y %H:%M:%S}"
-            print("UNLOCK DATE: ", my_date)
-            days ,hours,minutes= lock_time_difference(my_date)
-            if days >= 90:
+            TrustSwaplockinfo = contract_trustswapsecure.functions.getDepositsByWithdrawalAddress(deployer_address).call()
+            if TrustSwaplockinfo == []:
                 criteria_met = True
-            print(style.YELLOW + f"TOKEN LOCKED FOR: {days} days {hours} hours {minutes} minutes")
-            reserves = getReserves(pair_address)
-            tokenLiquidityAmount = float(web3.from_wei(reserves[1], "ether"))
-            lp_amount = tokenLiquidityAmount
-
-            if lp_amount < 5:
-                tokenLiquidityAmount = float(web3.from_wei(reserves[get_token_from_lp(pair_address)], "ether"))
-                print(style.RED + "CURRENT LP BALANCE : ", round(tokenLiquidityAmount, 2), "ETH")
-
+                print(style.MAGENTA + "[TRUSTWAP] Locked With Percentage Locked: ",round(trustswapliquidity_percentage), "%")
             else:
-                tokenLiquidityAmount = float(web3.from_wei(reserves[get_token_from_lp(pair_address)], "ether"))
-                print(style.GREEN + "Current Liquidity", round(tokenLiquidityAmount, 2), "ETH")
+                TrustSwaplockinfo_ = contract_trustswapsecure.functions.lockedToken(TrustSwaplockinfo[0]).call()
+                print(style.YELLOW + "[TRUSTWAP] Locked With Percentage Locked: ", trustswapliquidity_percentage, "%")
+                unlocked_date = TrustSwaplockinfo_[3]
+                timestamp = unlocked_date
+                value = datetime.datetime.fromtimestamp(timestamp)
+                my_date = f"{value:%d-%m-%Y %H:%M:%S}"
+                print("UNLOCK DATE: ", my_date)
+                days, hours, minutes = lock_time_difference(my_date)
+                if days >= 90:
+                    criteria_met = True
+                print(style.YELLOW + f"TOKEN LOCKED FOR: {days} days {hours} hours {minutes} minutes")
 
-   
+                reserves = getReserves(pair_address)
+                tokenLiquidityAmount = float(web3.from_wei(reserves[1], "ether"))
+                lp_amount = tokenLiquidityAmount
+                if lp_amount < 5:
+                    # print(style.RED + "🚨PROCEED WITH CAUTION !!!  LP BALANCE LESS THAN 5 ETH:")
+                    tokenLiquidityAmount = float(web3.from_wei(reserves[get_token_from_lp(pair_address)], "ether"))
+                    print(style.RED + "CURRENT LP BALANCE : ", round(tokenLiquidityAmount, 2), "ETH")
+                else:
+                    tokenLiquidityAmount = float(web3.from_wei(reserves[get_token_from_lp(pair_address)], "ether"))
+                    print(style.GREEN + "Current Liquidity", round(tokenLiquidityAmount, 2), "ETH")
+
+
 
         elif BalanceDeadlp > 0:
-             criteria_met=True
-             Ownerliquidity_percentage = BalanceDeadlp / totalLpBalance * 100
-             percent_lp = Ownerliquidity_percentage
-             print(style.RESET + "DEAD WALLET LP tokens", BalanceDeadlp, "Percentage", round(Ownerliquidity_percentage), "%")
-          
+            criteria_met = True
+            # checkDeadlp = lpContract.functions.balanceOf(dead_address).call() / lpDECIMAL
+            Ownerliquidity_percentage = BalanceDeadlp / totalLpBalance * 100
+            percent_lp = Ownerliquidity_percentage
+            print(style.RESET + "DEAD WALLET LP tokens", BalanceDeadlp, "Percentage", round(Ownerliquidity_percentage),
+                  "%")
+
 
         else:
             print(style.RED + ("Liquidity is not Locked by certfied authority proceed with extreme caution"))
 
-        #### CHECKING BUYING CONDITION
-       
+        ###### CHECKING BUYING CONDITION ##########
+
         if criteria_met:
-           print(style.GREEN,"Buying Criteria MET",style.RESET)
-        else:
-           print(style.RED,"Buying Criteria NOT MET",style.RESET)
-        security_checks_dict = dict(security_checks)
-        #Added extra check for proxy contracts who meet lock requirement
-        if (criteria_met and smartContract_check) or (owner == "NULL" and result.is_proxy=="1" ):            #if  days_locked in range(60,10000) or owner_address in (None, null_address, dead_address):
-                token_total_holders = data['token']['totalHolders']
-                liquidity = data['pair']['liquidity']
-               
-                if (token_total_holders < 50 and round(liquidity) in range(1500,5000)) or (token_total_holders in range(60,99) and round(liquidity) in range(5000, 15001)) or (token_total_holders > 100 and liquidity > 10000):
+            print(style.GREEN, "Buying Criteria MET", style.RESET)
+            creation_time = get_creation_timestamp(token_address)
+            time_difference_str = calculate_time_difference(creation_time)
+            num_days, hours, minutes = get_Days(creation_time)
 
-            
 
-                        print(style.GREEN,"============================================",style.RESET)
-
-                        print(style.GREEN, "This token Matches buying criteria")
-
+            if token_total_holders <100 and owner in (null_address,dead_address) and minutes in range(7,11) and hours < 1 and days < 1:
+                if (token_total_holders < 50 and round(liquidity) in range(1500, 5000)) or (
+                        token_total_holders in range(30, 50) and round(liquidity) in range(5000, 8000)) or (
+                        token_total_holders in range(60, 99) and round(liquidity) in range(5000, 15001)) or (
+                        token_total_holders in range(100,250) and round(liquidity)in range(10000,25001)):
+                        print(style.YELLOW, "TESTING NEW HYPOTHESIS FOR BUYING", style.RESET)
                         print(style.GREEN, "BUYING", style.RESET)
-                        #Buy_Token(token_address,0.0113)
-
-
-
-
-
-                else:
-                        print(style.RED,"============================================",style.RESET)
-
-                        print(style.RED, "BOT NOT BUYING ")
+                        #Buy_Token(token_address,0.00649)
         else:
-            print(style.RED, "============================================", style.RESET)
-
-            print(style.RED, "BOT NOT BUYING")
-        print(style.RESET,"============================================")
+            print(style.RED, "Buying Criteria NOT MET", style.RESET)
 
 
+
+        security_checks_dict = dict(security_checks)
+
+        # if owner!= "NULL" and initialOwner_Percentage< 1 and  round(initial_lp) < 2 and  round(totalLpBalance)> 5 and round(buy_tax_value)<= 5 and round(sell_tax_value) <=5:
+        #     print(f"Test BUYING--------")
+        #     Buy_Token(token_address, 0.00318)
+        # else:
+        #     print("Not Buying")
+
+        # Added extra check for proxy contracts who meet lock requirement
+        # if (criteria_met and smartContract_check) or (
+        #         owner == "NULL" and result.is_proxy == "1"):  # if  days_locked in range(60,10000) or owner_address in (None, null_address, dead_address):
+        #     token_total_holders = data['token']['totalHolders']
+        #     liquidity = data['pair']['liquidity']
+        #     # Unecessary checks if owner of token is renounced
+        #     # and float(security_checks_dict.get("Transfer Pausable")) == float(expected_outcomes["Transfer Pausable"]) and float(security_checks_dict.get("Tax Modifiable")) == float(expected_outcomes["Tax Modifiable"]) and float(security_checks_dict.get("Mintable")) == float(expected_outcomes["Mintable"])
+        #     if (token_total_holders < 50 and round(liquidity) in range(1500, 5001)) or (
+        #             token_total_holders in range(30, 50) and round(liquidity) in range(5000, 8000)) or (
+        #             token_total_holders in range(60, 99) and round(liquidity) in range(10000,15001)) or (
+        #             token_total_holders > 100 and round(liquidity) in range(10000,15001)) or (
+        #             token_total_holders in range(250,400) and round(liquidity) >20000) and minutes in range(26) and hours < 1 and days < 1:
+        #
+        #         print(style.GREEN, "============================================", style.RESET)
+        #
+        #         print(style.GREEN, "This token Matches buying criteria")
+        #
+        #         print(style.GREEN, "BUYING", style.RESET)
+        #         #Buy_Token(token_address,0.00649)
+        #         # creation_time = get_creation_timestamp(tokenBought)
+        #         # time_difference_str = calculate_time_difference(creation_time)
+        #         # num_days, hours, mins = get_Days(creation_time)
+        # #elif (criteria_met )
+
+
+
+
+
+        #     else:
+        #         print(style.RED, "============================================", style.RESET)
+        #
+        #         print(style.RED, "BOT NOT BUYING ")
+        # else:
+        #     print(style.RED, "============================================", style.RESET)
+        #
+        #     print(style.RED, "BOT NOT BUYING")
+        # print(style.RESET, "============================================")
 
 
 if __name__ == "__main__":
-   token_address = input("Enter Token Address: ")
-   analyze_token(token_address)
-   
+    token_address = input("Enter Token Address: ")
+    analyze_token(token_address)
+    # get_owner_and_balance(token_address)
+
 
