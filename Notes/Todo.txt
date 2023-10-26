@@ -19,3 +19,5 @@ Build tool able to read the logic of a smartcontract and detect contract base sc
 Script to evaluate the profitability of a wallet
 
 -Make a concise list of scams and write code to counter it at least to a certain degree. Test and measure against time how good these scripts perform
+
+-binary buying criteria
