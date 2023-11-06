@@ -101,8 +101,8 @@ def get_owner_and_balance(token_address):
 
 
     if check['status'] == '1':
-        abi = check['result']
-        tokenabi = abi
+        abi = check['result'][0]['ABI']
+
 
         if ownership_function in abi:
             contract = web3.eth.contract(address=token_address, abi=abi)
