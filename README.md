@@ -15,7 +15,7 @@ Are you a crypto enthusiast with unique degen trading ideas? Feel free to connec
 We value your feedback! If you're using these scripts, please share your thoughts and suggestions. Your input will play a crucial role in shaping the future development of these tools. I am also planning to create a user-friendly Graphic User Interface (GUI) based on your feedback.
 
 ## Video Series Coming Soon
-Exciting news! We have a video series in the works to provide in-depth guidance on using these scripts effectively. To stay updated, make sure to subscribe to our [YouTube Channel](https://www.youtube.com/henrytirla) 
+Exciting news! We have I have a video series in the works to provide in-depth guidance on using these scripts effectively. To stay updated, make sure to subscribe to my [YouTube Channel](https://www.youtube.com/henrytirla) 
 
 
 ## Contact Information
