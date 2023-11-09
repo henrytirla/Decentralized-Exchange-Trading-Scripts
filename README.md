@@ -1,22 +1,29 @@
 # DEX-Essential-Trading-Scripts
-Useful scripts to automate trading on different DEX.
-These tools are mostly the ground up to build degen-tools 
 
-If you need help setting up your own degen toolbox or crafting up your degen idea let's connect.
+Welcome to the DEX Essential Trading Scripts repository! Here, you'll find a collection of useful scripts designed to automate trading on various decentralized exchanges (DEX). These tools have been meticulously crafted from the ground up, with a focus on building a robust suite of degen-tools.
 
-If you are using these scripts your feedback will be appreciated. Graphic User Interface will be done based on user feedback
+## How Can These Scripts Help You?
 
-Email - henrytirla@protonmail.com
+If you're looking to set up your own degen toolbox for trading on DEX platforms, you've come to the right place. My scripts can simplify the process and enhance your trading experience.
 
-
-Instant Messaging: [Let's Chat](https://t.me/henrytirla)
-
-BITCOIN: 1GdaMqMZyirTkfYe4dyZn5Tox9dVJmT21Z
-
-BSC/ETH: henrytirla.eth
+Are you a crypto enthusiast with unique degen trading ideas? Feel free to connect with me to discuss how these scripts can be tailored to your specific needs.
 
 
 
+## Your Feedback Matters
+
+We value your feedback! If you're using these scripts, please share your thoughts and suggestions. Your input will play a crucial role in shaping the future development of these tools. I am also planning to create a user-friendly Graphic User Interface (GUI) based on your feedback.
+
+## Video Series Coming Soon
+Exciting news! We have a video series in the works to provide in-depth guidance on using these scripts effectively. To stay updated, make sure to subscribe to our [YouTube Channel](https://www.youtube.com/henrytirla) 
 
 
+## Contact Information
 
+- Email: henrytirla@protonmail.com
+- Telegram: [Let's Chat](https://t.me/henrytirla)
+
+## Support
+
+- Bitcoin: 1GdaMqMZyirTkfYe4dyZn5Tox9dVJmT21Z
+- BSC/ETH: henrytirla.eth
