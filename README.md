@@ -1,4 +1,4 @@
-# DEX-Exchange-Trading-Scripts
+# Decentralized-Exchange-Trading-Scripts
 
 Here, you'll find a collection of useful scripts designed to automate trading on various decentralized exchanges (DEX). These tools have been meticulously crafted from the ground up, with a focus on building a robust suite of degen-tools.
 
