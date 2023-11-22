@@ -23,3 +23,5 @@ Script to evaluate the profitability of a wallet
 -Make a concise list of scams and write code to counter it at least to a certain degree. Test and measure against time how good these scripts perform
 
 -binary buying criteria
+
+- Add in evaluaton metric + Number of buys occuring in the same block that liquidity was added ie how many unique wallets bought and how much percentage of the token
