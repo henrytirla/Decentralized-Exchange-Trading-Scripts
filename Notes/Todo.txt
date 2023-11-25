@@ -1,6 +1,7 @@
 Write  articles on how to use these script and get the best out of it
 henrytirla.medium.com add comment of article on each script
 
+-Number of lines of code ? A--T  R<---T
 - Diff Checker--Check against scam contracts
 - How many wallets bought on the block liquidity was added and how much percentage of the token do they hold?
 - Was a whitelist present to prevent external wallets from buying on a specific time ie during the first minutes of the life of a token.
