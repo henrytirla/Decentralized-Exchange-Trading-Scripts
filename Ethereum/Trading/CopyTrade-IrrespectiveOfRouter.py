@@ -88,7 +88,6 @@ async def process_transaction(transaction_hash):
                           print(f" {getTimestamp()} {block_num} {style.YELLOW}TOKEN SOLD {logs['address']}  {style.RESET}  {style.MAGENTA} {from_address}      {style.RESET} TxnHash:  https://etherscan.io/tx/{txn_hash} ", style.RESET)
                           print(style.MAGENTA+"====COPY TRADING TRADE SALE SIMULATION=====",style.RESET)
 
-                  #pprint.pprint(wallet_data)
 
            queue.task_done()
 
