@@ -3,6 +3,7 @@
 
 """-----ADD YOUR WALLETS ON LINE 65 -----"""
 #TODO Keep a log of buy amount and sell amount in ETH use Data-Analytic techniques to determine most profitable wallet
+#TODO Display Sales profit and keep log for data analysis
 
 import asyncio
 import json
