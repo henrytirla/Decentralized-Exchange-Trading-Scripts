@@ -195,7 +195,7 @@ async def subscribe_to_pending_transactions():
 
 
 async def process_queue():
-    print(style.GREEN+"Scanning Transaction.....",style.RESET)
+    print(style.GREEN+"=====Monitoring Targets Wallets To Copy Transaction====== ",style.RESET)
     while True:
         if queue.qsize() <= 3:
             wait_time =3
