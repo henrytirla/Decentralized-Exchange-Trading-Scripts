@@ -87,9 +87,9 @@ async def process_transaction(transaction_hash):
                       elif alchemy.to_hex(logs['topics'][1]) in monitored_wallets_hex:
                           print(f" {getTimestamp()} {block_num} {style.YELLOW}TOKEN SOLD {logs['address']}  {style.RESET}  {style.MAGENTA} {from_address}      {style.RESET} TxnHash:  https://etherscan.io/tx/{txn_hash} ", style.RESET)
                           print(style.MAGENTA+"====COPY TRADING TRADE SALE SIMULATION=====",style.RESET)
-                      elif alchemy.to_hex(logs['topics'][0]) == "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925":
-                           if alchemy.to_hex(logs['topics'][1]) in monitored_wallets_hex:
-                              print(f"{getTimestamp()} {style.RED}{block_num}{style.RESET} {style.YELLOW} TOKEN APPROVED {logs['address']} {style.RESET} {style.MAGENTA} {from_address} {style.RESET}  TxnHash: https://etherscan.io/tx/{txn_hash}",style.RESET)
+                  elif alchemy.to_hex(logs['topics'][0]) == "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925":
+                       if alchemy.to_hex(logs['topics'][1]) in monitored_wallets_hex:
+                          print(f"{getTimestamp()} {style.RED}{block_num}{style.RESET} {style.YELLOW} TOKEN APPROVED {logs['address']} {style.RESET} {style.MAGENTA} {from_address} {style.RESET}  TxnHash: https://etherscan.io/tx/{txn_hash}",style.RESET)
 
 
            queue.task_done()
