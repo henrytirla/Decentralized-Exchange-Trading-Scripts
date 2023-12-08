@@ -176,7 +176,7 @@ async def process_transaction(transaction_hash):
                     hex_value = alchemy.to_hex(logs['data'])
                     integer_value = int(hex_value, 16)
                     eth_value = alchemy.from_wei(integer_value, 'ether')
-                    eth_value= formatted_Ethvalue = '{:.4f}'.format(eth_value)
+                    eth_value= '{:.4f}'.format(eth_value)
 
             if eth_value is not None:
                 for logs in receipt['logs']:
