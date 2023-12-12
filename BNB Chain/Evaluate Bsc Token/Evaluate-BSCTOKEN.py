@@ -195,6 +195,9 @@ def getOwnerPercentage_LpHash(contract_address, pair_address):
     url = f"https://api.bscscan.com/api?module=account&action=tokentx&contractaddress={contract_address}&apikey={api_key}"
     response = requests.get(url)
     data = json.loads(response.text)
+    amount_toDead= 0
+    percentToDead=0
+
 
 
 
@@ -202,13 +205,26 @@ def getOwnerPercentage_LpHash(contract_address, pair_address):
         transactions = data['result']
         deployer_address = transactions[0]['to']
         pair_address = pair_address.lower()
-        for t in transactions:
+        for t in transactions[:15]:
+
+            if t['to'] == "0x000000000000000000000000000000000000dead":
+                value_decimal= int(t['value']) / DECIMAL
+                print((value_decimal/totalSupply)  * 100)
+                percentToDead = (value_decimal/totalSupply)  * 100
             if  t['to'] == pair_address:
                 trueOwner_percent = ((totalSupply - int(t['value']) / DECIMAL) / totalSupply) * 100
                 initial_lpHash = t['hash']
-                return round(trueOwner_percent, 1), initial_lpHash
+                #return round(trueOwner_percent, 1), initial_lpHash
 
+                truePercent=trueOwner_percent - percentToDead
+                if truePercent <0:
+                   truePercent= 100- (percentToDead - trueOwner_percent)
+                   return  round(truePercent,1), initial_lpHash
 
+                return round(truePercent,1), initial_lpHash
+
+#0xe0edFB2D674188D3fEA36a38f39E6cd8a14e28E0
+#0xa7ffb399d44eb830f01751052C75d14f0b47E779
 def get_InitialLP(transaction_hash):
     receipt = web3.eth.get_transaction_receipt(transaction_hash)
 
