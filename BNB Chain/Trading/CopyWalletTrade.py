@@ -45,7 +45,7 @@ def format_hex(original_hex):
 
 
 
-infura_ws_url="wss://bsc-mainnet.core.chainstack.com/ws/a0f24337b06b05ec7b972078ce65d3ca"
+infura_ws_url="Enter Your ChainStack Websocket URL"
 infura_http_url = 'https://bsc-dataseed1.binance.org/'
 web3 = Web3(Web3.HTTPProvider(infura_http_url))
 WETH="0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
