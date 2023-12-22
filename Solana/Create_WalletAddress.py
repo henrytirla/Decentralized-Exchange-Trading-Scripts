@@ -17,3 +17,5 @@ base58_private_key = base58.b58encode(bytes.fromhex(hex_string)).decode('utf-8')
 
 print("Wallet Address:",new_account.pubkey())
 print("Readable private key to Import on Browser Wallet:", base58_private_key)
+
+#TODO: Fix compatibiltiy with Phantom Wallet
