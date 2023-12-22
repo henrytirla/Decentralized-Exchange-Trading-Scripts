@@ -31,7 +31,6 @@ The more complex and intricate the idea, the better. I love a good challenge!
 
 ## Support My Work
 If these scripts have helped you, please consider supporting my work. Your support will help me continue to develop these tools and create more useful resources for the crypto community.
- 
 
 -henrytirla.eth
 - Bitcoin: 1GdaMqMZyirTkfYe4dyZn5Tox9dVJmT21Z
