@@ -5,3 +5,6 @@ https://kevinheavey.github.io/solders/tutorials/index.html
 
 #Contrast with Ethereum
 https://solana.wiki/zh-cn/docs/ethereum-comparison/
+
+#Explaination of accounts
+https://medium.com/@jorge_londono_31005/understanding-solanas-mint-account-and-token-accounts-546c0590e8e
