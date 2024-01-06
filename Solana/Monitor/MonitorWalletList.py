@@ -1,5 +1,7 @@
 "Subscrine to a wallet and monitor the transactions"
 
+#NOTE SOLANA supports only 1 wallet for this subscription
+
 import asyncio
 import websockets
 import json
