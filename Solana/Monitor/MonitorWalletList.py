@@ -33,8 +33,6 @@ async def run():
            response_dict = json.loads(response)
            print(response_dict.values.err)
            if 'params' in response_dict:
-           #if response_dict.values.err=="null":
-
               print("New update received: ", response_dict['params'])
               print("=========================================")
            else:
