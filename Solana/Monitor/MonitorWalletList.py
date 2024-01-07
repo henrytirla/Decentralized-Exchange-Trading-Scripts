@@ -1,4 +1,4 @@
-"Subscrine to a wallet and monitor the transactions"
+"Subscrine to a wallet  transactions on solana blockchain"
 
 #NOTE SOLANA supports only 1 wallet for this subscription
 
