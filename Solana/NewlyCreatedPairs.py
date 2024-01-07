@@ -1,19 +1,11 @@
 "V1 Script to get newly created pairs on Raydium    "
 
-import httpx
-import time
-import threading
+from solana.rpc.api import Client
 
-response = httpx.get("https://api.raydium.io/v2/sdk/token/raydium.mainnet.json")
-previous_tokens = set()
+from solders.pubkey import Pubkey
+from solders.transaction import Transaction
+from solders.signature import Signature
+RAYDIUM_PROGRAM_ID = Pubkey.from_string("675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8")
 
-new_tokens = set()
-printtokens = set()
-if response.status_code == 200:
-  # print(response.json())
-   response = httpx.get("https://api.raydium.io/v2/sdk/token/raydium.mainnet.json")
-   #print(response.json()["unNamed"])
-   current_tokens = set([j["mint"] for j in response.json()["unNamed"]])
-   new_tokens = current_tokens - previous_tokens
-   previous_tokens = current_tokens
-   print(new_tokens)
+OPENBOOK = Pubkey.from_string("srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX")
+METADATA_2022_PROGRAM_ID = Pubkey.from_string("META4s4fSmpkTbZoUsgC1oBnWB31vQcmnN8giPw51Zu")
