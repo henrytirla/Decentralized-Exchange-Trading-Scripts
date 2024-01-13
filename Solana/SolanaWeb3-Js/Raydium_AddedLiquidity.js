@@ -8,7 +8,6 @@ const {Connection,PublicKey} = require('@solana/web3.js');
 
 const RAYDIUM_PUBLIC_KEY = ('675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8');
 const SESSION_HASH='TIRLA'+ Math.ceil(Math.random()*1e9);
-let credits=0;
 const raydium = new PublicKey(RAYDIUM_PUBLIC_KEY);
 const connection = new Connection('https://api.mainnet-beta.solana.com',{
     wsEndpoint: 'wss://api.mainnet-beta.solana.com',
