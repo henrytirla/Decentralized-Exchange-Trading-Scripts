@@ -53,10 +53,16 @@ async function fetchRaydiumAccounts(signature,connection){
     console.log("New LP Found");
     console.log(generateExplorerUrl(txId));
     console.table(displayData);
+    await sleep(2000);
+
 }
 
 function generateExplorerUrl(txId){
     return `https://solscan.io/tx/${txId}?cluster=mainnet`;
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 main(connection,raydium).catch(console.error);
