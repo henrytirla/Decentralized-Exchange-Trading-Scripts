@@ -20,19 +20,19 @@ def  getTokens(str_signature):
     signature = Signature.from_string(str_signature)
     transaction = solana_client.get_transaction(signature, encoding="jsonParsed",max_supported_transaction_version=0).value
     instruction_list = transaction.transaction.transaction.message.instructions
-    if any("initialize2" in message for message in transaction.transaction.meta.log_messages):
-        for instructions in instruction_list:
-            if instructions.program_id == Pubkey.from_string(wallet_address):
-                print("============NEW POOL DETECTED====================")
-                Token0= instructions.accounts[8]
-                Token1= instructions.accounts[9]
-                # Your data
-                data = {'Token_Index': ['Token0', 'Token1'],
-                        'Account Public Key': [Token0, Token1]}
 
-                df = pd.DataFrame(data)
-                table = tabulate(df, headers='keys', tablefmt='fancy_grid')
-                print(table)
+    for instructions in instruction_list:
+        if instructions.program_id == Pubkey.from_string(wallet_address):
+            print("============NEW POOL DETECTED====================")
+            Token0= instructions.accounts[8]
+            Token1= instructions.accounts[9]
+            # Your data
+            data = {'Token_Index': ['Token0', 'Token1'],
+                    'Account Public Key': [Token0, Token1]}
+
+            df = pd.DataFrame(data)
+            table = tabulate(df, headers='keys', tablefmt='fancy_grid')
+            print(table)
              
 
 
