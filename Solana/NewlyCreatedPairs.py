@@ -69,7 +69,7 @@ async def run():
 
                   search="initialize2"
                   if any(search in message for message in log_messages_set):
-                      print("True",signature)
+                      print(f"True, https://solscan.io/tx/{signature}")
                       getTokens(signature)
 
                  
