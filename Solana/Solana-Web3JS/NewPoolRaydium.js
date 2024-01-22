@@ -41,7 +41,7 @@ async function fetchRaydiumAccounts(signature,connection){
     console.log("New Raydium  Liquidity Pool Created Found");
     console.log(generateExplorerUrl(txId));
     console.table(displayData);
-    await sleep(2000);
+    // await sleep(2000);
 }
 
 function generateExplorerUrl(txId){
@@ -53,4 +53,15 @@ function sleep(ms) {
 }
 
 
-main(connection,raydium).catch(console.error);
+// main(connection,raydium).catch(console.error);
+async function runProgram() {
+    try {
+        await main(connection, raydium);
+    } catch (error) {
+        console.error(`Error occurred: ${error}`);
+        console.log('Restarting the program...');
+        runProgram();
+    }
+}
+
+runProgram().catch(console.error);
