@@ -32,17 +32,24 @@ log_instruction = "initialize2"
 async def main():
     """The client as an infinite asynchronous iterator:"""
     async with connect(WSS) as websocket:
-        subscription_id = await subscribe_to_logs(websocket, Finalized)  # type: ignore
+        subscription_id = await subscribe_to_logs(
+            websocket,
+            RpcTransactionLogsFilterMentions(RaydiumLPV4),
+            Finalized
+        )  # type: ignore
         async for signature in process_messages(websocket, log_instruction):  # type: ignore
             get_tokens(signature, RaydiumLPV4)
-            break 
+            break
         await websocket.logs_unsubscribe(subscription_id)
 
 
-async def subscribe_to_logs(websocket: SolanaWsClientProtocol,
+async def subscribe_to_logs(websocket: SolanaWsClientProtocol, 
+                            mentions: RpcTransactionLogsFilterMentions,
                             commitment: Commitment) -> int:
-    """Subscribed to logs, also posible use .send_data method"""
-    await websocket.logs_subscribe(commitment=commitment)
+    await websocket.logs_subscribe(
+        filter_=mentions,
+        commitment=commitment
+    )
     first_resp = await websocket.recv()
     return get_subscription_id(first_resp)  # type: ignore
 
@@ -55,8 +62,8 @@ async def process_messages(websocket: SolanaWsClientProtocol,
                            instruction: str) -> AsyncIterator[Signature]:
     """Async generator, main websocket's loop"""
     async for idx, msg in enumerate(websocket):
-        print(idx)
         value = get_msg_value(msg)
+        print(idx)
         if [log for log in value.logs if instruction in log]:
             print(f"{value.signature=}")
             pprint(value.logs)
@@ -67,12 +74,12 @@ def get_msg_value(msg: List[LogsNotification]) -> RpcLogsResponse:
     return msg[0].result.value
 
 
-def get_tokens(signature: Signature, RaydiumLPV4: str) -> None:
+def get_tokens(signature: Signature, RaydiumLPV4: Pubkey) -> None:
     """httpx.HTTPStatusError: Client error '429 Too Many Requests' 
     for url 'https://api.mainnet-beta.solana.com'
     For more information check: https://httpstatuses.com/429
     """
-    transaction = solana_client.get_transaction( 
+    transaction = solana_client.get_transaction(
         signature,
         encoding="jsonParsed",
         max_supported_transaction_version=0
@@ -101,7 +108,7 @@ def instructions_with_program_id(
     program_id: str
 ) -> Iterator[UiPartiallyDecodedInstruction | ParsedInstruction]:
     return (instruction for instruction in instructions
-            if instruction.program_id == Pubkey.from_string(program_id))
+            if instruction.program_id == program_id)
 
 
 def get_tokens_info(
@@ -127,4 +134,5 @@ def print_table(tokens: Tuple[Pubkey, Pubkey]) -> None:
 
 
 if __name__ == "__main__":
+    RaydiumLPV4 = Pubkey.from_string(RaydiumLPV4)
     asyncio.run(main())
