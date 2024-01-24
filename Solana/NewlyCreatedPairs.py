@@ -40,7 +40,7 @@ async def main():
         )  # type: ignore
         async for signature in process_messages(websocket, log_instruction):  # type: ignore
             get_tokens(signature, RaydiumLPV4)
-            break
+            #break
         await websocket.logs_unsubscribe(subscription_id)
 
 
