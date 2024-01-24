@@ -16,6 +16,7 @@ from solders.pubkey import Pubkey
 # Type hinting imports
 from solana.rpc.commitment import Commitment
 from solana.rpc.websocket_api import SolanaWsClientProtocol
+from solders.rpc.config import RpcTransactionLogsFilterMentions
 from solders.rpc.responses import RpcLogsResponse, SubscriptionResult, LogsNotification, GetTransactionResp
 from solders.signature import Signature
 from solders.transaction_status import UiPartiallyDecodedInstruction, ParsedInstruction
@@ -63,10 +64,10 @@ async def process_messages(websocket: SolanaWsClientProtocol,
     """Async generator, main websocket's loop"""
     async for idx, msg in enumerate(websocket):
         value = get_msg_value(msg)
-        print(idx)
+        #print(idx)
         if [log for log in value.logs if instruction in log]:
             print(f"{value.signature=}")
-            pprint(value.logs)
+            #pprint(value.logs)
             yield value.signature
 
 
