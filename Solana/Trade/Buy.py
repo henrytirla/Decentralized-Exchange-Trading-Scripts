@@ -2,13 +2,10 @@
 from spl.token.instructions import create_associated_token_account, get_associated_token_address
 from spl.token.instructions import close_account, CloseAccountParams
 from spl.token.client import Token
-
 from solders.pubkey import Pubkey
 from solders.instruction import Instruction
-
 from solana.rpc.types import TokenAccountOpts
 from solana.transaction import AccountMeta
-from solana.rpc.api import Client
 from construct import Bytes, Int8ul, Int64ul, BytesInteger
 from construct import Struct as cStruct
 from spl.token.core import _TokenCore
