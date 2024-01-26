@@ -1,22 +1,26 @@
 "Detect  New Pools Created on Solana Raydium DEX"
 
-#TODO Add Buys ,Sells price and liquidity pool tracking management
 from pprint import pprint
+from time import sleep
+import logging
+
 
 import asyncio
-from typing import Iterator, List, AsyncIterator, Tuple
+from typing import List, AsyncIterator, Tuple
 from asyncstdlib import enumerate
+
+from solders.pubkey import Pubkey
+from solders.rpc.config import RpcTransactionLogsFilterMentions
 
 from solana.rpc.websocket_api import connect
 from solana.rpc.commitment import Finalized
 from solana.rpc.api import Client
-
-from solders.pubkey import Pubkey
+from solana.exceptions import SolanaRpcException
+from websockets.exceptions import ConnectionClosedError, ProtocolError
 
 # Type hinting imports
 from solana.rpc.commitment import Commitment
 from solana.rpc.websocket_api import SolanaWsClientProtocol
-from solders.rpc.config import RpcTransactionLogsFilterMentions
 from solders.rpc.responses import RpcLogsResponse, SubscriptionResult, LogsNotification, GetTransactionResp
 from solders.signature import Signature
 from solders.transaction_status import UiPartiallyDecodedInstruction, ParsedInstruction
@@ -29,6 +33,10 @@ solana_client = Client(URI)
 # Raydium function call name, look at raydium-amm/program/src/instruction.rs
 log_instruction = "initialize2"
 
+# Init logging
+logging.basicConfig(filename='app.log', filemode='a', level=logging.DEBUG)
+
+
 
 async def main():
     """The client as an infinite asynchronous iterator:"""
@@ -39,16 +47,24 @@ async def main():
                 RpcTransactionLogsFilterMentions(RaydiumLPV4),
                 Finalized
             )
+            # Change level debugging to INFO
+            logging.getLogger().setLevel(logging.INFO)  # Logging
             async for i, signature in enumerate(process_messages(websocket, log_instruction)):  # type: ignore
+                logging.info(f"{i=}")  # Logging
                 try:
                     get_tokens(signature, RaydiumLPV4)
                 except SolanaRpcException as err:
                     # Omitting httpx.HTTPStatusError: Client error '429 Too Many Requests'
                     # Sleep 5 sec, and try connect again
+                    # Start logging
+                    logging.exception(err)
+                    logging.info("sleep for 5 seconds and try again")
+                    # End logging
                     sleep(5)
                     continue
         except (ProtocolError, ConnectionClosedError) as err:
             # Restart socket connection if ProtocolError: invalid status code
+            logging.error(err)  # Logging
             print(f"Danger! Danger!", err)
             continue
         except KeyboardInterrupt:
@@ -76,10 +92,19 @@ async def process_messages(websocket: SolanaWsClientProtocol,
     """Async generator, main websocket's loop"""
     async for idx, msg in enumerate(websocket):
         value = get_msg_value(msg)
-        #print(idx)
-        if [log for log in value.logs if instruction in log]:
-            print(f"{value.signature=}")
-            #pprint(value.logs)
+        if not idx % 100:
+            print(f"{idx=}")
+        for log in value.logs:
+            if instruction not in log:
+                continue
+            # Start logging
+            logging.info(value.signature)
+            logging.info(log)
+            with open("messages.json", 'a', encoding='utf-8') as raw_messages:  
+                raw_messages.write(f"signature: {value.signature} \n")
+                raw_messages.write(msg[0].to_json())
+                raw_messages.write("\n ########## \n")
+            # End logging
             yield value.signature
 
 
@@ -97,9 +122,16 @@ def get_tokens(signature: Signature, RaydiumLPV4: Pubkey) -> None:
         encoding="jsonParsed",
         max_supported_transaction_version=0
     )
-    # https://kevinheavey.github.io/solders/api_reference/instruction.html
     instructions = get_instructions(transaction)
-    for instruction in instructions_with_program_id(instructions, RaydiumLPV4):
+    filtred_instuctions = instructions_with_program_id(instructions, RaydiumLPV4)
+    # Start logging
+    with open("transactions.json", 'a', encoding='utf-8') as raw_transactions:
+        raw_transactions.write(f"signature: {signature}\n")
+        raw_transactions.write(transaction.to_json())        
+        raw_transactions.write("\n ########## \n")
+    logging.info(filtred_instuctions)
+    # End logging
+    for instruction in filtred_instuctions:
         tokens = get_tokens_info(instruction)
         print_table(tokens)
         print(f"True, https://solscan.io/tx/{signature}")
@@ -132,6 +164,10 @@ def get_tokens_info(
     Pair = accounts[4]
     Token0 = accounts[8]
     Token1 = accounts[9]
+    # Start logging
+    logging.info("find LP !!!")
+    logging.info(f"\n Token0: {Token0}, \n Token1: {Token1}, \n Pair: {Pair}")
+    # End logging
     return (Token0, Token1, Pair)
 
 
