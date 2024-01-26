@@ -62,7 +62,7 @@ async def main():
                     continue
         except (ProtocolError, ConnectionClosedError) as err:
             # Restart socket connection if ProtocolError: invalid status code
-            logging.error(err)  # Logging
+            logging.exception(err)  # Logging
             print(f"Danger! Danger!", err)
             continue
         except KeyboardInterrupt:
@@ -121,15 +121,15 @@ def get_tokens(signature: Signature, RaydiumLPV4: Pubkey) -> None:
         encoding="jsonParsed",
         max_supported_transaction_version=0
     )
-    instructions = get_instructions(transaction)
-    filtred_instuctions = instructions_with_program_id(instructions, RaydiumLPV4)
     # Start logging to transactions.json
     with open("transactions.json", 'a', encoding='utf-8') as raw_transactions:
-        raw_transactions.write(f"signature: {signature}\n")
-        raw_transactions.write(transaction.to_json())        
-        raw_transactions.write("\n ########## \n")
-    logging.info(filtred_instuctions)
+    raw_transactions.write(f"signature: {signature}\n")
+    raw_transactions.write(transaction.to_json())        
+    raw_transactions.write("\n ########## \n")
     # End logging
+    instructions = get_instructions(transaction)
+    filtred_instuctions = instructions_with_program_id(instructions, RaydiumLPV4)
+    logging.info(filtred_instuctions)
     for instruction in filtred_instuctions:
         tokens = get_tokens_info(instruction)
         print_table(tokens)
@@ -158,7 +158,7 @@ def instructions_with_program_id(
 
 def get_tokens_info(
     instruction: UiPartiallyDecodedInstruction | ParsedInstruction
-) -> Tuple[Pubkey, Pubkey]:
+) -> Tuple[Pubkey, Pubkey, Pubkey]:
     accounts = instruction.accounts
     Pair = accounts[4]
     Token0 = accounts[8]
@@ -170,7 +170,7 @@ def get_tokens_info(
     return (Token0, Token1, Pair)
 
 
-def print_table(tokens: Tuple[*Pubkey]) -> None:
+def print_table(tokens: Tuple[Pubkey, Pubkey, Pubkey]) -> None:
     data = [
         {'Token_Index': 'Token0', 'Account Public Key': tokens[0]},  # Token0
         {'Token_Index': 'Token1', 'Account Public Key': tokens[1]},  # Token1
