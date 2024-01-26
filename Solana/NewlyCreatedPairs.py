@@ -123,9 +123,9 @@ def get_tokens(signature: Signature, RaydiumLPV4: Pubkey) -> None:
     )
     # Start logging to transactions.json
     with open("transactions.json", 'a', encoding='utf-8') as raw_transactions:
-    raw_transactions.write(f"signature: {signature}\n")
-    raw_transactions.write(transaction.to_json())        
-    raw_transactions.write("\n ########## \n")
+        raw_transactions.write(f"signature: {signature}\n")
+        raw_transactions.write(transaction.to_json())        
+        raw_transactions.write("\n ########## \n")
     # End logging
     instructions = get_instructions(transaction)
     filtred_instuctions = instructions_with_program_id(instructions, RaydiumLPV4)
