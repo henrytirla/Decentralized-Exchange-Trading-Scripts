@@ -95,6 +95,7 @@ def get_tokens(signature: Signature, RaydiumLPV4: Pubkey) -> None:
     for instruction in instructions_with_program_id(instructions, RaydiumLPV4):
         tokens = get_tokens_info(instruction)
         print_table(tokens)
+        print(f"True, https://solscan.io/tx/{signature}")
 
 
 def get_instructions(
@@ -121,15 +122,17 @@ def get_tokens_info(
     instruction: UiPartiallyDecodedInstruction | ParsedInstruction
 ) -> Tuple[Pubkey, Pubkey]:
     accounts = instruction.accounts
+    Pair = accounts[4]
     Token0 = accounts[8]
     Token1 = accounts[9]
-    return (Token0, Token1)
+    return (Token0, Token1, Pair)
 
 
-def print_table(tokens: Tuple[Pubkey, Pubkey]) -> None:
+def print_table(tokens: Tuple[*Pubkey]) -> None:
     data = [
         {'Token_Index': 'Token0', 'Account Public Key': tokens[0]},  # Token0
-        {'Token_Index': 'Token1', 'Account Public Key': tokens[1]}   # Token1
+        {'Token_Index': 'Token1', 'Account Public Key': tokens[1]},  # Token1
+        {'Token_Index': 'LP Pair', 'Account Public Key': tokens[2]}  # LP Pair
     ]
     print("============NEW POOL DETECTED====================")
     header = ["Token_Index", "Account Public Key"]
