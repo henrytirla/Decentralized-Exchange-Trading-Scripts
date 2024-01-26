@@ -1,9 +1,7 @@
 "Detect  New Pools Created on Solana Raydium DEX"
 
-from pprint import pprint
 from time import sleep
 import logging
-
 
 import asyncio
 from typing import List, AsyncIterator, Tuple
@@ -35,8 +33,8 @@ log_instruction = "initialize2"
 
 # Init logging
 logging.basicConfig(filename='app.log', filemode='a', level=logging.DEBUG)
-
-
+# Writes responses from socket to messages.json
+# Writes responses from http req to  transactions.json
 
 async def main():
     """The client as an infinite asynchronous iterator:"""
@@ -100,6 +98,7 @@ async def process_messages(websocket: SolanaWsClientProtocol,
             # Start logging
             logging.info(value.signature)
             logging.info(log)
+            # Logging to messages.json
             with open("messages.json", 'a', encoding='utf-8') as raw_messages:  
                 raw_messages.write(f"signature: {value.signature} \n")
                 raw_messages.write(msg[0].to_json())
@@ -124,7 +123,7 @@ def get_tokens(signature: Signature, RaydiumLPV4: Pubkey) -> None:
     )
     instructions = get_instructions(transaction)
     filtred_instuctions = instructions_with_program_id(instructions, RaydiumLPV4)
-    # Start logging
+    # Start logging to transactions.json
     with open("transactions.json", 'a', encoding='utf-8') as raw_transactions:
         raw_transactions.write(f"signature: {signature}\n")
         raw_transactions.write(transaction.to_json())        
