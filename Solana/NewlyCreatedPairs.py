@@ -39,8 +39,13 @@ async def main():
             Finalized
         )  # type: ignore
         async for signature in process_messages(websocket, log_instruction):  # type: ignore
-            get_tokens(signature, RaydiumLPV4)
-            #break
+            try:
+                get_tokens(signature, RaydiumLPV4)
+            except SolanaRpcException as err:
+                # Omitting httpx.HTTPStatusError: Client error '429 Too Many Requests'
+                # Sleep 5 sec, and try connect again
+                sleep(5)
+                continue
         await websocket.logs_unsubscribe(subscription_id)
 
 
