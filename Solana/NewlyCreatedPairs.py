@@ -32,21 +32,28 @@ log_instruction = "initialize2"
 
 async def main():
     """The client as an infinite asynchronous iterator:"""
-    async with connect(WSS) as websocket:
-        subscription_id = await subscribe_to_logs(
-            websocket,
-            RpcTransactionLogsFilterMentions(RaydiumLPV4),
-            Finalized
-        )  # type: ignore
-        async for signature in process_messages(websocket, log_instruction):  # type: ignore
-            try:
-                get_tokens(signature, RaydiumLPV4)
-            except SolanaRpcException as err:
-                # Omitting httpx.HTTPStatusError: Client error '429 Too Many Requests'
-                # Sleep 5 sec, and try connect again
-                sleep(5)
-                continue
-        await websocket.logs_unsubscribe(subscription_id)
+    async for websocket in connect(WSS):
+        try:
+            subscription_id = await subscribe_to_logs(
+                websocket,
+                RpcTransactionLogsFilterMentions(RaydiumLPV4),
+                Finalized
+            )
+            async for i, signature in enumerate(process_messages(websocket, log_instruction)):  # type: ignore
+                try:
+                    get_tokens(signature, RaydiumLPV4)
+                except SolanaRpcException as err:
+                    # Omitting httpx.HTTPStatusError: Client error '429 Too Many Requests'
+                    # Sleep 5 sec, and try connect again
+                    sleep(5)
+                    continue
+        except (ProtocolError, ConnectionClosedError) as err:
+            # Restart socket connection if ProtocolError: invalid status code
+            print(f"Danger! Danger!", err)
+            continue
+        except KeyboardInterrupt:
+            if websocket:
+                await websocket.logs_unsubscribe(subscription_id)
 
 
 async def subscribe_to_logs(websocket: SolanaWsClientProtocol, 
