@@ -33,7 +33,5 @@ The more complex and intricate the idea, the better. I love a good challenge!
 If these scripts have helped you, please consider supporting my work. Your support will help me continue to develop these tools and create more useful resources for the crypto community.
 
 - henrytirla.eth
-- Bitcoin: 1GdaMqMZyirTkfYe4dyZn5Tox9dVJmT21Z
 - BSC/ETH/Polygon: 0x84c8ea2224cDF28b0c02EF1b2F2618dE082030fe
-- Solana: 5E6ofnQM1m7F5hJ7747r58Y59sVsSHJSUKzoqLcxo5TT
 
