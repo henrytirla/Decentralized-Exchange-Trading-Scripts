@@ -84,7 +84,7 @@ def extract_pool_info(pools_list: list, mint: str) -> dict:
             return pool
     raise Exception(f'{mint} pool not found!')
 
-
+# TODO Fix this to get swap instruction without an API
 def fetch_pool_keys(mint: str):
     amm_info = {}
     all_pools = {}
