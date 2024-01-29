@@ -1,5 +1,7 @@
 "Detect  New Pools Created on Solana Raydium DEX"
 
+#MAnually see transactions of new pairs GThUX1Atko4tqhN2NaiTazWSeFWMuiUvfFnyJyUghFMJ
+
 from time import sleep
 import logging
 
