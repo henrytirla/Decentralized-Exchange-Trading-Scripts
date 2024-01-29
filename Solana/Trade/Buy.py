@@ -180,14 +180,8 @@ def buy(solana_client, TOKEN_TO_SWAP_BUY, payer, amount):
             txnBool = False
             return "failed"
 
-
-# token_toBuy=input("Enter token to buy: ")
-# private_key_string = "Enter Your Private Key"
 token_toBuy=input("Enter token to buy: ")
-private_key_string = "Enter Your Private Key"
-
-private_key_bytes = base58.b58decode(private_key_string)
-payer = Keypair.from_bytes(private_key_bytes)
+payer = Keypair.from_base58_string("Enter String Private Key")
 print(payer.pubkey())
 #0.004960
 #0.0001
