@@ -1,1 +1,1 @@
-#Get AmmId of a pair of tokens with Raydium pool 
+#Get AmmId of New created pool without raydium sdk-------DONE_COMPLETE
