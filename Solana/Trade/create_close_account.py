@@ -85,6 +85,7 @@ def extract_pool_info(pools_list: list, mint: str) -> dict:
     raise Exception(f'{mint} pool not found!')
 
 # TODO Fix this to get swap instruction without an API
+#SOLVED!!!! DUE TO COMPETION I"M NOT GONNA OPEN SOURCE IT CONTACT ME--- FOR PURCHASE OR SUBSCRIBE to my site to get ready to use my solana bot
 def fetch_pool_keys(mint: str):
     amm_info = {}
     all_pools = {}
