@@ -21,7 +21,10 @@ Exciting news! I have a video series in the works to provide in-depth guidance o
 ## Services
 I build crypto bots on all blockchains contact me let's work on your degen toolbox and bring your ideas to life.
 The more complex and intricate the idea, the better. I love a good challenge!
+ ### Mentorship
 
+  Have me as a mentor , where I offer my knowledgeable experience and strategies in trading cryptocurrencies. Whether you're a beginner looking to understand the basics or an 
+  experienced enthusiast aiming to enhance your skills, I'm here to help you on your crypto journey. Contact for more information.
 
 
 
