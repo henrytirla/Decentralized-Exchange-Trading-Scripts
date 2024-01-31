@@ -2,6 +2,8 @@
 
 #NOTE SOLANA supports only 1 wallet for this subscription
 
+#TODO Improve Token Information Eg what token bought what quantity of solana what value receive precious details for copytrading 
+
 import asyncio
 import websockets
 import json
