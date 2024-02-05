@@ -1,14 +1,12 @@
-"Subscrine to a wallet  transactions on solana blockchain"
-
-#NOTE SOLANA supports only 1 wallet for this subscription
-
 import asyncio
 import websockets
 import json
 
-wallet_address = "Enter Wallet Transaction"
+wallet_address = "GHZuLHwS4w7hqF232H8Qg8k4CAUg7Zvr49VdYw3K6mtc"
+seen_signatures = set()
 
 async def run():
+   count = 0
    uri = "wss://api.mainnet-beta.solana.com"
    async with websockets.connect(uri) as websocket:
        # Send subscription request
@@ -29,15 +27,22 @@ async def run():
        if 'result' in response_dict:
           print("Subscription successful. Subscription ID: ", response_dict['result'])
 
-       # Continuously read from the WebSocket
-       async for response in websocket:
-           print(response)
-           response_dict = json.loads(response)
-           print(response_dict.values.err)
-           if 'params' in response_dict:
-              print("New update received: ", response_dict['params'])
-              print("=========================================")
-           else:
-              print("Unexpected response: ", response_dict)
+          # Continuously read from the WebSocket
+          async for response in websocket:
+              # print(response)
+              response_dict = json.loads(response)
+             
+              if response_dict['params']['result']['value']['err'] == None:
+
+                  signature = response_dict['params']['result']['value']['signature']
+                  if signature not in seen_signatures:
+                      seen_signatures.add(signature)
+                      count += 1
+                      print(f"{count}-New update received: , {signature}")
+                      print("=========================================")
+                
+              else:
+                  # print("Unexpected response: ", response_dict)
+                  pass
 
 asyncio.run(run())

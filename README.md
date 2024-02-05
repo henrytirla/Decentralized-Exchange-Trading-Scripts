@@ -19,7 +19,7 @@ Exciting news! I have a video series in the works to provide in-depth guidance o
 
 
 ## Services
-I build crypto bots on all blockchains contact me let's work on your degen toolbox and bring your ideas to life.
+I build crypto bots and on-chain analytics tools that will give you an edge on the market, contact me let's work on your degen toolbox and bring your ideas to life.
 The more complex and intricate the idea, the better. I love a good challenge!
  ### Mentorship
 
