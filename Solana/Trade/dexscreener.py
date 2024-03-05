@@ -1,3 +1,5 @@
+
+#TODO REFACTOR CODE
 import requests, json, os, sys
 from configparser import ConfigParser
 
