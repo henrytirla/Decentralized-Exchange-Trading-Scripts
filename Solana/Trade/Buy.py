@@ -14,6 +14,8 @@ from spl.token.core import _TokenCore
 from solana.rpc.commitment import Commitment
 from solana.rpc.api import RPCException
 from solana.rpc.api import Client, Keypair
+from solders.compute_budget import set_compute_unit_price,set_compute_unit_limit
+
 import base58
 
 from solders.signature import Signature
@@ -119,6 +121,8 @@ def buy(solana_client, TOKEN_TO_SWAP_BUY, payer, amount):
         print("6. Add instructions to transaction...")
         if swap_token_account_Instructions != None:
             swap_tx.add(swap_token_account_Instructions)
+        swap_tx.add(set_compute_unit_price(1_000)) #Set your gas fees here in micro_lamports eg 1_000_000 ,20_400_000 choose amount in sol and multiply by microlamport eg 1000000000 =1 lamport 
+
         swap_tx.add(instructions_swap)
         swap_tx.add(closeAcc)
 
