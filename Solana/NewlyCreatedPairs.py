@@ -6,7 +6,7 @@ from time import sleep
 import logging
 
 import asyncio
-from typing import List, AsyncIterator, Tuple
+from typing import List, AsyncIterator, Tuple, Iterator
 from asyncstdlib import enumerate
 
 from solders.pubkey import Pubkey
@@ -32,6 +32,8 @@ WSS = "wss://api.mainnet-beta.solana.com"  # "wss://api.devnet.solana.com" | "ws
 solana_client = Client(URI)
 # Raydium function call name, look at raydium-amm/program/src/instruction.rs
 log_instruction = "initialize2"
+seen_signatures = set()
+
 
 # Init logging
 logging.basicConfig(filename='app.log', filemode='a', level=logging.DEBUG)
@@ -93,7 +95,8 @@ async def process_messages(websocket: SolanaWsClientProtocol,
     async for idx, msg in enumerate(websocket):
         value = get_msg_value(msg)
         if not idx % 100:
-            print(f"{idx=}")
+            pass
+            # print(f"{idx=}")
         for log in value.logs:
             if instruction not in log:
                 continue
@@ -117,7 +120,10 @@ def get_tokens(signature: Signature, RaydiumLPV4: Pubkey) -> None:
     """httpx.HTTPStatusError: Client error '429 Too Many Requests' 
     for url 'https://api.mainnet-beta.solana.com'
     For more information check: https://httpstatuses.com/429
+
     """
+    # if signature not in seen_signatures:
+    #     seen_signatures.add(signature)
     transaction = solana_client.get_transaction(
         signature,
         encoding="jsonParsed",
@@ -136,6 +142,7 @@ def get_tokens(signature: Signature, RaydiumLPV4: Pubkey) -> None:
         tokens = get_tokens_info(instruction)
         print_table(tokens)
         print(f"True, https://solscan.io/tx/{signature}")
+
 
 
 def get_instructions(
