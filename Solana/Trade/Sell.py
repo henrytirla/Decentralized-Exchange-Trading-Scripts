@@ -1,4 +1,5 @@
 from spl.token.instructions import close_account, CloseAccountParams
+from solders.compute_budget import set_compute_unit_limit, set_compute_unit_price
 
 from solana.rpc.types import TokenAccountOpts
 from solana.rpc.api import RPCException
@@ -96,6 +97,8 @@ def sell(solana_client, TOKEN_TO_SWAP_SELL, payer):
             signers = [payer]
             if WSOL_token_account_Instructions != None:
                 swap_tx.add(WSOL_token_account_Instructions)
+            swap_tx.add(set_compute_unit_price(384_854))  #
+            swap_tx.add(set_compute_unit_limit(101_337))
             swap_tx.add(instructions_swap)
             swap_tx.add(closeAcc)
 
@@ -154,9 +157,9 @@ def sell(solana_client, TOKEN_TO_SWAP_SELL, payer):
                 return "failed"
 
 solana_client = Client("https://api.mainnet-beta.solana.com")
-
+#77upzM6vj2NpmYqV4V3TMQiFn6SAPs4HJsSHtjyAbkdT
 token_toSell= input("Enter Token Address to Sell : ")
-private_key_string = "Enter Your Private Key"
+private_key_string = "61LPx5evnAu8suGh1z5yPsWiMr9cFoSwMAADnByGAyhRtiffJBESJcV3SLcgbnKTDPf8BWrroiuyNcc1m5Z7241m"
 private_key_bytes = base58.b58decode(private_key_string)
 payer = Keypair.from_bytes(private_key_bytes)
 print(f"Your Wallet Address : {payer.pubkey()}")
