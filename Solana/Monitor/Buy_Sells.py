@@ -1,7 +1,6 @@
-#Decoded Signature To Display Buy and Sell information crucial for copyTrading
 
-#Fixed this for all type of transction......
-#TODO OPTIMIZE THIS TO CAPTURE TRANSACTIONS 1s after ----> Copy Trading buy Should occur max 2s After transaction detected
+
+#I found a better way UPDATE COMING soon
 
 import asyncio
 import datetime
