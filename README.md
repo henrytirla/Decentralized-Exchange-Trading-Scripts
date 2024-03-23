@@ -21,10 +21,12 @@ Exciting news! I have a video series in the works to provide in-depth guidance o
 ## Services
 I build crypto bots and on-chain analytics tools that will give you an edge on the market, contact me let's work on your degen toolbox and bring your ideas to life.
 The more complex and intricate the idea, the better. I love a good challenge!
+ 
+ 
  ### Mentorship
 
   Have me as a mentor , where I offer my knowledgeable experience and strategies in trading cryptocurrencies. Whether you're a beginner looking to understand the basics or an 
-  experienced enthusiast aiming to enhance your skills, I'm here to help you on your crypto journey. Contact for more information.
+  experienced enthusiast aiming to enhance your skills, I'm here to help you on your crypto journey.
 
 
 
@@ -36,6 +38,8 @@ The more complex and intricate the idea, the better. I love a good challenge!
 ## Support My Work
 If these scripts have helped you, please consider supporting my work. Your support will help me continue to develop these tools and create more useful resources for the crypto community.
 
-- henrytirla.eth
+- henrytirla.sol:   FJRDY392XSyfV9nFZC8SZij1hB3hsH121pCQi1KrvH6b
+- henrytirla.eth:  0x84c8ea2224cDF28b0c02EF1b2F2618dE082030fe
 - BSC/ETH/Polygon: 0x84c8ea2224cDF28b0c02EF1b2F2618dE082030fe
+- BTC :            16XtMfS3TeuG4SBXApGsn8Hkp1ZmisPEtc
 
