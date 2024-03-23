@@ -35,11 +35,12 @@ The more complex and intricate the idea, the better. I love a good challenge!
 - Email: henrytirla@protonmail.com
 - Telegram: [Let's Chat](https://t.me/henrytirla)
 
-## Support My Work
+## 💰 Support My Work
 If these scripts have helped you, please consider supporting my work. Your support will help me continue to develop these tools and create more useful resources for the crypto community.
 
-- henrytirla.sol:   FJRDY392XSyfV9nFZC8SZij1hB3hsH121pCQi1KrvH6b
-- henrytirla.eth:  0x84c8ea2224cDF28b0c02EF1b2F2618dE082030fe
-- BSC/ETH/Polygon: 0x84c8ea2224cDF28b0c02EF1b2F2618dE082030fe
-- BTC :            16XtMfS3TeuG4SBXApGsn8Hkp1ZmisPEtc
+- 🚀 henrytirla.sol:   FJRDY392XSyfV9nFZC8SZij1hB3hsH121pCQi1KrvH6b
+- 💰 henrytirla.eth:  0x84c8ea2224cDF28b0c02EF1b2F2618dE082030fe
+- 💰 BSC/ETH/Polygon: 0x84c8ea2224cDF28b0c02EF1b2F2618dE082030fe
+- 💰 BTC :            16XtMfS3TeuG4SBXApGsn8Hkp1ZmisPEtc
+
 
