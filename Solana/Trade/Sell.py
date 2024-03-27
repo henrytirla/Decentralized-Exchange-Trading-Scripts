@@ -2,16 +2,12 @@
 
 from spl.token.instructions import close_account, CloseAccountParams
 from solders.compute_budget import set_compute_unit_limit, set_compute_unit_price
-
 from solana.rpc.types import TokenAccountOpts
 from solana.rpc.api import RPCException
 from solana.transaction import Transaction
-
 from solders.pubkey import Pubkey
 from solana.rpc.api import Client, Keypair
 import base58
-
-
 from create_close_account import fetch_pool_keys, sell_get_token_account, get_token_account, \
     make_swap_instruction
 from dexscreener import getSymbol
@@ -21,20 +17,12 @@ import time
 
 LAMPORTS_PER_SOL = 1000000000
 
-
-# ctx ,     TOKEN_TO_SWAP_SELL,  keypair
 def sell(solana_client, TOKEN_TO_SWAP_SELL, payer):
     token_symbol, SOl_Symbol = getSymbol(TOKEN_TO_SWAP_SELL)
 
     mint = Pubkey.from_string(TOKEN_TO_SWAP_SELL)
     sol = Pubkey.from_string("So11111111111111111111111111111111111111112")
-
-    """Get swap token program id"""
-    print("1. Get TOKEN_PROGRAM_ID...")
     TOKEN_PROGRAM_ID = solana_client.get_account_info_json_parsed(mint).value.owner
-
-    """Get Pool Keys"""
-    print("2. Get Pool Keys...")
     pool_keys = fetch_pool_keys(str(mint))
     if pool_keys == "failed":
         print(f"a|Sell Pool ERROR {token_symbol}", f"[Raydium]: Pool Key Not Found")
@@ -42,16 +30,11 @@ def sell(solana_client, TOKEN_TO_SWAP_SELL, payer):
 
     txnBool = True
     while txnBool:
-        """Get Token Balance from wallet"""
-        print("3. Get oken Balance from wallet...")
-
         balanceBool = True
         while balanceBool:
             tokenPk = mint
-
             accountProgramId = solana_client.get_account_info_json_parsed(tokenPk)
             programid_of_token = accountProgramId.value.owner
-
             accounts = solana_client.get_token_accounts_by_owner_json_parsed(payer.pubkey(), TokenAccountOpts(
                 program_id=programid_of_token)).value
             for account in accounts:
@@ -65,9 +48,6 @@ def sell(solana_client, TOKEN_TO_SWAP_SELL, payer):
             else:
                 print("No Balance, Retrying...")
                 time.sleep(2)
-
-        """Get token accounts"""
-        print("4. Get token accounts for swap...")
         swap_token_account = sell_get_token_account(solana_client, payer.pubkey(), mint)
         WSOL_token_account, WSOL_token_account_Instructions = get_token_account(solana_client, payer.pubkey(), sol)
 
@@ -99,9 +79,9 @@ def sell(solana_client, TOKEN_TO_SWAP_SELL, payer):
             signers = [payer]
             if WSOL_token_account_Instructions != None:
                 swap_tx.add(WSOL_token_account_Instructions)
-            swap_tx.add(set_compute_unit_price(384_854))  #
-            swap_tx.add(set_compute_unit_limit(101_337))
             swap_tx.add(instructions_swap)
+             swap_tx.add(set_compute_unit_price(384_854))  #
+            swap_tx.add(set_compute_unit_limit(101_337))
             swap_tx.add(closeAcc)
 
             """Send transaction"""
@@ -127,23 +107,18 @@ def sell(solana_client, TOKEN_TO_SWAP_SELL, payer):
                             end_time = time.time()
                             execution_time = end_time - start_time
                             print(f"Execution time: {execution_time} seconds")
-
                             txnBool = False
                             checkTxn = False
                             return txid_string_sig
                         else:
-
                             print("Transaction Failed")
-
                             end_time = time.time()
                             execution_time = end_time - start_time
                             print(f"Execution time: {execution_time} seconds")
-
                             checkTxn = False
 
                     except Exception as e:
                         print(f"e|Sell ERROR {token_symbol}", f"[Raydium]: {e}")
-
                         print("Sleeping...", e)
                         time.sleep(0.500)
                         print("Retrying...")
@@ -161,8 +136,7 @@ def sell(solana_client, TOKEN_TO_SWAP_SELL, payer):
 solana_client = Client("https://api.mainnet-beta.solana.com")
 #77upzM6vj2NpmYqV4V3TMQiFn6SAPs4HJsSHtjyAbkdT
 token_toSell= input("Enter Token Address to Sell : ")
-private_key_string = "61LPx5evnAu8suGh1z5yPsWiMr9cFoSwMAADnByGAyhRtiffJBESJcV3SLcgbnKTDPf8BWrroiuyNcc1m5Z7241m"
-#TO the bastard who stole my $100 due to my mistake kindly contact me and refund me here is my new address ->4HevDy7zpoZY43oXdvdkSrTD2EVY7EZ6NaGokNhHfsd4
+private_key_string = ""
 private_key_bytes = base58.b58decode(private_key_string)
 payer = Keypair.from_bytes(private_key_bytes)
 print(f"Your Wallet Address : {payer.pubkey()}")
