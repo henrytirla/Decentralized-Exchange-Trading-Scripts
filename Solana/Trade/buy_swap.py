@@ -66,7 +66,7 @@ async def buy(solana_client, TOKEN_TO_SWAP_BUY, payer, amount):
             swap_associated_token_address, swap_token_account_Instructions = await get_token_account(async_solana_client,payer.pubkey(),mint)
             WSOL_token_account, swap_tx, payer, Wsol_account_keyPair, opts, = _TokenCore._create_wrapped_native_account_args(
                 TOKEN_PROGRAM_ID, payer.pubkey(), payer, amount_in,
-                False, balance_needed, Commitment("confirmed"))
+                False, balance_needed, Confirmed)
 
             instructions_swap = make_swap_instruction(amount_in,
                                                       WSOL_token_account,
