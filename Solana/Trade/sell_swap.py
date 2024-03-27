@@ -95,7 +95,7 @@ async def sell_normal(solana_client, TOKEN_TO_SWAP_SELL, payer):
                 print(f"Transaction Signature: https://solscan.io/tx/{txid_string_sig}")
                 # Await transaction confirmation with a timeout
                 await asyncio.wait_for(
-                    get_transaction_with_timeout(solana_client, txid_string_sig, Commitment("confirmed"), timeout=10),
+                    get_transaction_with_timeout(solana_client, txid_string_sig, commitment="confirmed", timeout=10),
                     timeout=15
                 )
                 print("Transaction Confirmed")
