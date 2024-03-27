@@ -3,7 +3,7 @@ import datetime
 import time
 from solana.rpc.types import TokenAccountOpts
 from solders.pubkey import Pubkey
-from solana.rpc.commitment import Commitment, Confirmed
+from solana.rpc.commitment import Commitment, Confirmed, Finalized
 from solana.rpc.api import RPCException
 from solana.rpc.api import Client, Keypair
 from solana.rpc.async_api import AsyncClient
@@ -66,7 +66,7 @@ async def buy(solana_client, TOKEN_TO_SWAP_BUY, payer, amount):
             swap_associated_token_address, swap_token_account_Instructions = await get_token_account(async_solana_client,payer.pubkey(),mint)
             WSOL_token_account, swap_tx, payer, Wsol_account_keyPair, opts, = _TokenCore._create_wrapped_native_account_args(
                 TOKEN_PROGRAM_ID, payer.pubkey(), payer, amount_in,
-                False, balance_needed, Confirmed)
+                False, balance_needed, Commitment("confirmed"))
 
             instructions_swap = make_swap_instruction(amount_in,
                                                       WSOL_token_account,
@@ -79,6 +79,10 @@ async def buy(solana_client, TOKEN_TO_SWAP_BUY, payer, amount):
                                         program_id=TOKEN_PROGRAM_ID)
             closeAcc = (close_account(params))
             if swap_token_account_Instructions != None:
+                # recent_blockhash = solana_client.get_latest_blockhash(Commitment("confirmed"))
+                recent_blockhash = solana_client.get_latest_blockhash(commitment="confirmed")
+
+                swap_tx.recent_blockhash = recent_blockhash.value.blockhash
                 swap_tx.add(swap_token_account_Instructions)
 
             #compute unit price and comute unit limit gauge your gas fees more explanations on how to calculate in a future article
@@ -92,7 +96,7 @@ async def buy(solana_client, TOKEN_TO_SWAP_BUY, payer, amount):
                 print(f"Transaction Signature: https://solscan.io/tx/{txid_string_sig}")
                 # Await transaction confirmation with a timeout
                 await asyncio.wait_for(
-                    get_transaction_with_timeout(solana_client, txid_string_sig, commitment="confirmed", timeout=10),
+                    get_transaction_with_timeout(solana_client, txid_string_sig, Commitment("confirmed"), timeout=10),
                     timeout=15
                 )
                 print("Transaction Confirmed")
@@ -122,7 +126,7 @@ async def main():
     token_toBuy="RUpbmGF6p42AAeN1QvhFReZejQry1cLkE1PUYFVVpnL" #Enter token you wish to buy here
     payer = Keypair.from_base58_string(config["PrivateKey"])
     print(payer.pubkey())
-    buy_transaction=await buy(solana_client, token_toBuy, payer, 0.001) #Enter amount of sol you wish to spend
+    buy_transaction=await buy(solana_client, token_toBuy, payer, 0.01) #Enter amount of sol you wish to spend
     print(buy_transaction)
 
 asyncio.run(main())
