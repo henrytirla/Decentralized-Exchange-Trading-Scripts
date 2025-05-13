@@ -1,1 +1,0 @@
-"Get newly Created pairs using subgraph Filter volume,liquidity and makers and make a buying decison"

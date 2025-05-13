@@ -1,1 +1,0 @@
-""Crypto telegram Trading bot ""

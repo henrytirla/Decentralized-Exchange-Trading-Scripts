@@ -5,8 +5,8 @@ from alchemy import Alchemy, Network
 import datetime
 import requests
 
-alchemy_ws_url = "wss://eth-mainnet.g.alchemy.com/v2/BLHi-AZvCt6LjvO8W7nFtloBJFZa393M"
-api_key = "BLHi-AZvCt6LjvO8W7nFtloBJFZa393M"
+alchemy_ws_url = "wss://eth-mainnet.g.alchemy.com/v2/enter you api key"
+api_key = "enter your api key"
 network = Network.ETH_MAINNET
 alchemy = Alchemy(api_key, network)
 WETH="0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
@@ -127,7 +127,7 @@ async def subscribe_to_pending_transactions():
         subscription_payload = {
             "jsonrpc": "2.0",
             "method": "eth_subscribe",
-            "params": ["alchemy_minedTransactions", {"addresses": [{"to": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"}], "includeRemoved": False, "hashesOnly": True}],
+            "params": ["alchemy_minedTransactions", {"addresses": [{"to": "0x3328F7f4A1D1C57c35df56bBf0c9dCAFCA309C49"}, {"to": "0x80a64c6D7f12C47B7c66c5B4E20E72bc1FCd5d9e"},{"to": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"}], "includeRemoved": False, "hashesOnly": True}],
             "id": 1
         }
 
